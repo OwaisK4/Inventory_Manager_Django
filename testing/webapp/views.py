@@ -15,6 +15,9 @@ def templatized_index(request):
     my_dict = {"insert_me": "I am from views.py"}
     return render(request,'test.html',context=my_dict)
 
+def master_page(request):
+    return render(request, 'webapp/master.html')
+
 def myself(request):
     return render(request, 'myself.html')
 
