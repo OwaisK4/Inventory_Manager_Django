@@ -35,6 +35,25 @@ class InventoryListView(ListView):
     context_object_name = 'inventory'
     template_name = 'webapp/view_inventory.html'
 
+class InventoryDetailView(DetailView):
+    model = Asset
+    context_object_name = 'asset'
+    template_name = 'webapp/view_inventory_detail.html'
+
+class InventoryDelete(DeleteView):
+    model = Asset
+    fields = '__all__'
+    context_object_name = 'asset'
+    template_name = 'webapp/view_inventory_confirm_delete.html'
+    success_url = reverse_lazy('view_inventory-list')
+
+class InventoryUpdate(UpdateView):
+    model = Asset
+    context_object_name = 'asset'
+    form_class = AssetModelForm
+    template_name = 'webapp/input_inventory.html'
+    success_url = reverse_lazy('view_inventory-list')
+
 class AssetListLiew(ListView):
     model = Asset
     # paginate_by = 10
@@ -59,7 +78,6 @@ class AssetDelete(DeleteView):
     model = Asset
     fields = '__all__'
     success_url = reverse_lazy('assets')
-
 
 def image(request):
     return render(request, 'webapp/image.html')
