@@ -19,9 +19,9 @@
               </div>
               <div class="card-body">
                 <div class="table-responsive">
-                  <h1>Asset: {{ asset.manufacturer.name }} {{ asset.name }}</h1>
+                  <h1>Asset: {{ asset.get_manufacturer_display }} {{ asset.name }}</h1>
                   <h3>
-                    <strong>Category:</strong>{{ asset.category.name }}
+                    <strong>Category:</strong>{{ asset.get_category_display }}
                   </h3>
                   <h3>
                     <strong>Price:</strong>{{ asset.price }}
@@ -30,10 +30,7 @@
                     <strong>Status:</strong>{{ asset.get_status_display }}
                   </h3>
                   <h3>
-                    <strong>Assigned to:</strong>{{ asset.assigned_to }}
-                  </h3>
-                  <h3>
-                    <strong>Department:</strong>{{ asset.department.name }}
+                    <strong>Department:</strong>{{ asset.get_department_display }}
                   </h3>
                   <h3>
                     <strong>Purchase date:</strong>{{ asset.purchase_date }}

@@ -14,9 +14,9 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path('input_employee/', views.input_employee_form, name='input_employee'),
-    path('view_employees/', views.EmployeeListView.as_view(), name='view_employee-list'),
-    path('view_employees/<int:pk>', views.EmployeeDetailView.as_view(), name='view_employee-detail'),
-    path('view_employees/<int:pk>/delete/', views.EmployeeDelete.as_view(), name='view_employee-delete'),
-    path('view_employees/<int:pk>/update/', views.EmployeeUpdate.as_view(), name='view_employee-update'),
+    path('assets/', views.AssetListLiew.as_view(), name='asset-list'),
+    path('asset/<int:pk>', views.AssetDetailView.as_view(), name='asset-detail'),
+    path('asset/create/', views.AssetCreate.as_view(), name='asset-create'),
+    path('asset/<int:pk>/update/', views.AssetUpdate.as_view(), name='asset-update'),
+    path('asset/<int:pk>/delete/', views.AssetDelete.as_view(), name='asset-delete'),
 ]

@@ -26,9 +26,7 @@
                     <th>Price</th>
                     <th>Purchase Date</th>
                     <th>Status</th>
-                    <th>Assigned to</th>
                     <th>Department</th>
-                    <th></th>
                     <th></th>
                   </thead>
                   <tbody>
@@ -36,17 +34,14 @@
                     <tr>
                       {% comment %} <td><a href="{% url 'asset-detail' asset.id %}">LDP{{ asset.id|stringformat:"06d" }}</a></td> {% endcomment %}
                       <td><a href="{% url 'view_inventory-detail' asset.id %}">LDP{{ asset.id|stringformat:"06d" }}</a></td>
-                      <td>{{ asset.category }}</td>
-                      <td>{{ asset.manufacturer }}</td>
+                      <td>{{ asset.get_category_display }}</td>
+                      <td>{{ asset.get_manufacturer_display }}</td>
                       <td>{{ asset.name }}</td>
                       <td>{{ asset.price }}</td>
                       <td>{{ asset.purchase_date }}</td>
                       <td>{{ asset.get_status_display }}</td>
-                      <td>{{ asset.assigned_to }}</td>
-                      <td>{{ asset.department }}</td>
-                      {% comment %} <td><a href="{% url 'view_inventory-delete' asset.id %}" class="btn-sm btn-danger" role="button">X</a></td> {% endcomment %}
-                      <td><a href="{% url 'view_inventory-update' asset.id %}" class="btn btn-link btn-warning btn-just-icon edit"><i class="material-icons">edit</i></a></td>
-                      <td><a href="{% url 'view_inventory-delete' asset.id %}" class="btn btn-link btn-danger btn-just-icon remove"><i class="material-icons">close</i></a></td>
+                      <td>{{ asset.get_department_display }}</td>
+                      <td><a href="{% url 'view_inventory-delete' asset.id %}" class="btn-sm btn-danger" role="button">X</a></td>
                     </tr>
                     {% endfor %}
                   <tbody>

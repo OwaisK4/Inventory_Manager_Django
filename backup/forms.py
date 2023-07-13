@@ -1,6 +1,6 @@
 import datetime
 from django import forms
-from webapp.models import Asset, Employee
+from webapp.models import Asset
 
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
@@ -23,22 +23,35 @@ class RenewBookForm(forms.Form):
         return data
 
 class AssetModelForm(forms.ModelForm):
+    # def clean_due_back(self):
+    #     data = self.cleaned_data['due_back']
+
+    #     # Check if a date is not in the past.
+    #     if data < datetime.date.today():
+    #        raise ValidationError(_('Invalid date - renewal in past'))
+
+    #     # Check if a date is in the allowed range (+4 weeks from today).
+    #     if data > datetime.date.today() + datetime.timedelta(weeks=4):
+    #        raise ValidationError(_('Invalid date - renewal more than 4 weeks ahead'))
+
+    #     # Remember to always return the cleaned data.
+    #     return data
+
     class Meta:
         model = Asset
-        fields = ['category', 'manufacturer', 'name', 'price', 'purchase_date', 'status', 'department', 'assigned_to']
+        fields = ['category', 'manufacturer', 'name', 'price', 'purchase_date', 'status', 'department']
         widgets = {
             'category' : forms.Select(attrs={
                 'class': "selectpicker",
                 'data-style': "btn btn-info",
                 'style': 'max-width: 300px;',
-                # 'label': 'Category',
-                # 'placeholder': 'Category',
+                'placeholder': 'Category',
             }),
             'manufacturer' : forms.Select(attrs={
                 'class': "selectpicker",
                 'data-style': "btn btn-info",
                 'style': 'max-width: 300px;',
-                # 'placeholder': 'Manufacturer',
+                'placeholder': 'Manufacturer',
             }),
             'name' : forms.TextInput(attrs={
                 'class': "form-control",
@@ -64,33 +77,12 @@ class AssetModelForm(forms.ModelForm):
                 'style': 'max-width: 300px;',
                 'placeholder': 'Status',
             }),
-            'assigned_to' : forms.Select(attrs={
-                'class': "selectpicker",
-                'data-style': "btn btn-info",
-                'style': 'max-width: 300px;',
-            }),
             'department' : forms.Select(attrs={
                 'class': "selectpicker",
                 'data-style': "btn btn-info",
                 'style': 'max-width: 300px;',
-                # 'placeholder': 'Department',
+                'placeholder': 'Department',
             }),
         }
-
-class EmployeeModelForm(forms.ModelForm):
-    # def clean_name(self):
-    #     name_input = self.cleaned_data['name']
-    #     if Employee.objects.filter(name=name_input).exists():
-    #         raise ValidationError(_("Employee already exists."))
-    #     return name_input
-
-    class Meta:
-        model = Employee
-        fields = ['name']
-        widgets = {
-            'name' : forms.TextInput(attrs={
-                'class': "form-control",
-                'style': 'max-width: 300px;',
-                'placeholder': 'Name',
-            }),
-        }
+        # labels = {'category': _('Category'),}
+        # help_texts = {'due_back': _('Enter a date between now and 4 weeks (default 3).')}

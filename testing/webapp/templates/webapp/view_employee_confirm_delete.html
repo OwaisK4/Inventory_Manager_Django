@@ -18,11 +18,10 @@
               <div class="card-body">
                 <div class="table-responsive">
                   <h1>Delete asset</h1>
-                  <p class="lead">Are you sure you want to delete the {{ asset.category.name }}: {{ asset.manufacturer.name }} {{ asset.name }}?</p>
+                  <p class="lead">Are you sure you want to delete the employee: {{ employee.name }}?</p>
 
                   <form action="" method="POST">
                     {% csrf_token %}
-                    {% comment %} <input type="submit" value="Yes, delete." /> {% endcomment %}
                     <button name="submit" id="submit" type="submit" class="btn btn-danger">Yes, delete.</button>
                   </form>
                 </div>
