@@ -1,0 +1,110 @@
+{% extends 'master.html' %}
+
+{% block title %}
+  Input Inventory
+{% endblock %}
+
+{% block content %}
+<div class="content">
+  <div class="container">
+    <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header card-header-danger card-header-text">
+          <div class="card-text">
+            <h4 class="card-title">Input Inventory</h4>
+          </div>
+        </div>
+        <div class="card-body">
+          <form method="POST" action="" class="form-horizontal" id="input_form">
+            {% csrf_token %}
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Category:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  {{ form.category }}
+                  {% comment %} <input type="text" class="form-control" id="containerNo" name="containerNo" /> {% endcomment %}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Manufacturer:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  {{ form.manufacturer }}
+                  {% comment %} <input type="text" class="form-control" id="invoice_no" name="invoice_no" required="true" /> {% endcomment %}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Name:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  {{ form.name }}
+                  {% comment %} <input type="text" class="form-control" id="po_no" name="po_no" /> {% endcomment %}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Price:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-6">
+                <div class="form-group">{{ form.price }}</div>
+              </div>
+            </div>
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Purchase Date:</label>
+              <code class="col-form-label"></code>
+              <div class="col-sm-6">
+                <div class="form-group">{{ form.purchase_date }}</div>
+                <div class="form-group">Previous: {{ form.purchase_date.value | date:'m/d/Y' }}</div>
+              </div>
+            </div>
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Status:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  {% comment %} <input type="text" class="form-control" name="vendor" id="vendor" /> {% endcomment %}
+                  {{ form.status }}
+                </div>
+              </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Department:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-1">
+                <div class="form-group cost unitCost">
+                  {% comment %} <input class="form-control val" type="text" id="unit_cost" name="unit_cost" number="true" required="true" onkeypress="return isNumberKey(event)" /> {% endcomment %}
+                  {{ form.department }}
+                </div>
+              </div>
+
+              <hr />
+
+              <div class="row text-center">
+                <div class="col-md-12 text-center">
+                  <button name="submit" id="submit" type="submit" class="btn btn-success">Submit</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

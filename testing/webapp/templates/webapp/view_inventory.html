@@ -1,0 +1,58 @@
+{% extends 'master.html' %}
+
+{% block title %}View Inventory{% endblock title %}
+
+{% block content %}
+<div class="content">
+  <div class="container-fluid">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-icon card-header-danger">
+              <div class="card-icon">
+                <i class="material-icons">assignment</i>
+              </div>
+              <h4 class="card-title">Inventory</h4>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead class="text-primary">
+                    <th>ID</th>
+                    <th>Category</th>
+                    <th>Manufacturer</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Purchase Date</th>
+                    <th>Status</th>
+                    <th>Department</th>
+                    <th></th>
+                  </thead>
+                  <tbody>
+                    {% for asset in inventory %}
+                    <tr>
+                      {% comment %} <td><a href="{% url 'asset-detail' asset.id %}">LDP{{ asset.id|stringformat:"06d" }}</a></td> {% endcomment %}
+                      <td><a href="{% url 'view_inventory-detail' asset.id %}">LDP{{ asset.id|stringformat:"06d" }}</a></td>
+                      <td>{{ asset.get_category_display }}</td>
+                      <td>{{ asset.get_manufacturer_display }}</td>
+                      <td>{{ asset.name }}</td>
+                      <td>{{ asset.price }}</td>
+                      <td>{{ asset.purchase_date }}</td>
+                      <td>{{ asset.get_status_display }}</td>
+                      <td>{{ asset.get_department_display }}</td>
+                      <td><a href="{% url 'view_inventory-delete' asset.id %}" class="btn-sm btn-danger" role="button">X</a></td>
+                    </tr>
+                    {% endfor %}
+                  <tbody>
+                </table>
+                <a class="btn btn-danger" href="{% url 'input_inventory' %}" role="button">Add asset</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

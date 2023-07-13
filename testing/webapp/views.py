@@ -22,7 +22,7 @@ def input_inventory_form(request):
         form = AssetModelForm(request.POST)
         if form.is_valid():
             form.save(commit=True)
-            return HttpResponseRedirect(reverse('dashboard'))
+            return HttpResponseRedirect(reverse('view_inventory-list'))
     else:
         form = AssetModelForm(request.POST)
     context = {
