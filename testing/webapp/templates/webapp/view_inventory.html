@@ -28,6 +28,7 @@
                     <th>Status</th>
                     <th>Assigned to</th>
                     <th>Department</th>
+                    <th>Image</th>
                     <th></th>
                     <th></th>
                   </thead>
@@ -41,9 +42,10 @@
                       <td>{{ asset.name }}</td>
                       <td>{{ asset.price }}</td>
                       <td>{{ asset.purchase_date }}</td>
-                      <td>{{ asset.get_status_display }}</td>
+                      <td><a href="{% url 'view_inventory-check' asset.id %}">{{ asset.get_status_display }}</a></td>
                       <td>{{ asset.assigned_to }}</td>
                       <td>{{ asset.department }}</td>
+                      <td>{% if asset.asset_image %}YES{% else %}NO{% endif %}</td>
                       {% comment %} <td><a href="{% url 'view_inventory-delete' asset.id %}" class="btn-sm btn-danger" role="button">X</a></td> {% endcomment %}
                       <td><a href="{% url 'view_inventory-update' asset.id %}" class="btn btn-link btn-warning btn-just-icon edit"><i class="material-icons">edit</i></a></td>
                       <td><a href="{% url 'view_inventory-delete' asset.id %}" class="btn btn-link btn-danger btn-just-icon remove"><i class="material-icons">close</i></a></td>

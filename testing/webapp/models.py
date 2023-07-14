@@ -35,6 +35,7 @@ class Asset(models.Model):
     status = models.CharField(max_length=1, choices=STATUS.choices, default=STATUS.checked_in)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
     assigned_to = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True)
+    asset_image = models.ImageField(upload_to='images/', null=True, blank=True)
 
     # class Meta:
     #     ordering = ['-purchase_date']

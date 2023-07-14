@@ -25,7 +25,7 @@ class RenewBookForm(forms.Form):
 class AssetModelForm(forms.ModelForm):
     class Meta:
         model = Asset
-        fields = ['category', 'manufacturer', 'name', 'price', 'purchase_date', 'status', 'department', 'assigned_to']
+        fields = ['category', 'manufacturer', 'name', 'price', 'purchase_date', 'status', 'department', 'assigned_to', 'asset_image']
         widgets = {
             'category' : forms.Select(attrs={
                 'class': "selectpicker",
@@ -75,14 +75,18 @@ class AssetModelForm(forms.ModelForm):
                 'style': 'max-width: 300px;',
                 # 'placeholder': 'Department',
             }),
+            'asset_image' : forms.ClearableFileInput(attrs={
+                # 'class': 'form-control',
+                # 'required': "false"
+            }),
         }
 
 class EmployeeModelForm(forms.ModelForm):
-    # def clean_name(self):
-    #     name_input = self.cleaned_data['name']
-    #     if Employee.objects.filter(name=name_input).exists():
-    #         raise ValidationError(_("Employee already exists."))
-    #     return name_input
+    def clean_name(self):
+        name_input = self.cleaned_data['name']
+        if Employee.objects.filter(name=name_input).exists():
+            raise ValidationError(_("Employee already exists."))
+        return name_input
 
     class Meta:
         model = Employee

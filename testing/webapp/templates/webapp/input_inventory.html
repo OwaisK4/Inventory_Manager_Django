@@ -16,7 +16,7 @@
           </div>
         </div>
         <div class="card-body">
-          <form method="POST" action="" class="form-horizontal" id="input_form">
+          <form method="POST" action="" enctype="multipart/form-data" class="form-horizontal" id="input_form">
             {% csrf_token %}
 
             <div class="row">
@@ -90,6 +90,14 @@
                   {% comment %} <input class="form-control val" type="text" id="unit_cost" name="unit_cost" number="true" required="true" onkeypress="return isNumberKey(event)" /> {% endcomment %}
                   {{ form.assigned_to }}
                 </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Asset image:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-6">
+                  {{ form.asset_image }}
               </div>
             </div>
 

@@ -21,12 +21,12 @@ def input_inventory(request):
 
 def input_inventory_form(request):
     if request.method == 'POST':
-        form = AssetModelForm(request.POST)
+        form = AssetModelForm(request.POST, request.FILES)
         if form.is_valid():
             form.save(commit=True)
             return HttpResponseRedirect(reverse('view_inventory-list'))
-        else:
-            raise ValidationError(_("Employee name must be unique."))
+        # else:
+        #     raise ValidationError(_("Employee name must be unique."))
     else:
         form = AssetModelForm(request.POST)
     context = {
@@ -70,6 +70,14 @@ class InventoryUpdate(UpdateView):
     form_class = AssetModelForm
     template_name = 'webapp/input_inventory.html'
     success_url = reverse_lazy('view_inventory-list')
+
+def inventory_checkout(request, pk):
+    asset = Asset.objects.get(pk=pk)
+    if asset.status == 'I':
+        Asset.objects.filter(pk=pk).update(status='O')
+    else:
+        Asset.objects.filter(pk=pk).update(status='I')
+    return HttpResponseRedirect(reverse('view_inventory-list'))
 
 class EmployeeListView(ListView):
     model = Employee
