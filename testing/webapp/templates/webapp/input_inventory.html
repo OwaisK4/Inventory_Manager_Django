@@ -25,9 +25,15 @@
               <div class="col-sm-6">
                 <div class="form-group">
                   {{ form.category }}
-                  {% comment %} <input type="text" class="form-control" id="containerNo" name="containerNo" /> {% endcomment %}
                 </div>
               </div>
+              <!-- Start of new button-->
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <a href="{% url 'input_category' %}?next={{ request.path }}" class="btn btn-outline-info btn-block pb-2"><i class="material-icons">add</i> New</a>
+                </div>
+              </div>
+              <!-- End of new button-->
             </div>
 
             <div class="row">
@@ -36,9 +42,15 @@
               <div class="col-sm-6">
                 <div class="form-group">
                   {{ form.manufacturer }}
-                  {% comment %} <input type="text" class="form-control" id="invoice_no" name="invoice_no" required="true" /> {% endcomment %}
                 </div>
               </div>
+              <!-- Start of new button-->
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <a href="{% url 'input_manufacturer' %}?next={{ request.path }}" class="btn btn-outline-info btn-block pb-2"><i class="material-icons">add</i> New</a>
+                </div>
+              </div>
+              <!-- End of new button-->
             </div>
 
             <div class="row">
@@ -74,8 +86,25 @@
               <label class="col-form-label">&nbsp&nbsp</label>
               <div class="col-sm-6">
                 <div class="form-group">
-                  {% comment %} <input type="text" class="form-control" name="vendor" id="vendor" /> {% endcomment %}
                   {{ form.status }}
+                </div>
+              </div>
+              <!-- Start of new button-->
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <button type="button" class="btn btn-outline-info btn-block pb-2"><i class="material-icons">add</i> New</button>
+                </div>
+              </div>
+              <!-- End of new button-->
+            </div>
+            
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Checkout status:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  {% comment %} <input type="text" class="form-control" name="vendor" id="vendor" /> {% endcomment %}
+                  {{ form.checkout_status }}
                 </div>
               </div>
             </div>
@@ -85,12 +114,20 @@
             <div class="row">
               <label class="col-sm-2 col-form-label">Assigned to:</label>
               <label class="col-form-label">&nbsp&nbsp</label>
-              <div class="col-sm-1">
-                <div class="form-group cost unitCost">
-                  {% comment %} <input class="form-control val" type="text" id="unit_cost" name="unit_cost" number="true" required="true" onkeypress="return isNumberKey(event)" /> {% endcomment %}
+              <div class="col-sm-6">
+                <div class="form-group">
                   {{ form.assigned_to }}
                 </div>
               </div>
+              <!-- Start of new button-->
+              <div class="col-sm-2">
+                <div class="form-group">
+                  {% comment %} <button type="button" class="btn btn-outline-primary btn-block pb-2">New</button> {% endcomment %}
+                  <a href="{% url 'input_employee' %}?next={{ request.path }}" class="btn btn-outline-info btn-block pb-2"><i class="material-icons">add</i> New</a>
+                </div>
+              </div>
+              <!-- End of new button-->
+              
             </div>
 
             <div class="row">
@@ -104,21 +141,27 @@
             <div class="row">
               <label class="col-sm-2 col-form-label">Department:</label>
               <label class="col-form-label">&nbsp&nbsp</label>
-              <div class="col-sm-1">
-                <div class="form-group cost unitCost">
-                  {% comment %} <input class="form-control val" type="text" id="unit_cost" name="unit_cost" number="true" required="true" onkeypress="return isNumberKey(event)" /> {% endcomment %}
+              <div class="col-sm-6">
+                <div class="form-group">
                   {{ form.department }}
                 </div>
               </div>
+              <!-- Start of new button-->
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <button type="button" class="btn btn-outline-info btn-block pb-2"><i class="material-icons">add</i> New</button>
+                </div>
+              </div>
+              <!-- End of new button-->
+            </div>
 
               <hr />
 
               <div class="row text-center">
                 <div class="col-md-12 text-center">
-                  <button name="submit" id="submit" type="submit" class="btn btn-success">Submit</button>
+                  <button name="submit" id="submit" type="submit" class="btn btn-success  float-right">Submit</button>
                 </div>
               </div>
-            </div>
           </form>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import datetime
 from django import forms
-from webapp.models import Asset, Employee
+from webapp.models import Asset, Employee, Category, Manufacturer, Department, Status
 
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
@@ -25,7 +25,7 @@ class RenewBookForm(forms.Form):
 class AssetModelForm(forms.ModelForm):
     class Meta:
         model = Asset
-        fields = ['category', 'manufacturer', 'name', 'price', 'purchase_date', 'status', 'department', 'assigned_to', 'asset_image']
+        fields = ['category', 'manufacturer', 'name', 'price', 'purchase_date', 'status', 'checkout_status', 'department', 'assigned_to', 'asset_image']
         widgets = {
             'category' : forms.Select(attrs={
                 'class': "selectpicker",
@@ -52,13 +52,18 @@ class AssetModelForm(forms.ModelForm):
             'purchase_date' : forms.DateInput(
                 format=('%m/%d/%Y'),
                 attrs={
-                'class': "form-control",
+                # 'class': "form-control",
                 'class': "datepicker form-control",
                 'placeholder': 'Purchase Date (mm/dd/YYYY)',
                 'type': 'date',
                 # 'type': "datetime-local",
             }),
             'status' : forms.Select(attrs={
+                'class': "selectpicker",
+                'data-style': "btn btn-info",
+                'style': 'max-width: 300px;',
+            }),
+            'checkout_status' : forms.Select(attrs={
                 'class': "selectpicker",
                 'data-style': "btn btn-info",
                 'style': 'max-width: 300px;',
@@ -96,5 +101,41 @@ class EmployeeModelForm(forms.ModelForm):
                 'class': "form-control",
                 'style': 'max-width: 300px;',
                 'placeholder': 'Name',
+            }),
+        }
+
+class CategoryModelForm(forms.ModelForm):
+    def clean_name(self):
+        name_input = self.cleaned_data['name']
+        if Category.objects.filter(name=name_input).exists():
+            raise ValidationError(_("Category already exists."))
+        return name_input
+
+    class Meta:
+        model = Category
+        fields = ['name']
+        widgets = {
+            'name' : forms.TextInput(attrs={
+                'class': "form-control",
+                'style': 'max-width: 300px;',
+                'placeholder': 'Category',
+            }),
+        }
+
+class ManufacturerModelForm(forms.ModelForm):
+    def clean_name(self):
+        name_input = self.cleaned_data['name']
+        if Manufacturer.objects.filter(name=name_input).exists():
+            raise ValidationError(_("Manufacturer already exists."))
+        return name_input
+
+    class Meta:
+        model = Manufacturer
+        fields = ['name']
+        widgets = {
+            'name' : forms.TextInput(attrs={
+                'class': "form-control",
+                'style': 'max-width: 300px;',
+                'placeholder': 'Manufacturer',
             }),
         }

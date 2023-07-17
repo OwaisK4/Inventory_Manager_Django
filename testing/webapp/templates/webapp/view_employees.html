@@ -24,6 +24,7 @@
                     <tr>
                       <th>ID</th>
                       <th>Name</th>
+                      <th>No. of assets</th>
                       <th class="disabled-sorting text-right">Actions</th>
                     </tr>
                   </thead>
@@ -31,6 +32,7 @@
                     <tr>
                       <th>ID</th>
                       <th>Name</th>
+                      <th>No. of assets</th>
                       <th class="text-right">Actions</th>
                     </tr>
                   </tfoot>
@@ -39,6 +41,7 @@
                     <tr>
                         <td>{{ employee.id }}</td>
                         <td>{{ employee.name }}</td>
+                        <td>{{ employee.asset_set.all|length }}</td>
                         <td class="text-right">
                             <a href="#" class="btn btn-link btn-info btn-just-icon like"><i class="material-icons">favorite</i></a>
                             <a href="{% url 'view_employee-update' employee.id %}" class="btn btn-link btn-warning btn-just-icon edit"><i class="material-icons">edit</i></a>

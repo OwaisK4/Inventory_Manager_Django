@@ -29,7 +29,10 @@
                         <strong>Price:</strong>{{ asset.price }}
                       </h3>
                       <h3>
-                        <strong>Status:</strong>{{ asset.get_status_display }}
+                        <strong>Status:</strong>{{ asset.status.name }}
+                      </h3>
+                      <h3>
+                        <strong>Checkout status:</strong>{{ asset.get_checkout_status_display }}
                       </h3>
                       <h3>
                         <strong>Assigned to:</strong>{{ asset.assigned_to }}

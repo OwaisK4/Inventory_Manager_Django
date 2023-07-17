@@ -221,14 +221,26 @@
                 </li>
                 <li class="nav-item ">
                   <a class="nav-link" href="{% url 'view_inventory-list' %}">
-                    <span class="sidebar-mini"> V </span>
+                    <span class="sidebar-mini"> VI </span>
                     <span class="sidebar-normal"> View Inventory </span>
                   </a>
                 </li>
                 <li class="nav-item ">
                   <a class="nav-link" href="{% url 'view_employee-list' %}">
-                    <span class="sidebar-mini"> V </span>
+                    <span class="sidebar-mini"> VE </span>
                     <span class="sidebar-normal"> View Employees </span>
+                  </a>
+                </li>
+                <li class="nav-item ">
+                  <a class="nav-link" href="{% url 'view_category-list' %}">
+                    <span class="sidebar-mini"> VC </span>
+                    <span class="sidebar-normal"> View Categories </span>
+                  </a>
+                </li>
+                <li class="nav-item ">
+                  <a class="nav-link" href="{% url 'view_manufacturer-list' %}">
+                    <span class="sidebar-mini"> VM </span>
+                    <span class="sidebar-normal"> View Manufacturers </span>
                   </a>
                 </li>
                 <li class="nav-item ">
@@ -394,8 +406,8 @@
   <script src="{% static 'webapp/Assets/new/https_/cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js' %}"></script>
   <!-- Library for adding dinamically elements -->
   <script src="{% static 'webapp/Assets/assets/js/plugins/arrive.min.js' %}"></script>
-  <!--  Google Maps Plugin    -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2Yno10-YTnLjjn_Vtk0V8cdcY5lC4plU"></script>
+  {% comment %} <!--  Google Maps Plugin    -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2Yno10-YTnLjjn_Vtk0V8cdcY5lC4plU"></script> {% endcomment %}
   <!-- Place this tag in your head or just before your close body tag. -->
   <script async defer src="{% static 'webapp/Assets/buttons.github.io/buttons.js' %}"></script>
   <!-- Chartist JS -->
