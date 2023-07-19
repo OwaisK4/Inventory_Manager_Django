@@ -1,14 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import ListView, DetailView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.urls import reverse, reverse_lazy
 from datetime import datetime
-from .models import Asset, Employee, Category, Manufacturer, Department, Status
-from .forms import AssetModelForm, EmployeeModelForm, CategoryModelForm, ManufacturerModelForm
+from .models import Asset, Employee, Category, Manufacturer, Department, Status, Attachement, Supplier, Maintenance
+from .forms import AssetModelForm, EmployeeModelForm, CategoryModelForm, ManufacturerModelForm, AttachementModelForm, SupplierModelForm, DepartmentModelForm, StatusModelForm, MaintenanceModelForm
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
-from django import forms
 
 # Create your views here.
 def index(request):
@@ -85,15 +84,78 @@ def inventory_checkout(request, pk):
         Asset.objects.filter(pk=pk).update(checkout_status='I')
     return HttpResponseRedirect(reverse('view_inventory-list'))
 
+def inventory_attachements_list(request, pk):
+    asset = Asset.objects.get(pk=pk)
+    attachements = Attachement.objects.filter(asset=asset)
+    context = {
+        'asset': asset,
+        'attachements': attachements,
+    }
+    return render(request, 'webapp/view_inventory_attachements.html', context)
+
+def inventory_attachements_delete(request, pk, pk_attachement):
+    # Attachement.objects.filter(pk=pk_attachement).delete()
+    attachement = Attachement.objects.get(pk=pk_attachement)
+    attachement.delete()
+    return HttpResponseRedirect(reverse('view_inventory-attachements-list', args=str(pk)))
+
+class InventoryAttachementsAddView(CreateView):
+    model = Attachement
+    form_class = AttachementModelForm
+    template_name = 'webapp/view_inventory_input_attachements.html'
+
+    def get_success_url(self) -> str:
+        if self.kwargs['pk']:
+            return reverse('view_inventory-attachements-list', args=str(self.kwargs['pk']))
+        else:
+            return super().get_success_url()
+
+    def form_valid(self, form):
+        attachement = form.save(commit=False)
+        attachement.asset = Asset.objects.get(pk=self.kwargs['pk'])
+        attachement.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+def inventory_maintenances_list(request, pk):
+    asset = Asset.objects.get(pk=pk)
+    maintenances = Maintenance.objects.filter(asset=asset)
+    context = {
+        'asset': asset,
+        'maintenances': maintenances,
+    }
+    return render(request, 'webapp/view_inventory_maintenances.html', context)
+
+def inventory_maintenances_delete(request, pk, pk_attachement):
+    Maintenance.objects.filter(pk=pk_attachement).delete()
+    return HttpResponseRedirect(reverse('view_inventory-maintenances-list', args=str(pk)))
+
+class InventoryMaintenancesAddView(CreateView):
+    model = Maintenance
+    form_class = MaintenanceModelForm
+    template_name = 'webapp/view_inventory_input_maintenances.html'
+
+    def get_success_url(self) -> str:
+        if self.kwargs['pk']:
+            return reverse('view_inventory-maintenances-list', args=str(self.kwargs['pk']))
+        else:
+            return super().get_success_url()
+
+    def form_valid(self, form):
+        maintenance = form.save(commit=False)
+        maintenance.asset = Asset.objects.get(pk=self.kwargs['pk'])
+        maintenance.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+
 class EmployeeListView(ListView):
     model = Employee
     context_object_name = 'employees'
     template_name = 'webapp/view_employees.html'
 
-class EmployeeDetailView(DetailView):
-    model = Employee
-    context_object_name = 'employee'
-    template_name = 'webapp/view_employee_detail.html'
+# class EmployeeDetailView(DetailView):
+#     model = Employee
+#     context_object_name = 'employee'
+#     template_name = 'webapp/view_employee_detail.html'
 
 class EmployeeDeleteView(DeleteView):
     model = Employee
@@ -124,12 +186,6 @@ class CategoryListView(ListView):
     context_object_name = 'categories'
     template_name = 'webapp/view_categories.html'
 
-class CategoryDetailView(DetailView):
-    model = Category
-    fields = '__all__'
-    context_object_name = 'category'
-    template_name = 'webapp/view_category_detail.html'
-
 class CategoryCreateView(CreateView):
     model = Category
     form_class = CategoryModelForm
@@ -158,12 +214,6 @@ class ManufacturerListView(ListView):
     context_object_name = 'manufacturers'
     template_name = 'webapp/view_manufacturers.html'
 
-class ManufacturerDetailView(DetailView):
-    model = Manufacturer
-    fields = '__all__'
-    context_object_name = 'manufacturer'
-    template_name = 'webapp/view_manufacturer_detail.html'
-
 class ManufacturerCreateView(CreateView):
     model = Manufacturer
     form_class = ManufacturerModelForm
@@ -184,3 +234,87 @@ class ManufacturerUpdateView(UpdateView):
     form_class = ManufacturerModelForm
     template_name = 'webapp/input_manufacturer.html'
     success_url = reverse_lazy('view_manufacturer-list')
+
+# Views for Supplier objects
+class SupplierListView(ListView):
+    model = Supplier
+    fields = '__all__'
+    context_object_name = 'suppliers'
+    template_name = 'webapp/view_suppliers.html'
+
+class SupplierCreateView(CreateView):
+    model = Supplier
+    form_class = SupplierModelForm
+    template_name = 'webapp/input_supplier.html'
+    def get_success_url(self) -> str:
+        next_url = self.request.GET.get('next', None)
+        if next_url:
+            return str(next_url)
+        else:
+            return reverse_lazy('view_supplier-list')
+
+def supplier_delete(request, pk):
+    Supplier.objects.filter(pk=pk).delete()
+    return HttpResponseRedirect(reverse('view_supplier-list'))
+
+class SupplierUpdateView(UpdateView):
+    model = Supplier
+    form_class = SupplierModelForm
+    template_name = 'webapp/input_supplier.html'
+    success_url = reverse_lazy('view_supplier-list')
+
+# Views for Department objects
+class DepartmentListView(ListView):
+    model = Department
+    fields = '__all__'
+    context_object_name = 'departments'
+    template_name = 'webapp/view_departments.html'
+
+class DepartmentCreateView(CreateView):
+    model = Department
+    form_class = DepartmentModelForm
+    template_name = 'webapp/input_department.html'
+    def get_success_url(self) -> str:
+        next_url = self.request.GET.get('next', None)
+        if next_url:
+            return str(next_url)
+        else:
+            return reverse_lazy('view_department-list')
+
+def department_delete(request, pk):
+    Department.objects.filter(pk=pk).delete()
+    return HttpResponseRedirect(reverse('view_department-list'))
+
+class DepartmentUpdateView(UpdateView):
+    model = Department
+    form_class = DepartmentModelForm
+    template_name = 'webapp/input_department.html'
+    success_url = reverse_lazy('view_department-list')
+
+# Views for Status objects
+class StatusListView(ListView):
+    model = Status
+    fields = '__all__'
+    context_object_name = 'statuses'
+    template_name = 'webapp/view_statuses.html'
+
+class StatusCreateView(CreateView):
+    model = Status
+    form_class = StatusModelForm
+    template_name = 'webapp/input_status.html'
+    def get_success_url(self) -> str:
+        next_url = self.request.GET.get('next', None)
+        if next_url:
+            return str(next_url)
+        else:
+            return reverse_lazy('view_status-list')
+
+def status_delete(request, pk):
+    Status.objects.filter(pk=pk).delete()
+    return HttpResponseRedirect(reverse('view_status-list'))
+
+class StatusUpdateView(UpdateView):
+    model = Status
+    form_class = StatusModelForm
+    template_name = 'webapp/input_status.html'
+    success_url = reverse_lazy('view_status-list')

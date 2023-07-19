@@ -1,6 +1,6 @@
 import datetime
 from django import forms
-from webapp.models import Asset, Employee, Category, Manufacturer, Department, Status
+from webapp.models import Asset, Employee, Category, Manufacturer, Department, Status, Attachement, Supplier, Maintenance
 
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
@@ -25,7 +25,7 @@ class RenewBookForm(forms.Form):
 class AssetModelForm(forms.ModelForm):
     class Meta:
         model = Asset
-        fields = ['category', 'manufacturer', 'name', 'price', 'purchase_date', 'status', 'checkout_status', 'department', 'assigned_to', 'asset_image']
+        fields = ['category', 'manufacturer', 'name', 'price', 'processor', 'ram', 'hdd', 'ssd', 'purchase_date', 'status', 'checkout_status', 'department', 'supplier', 'assigned_to', 'asset_image', 'serial', 'invoice']
         widgets = {
             'category' : forms.Select(attrs={
                 'class': "selectpicker",
@@ -48,15 +48,28 @@ class AssetModelForm(forms.ModelForm):
                 'class': "form-control",
                 'placeholder': 'Price',
             }),
-
+            'processor' : forms.TextInput(attrs={
+                'class': "form-control",
+                'placeholder': 'Processor',
+            }),
+            'ram' : forms.NumberInput(attrs={
+                'class': "form-control",
+                'placeholder': 'RAM',
+            }),
+            'hdd' : forms.NumberInput(attrs={
+                'class': "form-control",
+                'placeholder': 'HDD',
+            }),
+            'ssd' : forms.NumberInput(attrs={
+                'class': "form-control",
+                'placeholder': 'SSD',
+            }),
             'purchase_date' : forms.DateInput(
-                format=('%m/%d/%Y'),
+                # format=('%m/%d/%Y'),
                 attrs={
-                # 'class': "form-control",
                 'class': "datepicker form-control",
                 'placeholder': 'Purchase Date (mm/dd/YYYY)',
                 'type': 'date',
-                # 'type': "datetime-local",
             }),
             'status' : forms.Select(attrs={
                 'class': "selectpicker",
@@ -78,13 +91,80 @@ class AssetModelForm(forms.ModelForm):
                 'class': "selectpicker",
                 'data-style': "btn btn-info",
                 'style': 'max-width: 300px;',
-                # 'placeholder': 'Department',
             }),
             'asset_image' : forms.ClearableFileInput(attrs={
                 # 'class': 'form-control',
-                # 'required': "false"
+            }),
+            'supplier' : forms.Select(attrs={
+                'class': "selectpicker",
+                'data-style': "btn btn-info",
+                'style': 'max-width: 300px;',
+            }),
+            'serial' : forms.TextInput(attrs={
+                'class': "form-control",
+                'placeholder': 'Serial no.',
+            }),
+            'invoice' : forms.NumberInput(attrs={
+                'class': "form-control",
+                'placeholder': 'Invoice no.',
             }),
         }
+
+class AttachementModelForm(forms.ModelForm):
+    class Meta:
+        model = Attachement
+        fields = ['file']
+        widgets = {
+            'file':  forms.FileInput(attrs={
+                'class': 'form-control',
+            }),
+        }
+
+class MaintenanceModelForm(forms.ModelForm):
+    class Meta:
+        model = Maintenance
+        fields = ['type', 'supplier', 'maintenance_name', 'start_date', 'end_date', 'cost', 'notes', 'file']
+        widgets = {
+            'type' : forms.Select(attrs={
+                'class': "selectpicker",
+                'data-style': "btn btn-info",
+                'style': 'max-width: 300px;',
+                'placeholder': 'Type',
+            }),
+            'supplier' : forms.Select(attrs={
+                'class': "selectpicker",
+                'data-style': "btn btn-info",
+                'style': 'max-width: 300px;',
+            }),
+            'maintenance_name' : forms.TextInput(attrs={
+                'class': "form-control",
+                'placeholder': 'Maintenance name',
+            }),
+            'start_date' : forms.DateInput(
+                attrs={
+                'class': "datepicker form-control",
+                'placeholder': 'Start date (mm/dd/YYYY)',
+                'type': 'date',
+            }),
+            'end_date' : forms.DateInput(
+                attrs={
+                'class': "datepicker form-control",
+                'placeholder': 'End date (mm/dd/YYYY)',
+                'type': 'date',
+            }),
+            'cost' : forms.NumberInput(attrs={
+                'class': "form-control",
+                'placeholder': 'Cost',
+            }),
+            'notes' : forms.TextInput(attrs={
+                'class': "form-control",
+                'placeholder': 'Notes',
+            }),
+            'file':  forms.FileInput(attrs={
+                'class': 'form-control',
+            }),
+        }
+
 
 class EmployeeModelForm(forms.ModelForm):
     def clean_name(self):
@@ -137,5 +217,59 @@ class ManufacturerModelForm(forms.ModelForm):
                 'class': "form-control",
                 'style': 'max-width: 300px;',
                 'placeholder': 'Manufacturer',
+            }),
+        }
+
+class SupplierModelForm(forms.ModelForm):
+    def clean_name(self):
+        name_input = self.cleaned_data['name']
+        if Supplier.objects.filter(name=name_input).exists():
+            raise ValidationError(_("Supplier already exists."))
+        return name_input
+
+    class Meta:
+        model = Supplier
+        fields = ['name']
+        widgets = {
+            'name' : forms.TextInput(attrs={
+                'class': "form-control",
+                'style': 'max-width: 300px;',
+                'placeholder': 'Supplier',
+            }),
+        }
+
+class DepartmentModelForm(forms.ModelForm):
+    def clean_name(self):
+        name_input = self.cleaned_data['name']
+        if Supplier.objects.filter(name=name_input).exists():
+            raise ValidationError(_("Department already exists."))
+        return name_input
+
+    class Meta:
+        model = Department
+        fields = ['name']
+        widgets = {
+            'name' : forms.TextInput(attrs={
+                'class': "form-control",
+                'style': 'max-width: 300px;',
+                'placeholder': 'Department',
+            }),
+        }
+
+class StatusModelForm(forms.ModelForm):
+    def clean_name(self):
+        name_input = self.cleaned_data['name']
+        if Supplier.objects.filter(name=name_input).exists():
+            raise ValidationError(_("Status already exists."))
+        return name_input
+
+    class Meta:
+        model = Status
+        fields = ['name']
+        widgets = {
+            'name' : forms.TextInput(attrs={
+                'class': "form-control",
+                'style': 'max-width: 300px;',
+                'placeholder': 'Status',
             }),
         }

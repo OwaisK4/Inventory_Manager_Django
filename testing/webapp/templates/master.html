@@ -225,7 +225,7 @@
                     <span class="sidebar-normal"> View Inventory </span>
                   </a>
                 </li>
-                <li class="nav-item ">
+                {% comment %} <li class="nav-item ">
                   <a class="nav-link" href="{% url 'view_employee-list' %}">
                     <span class="sidebar-mini"> VE </span>
                     <span class="sidebar-normal"> View Employees </span>
@@ -242,17 +242,53 @@
                     <span class="sidebar-mini"> VM </span>
                     <span class="sidebar-normal"> View Manufacturers </span>
                   </a>
-                </li>
+                </li> {% endcomment %}
                 <li class="nav-item ">
                   <a class="nav-link" data-toggle="collapse" href="#componentsCollapse2">
                     <span class="sidebar-mini"> OM </span>
-                    <span class="sidebar-normal"> Order Management
+                    <span class="sidebar-normal"> View Tables
                       <b class="caret"></b>
                     </span>
                   </a>
                   <div class="collapse" id="componentsCollapse2">
                     <ul class="nav">
                       <li class="nav-item ">
+                        <a class="nav-link" href="{% url 'view_employee-list' %}">
+                          <span class="sidebar-mini"> VE </span>
+                          <span class="sidebar-normal"> View Employees </span>
+                        </a>
+                      </li>
+                      <li class="nav-item ">
+                        <a class="nav-link" href="{% url 'view_category-list' %}">
+                          <span class="sidebar-mini"> VC </span>
+                          <span class="sidebar-normal"> View Categories </span>
+                        </a>
+                      </li>
+                      <li class="nav-item ">
+                        <a class="nav-link" href="{% url 'view_manufacturer-list' %}">
+                          <span class="sidebar-mini"> VM </span>
+                          <span class="sidebar-normal"> View Manufacturers </span>
+                        </a>
+                      </li>
+                      <li class="nav-item ">
+                        <a class="nav-link" href="{% url 'view_supplier-list' %}">
+                          <span class="sidebar-mini"> VS </span>
+                          <span class="sidebar-normal"> View Suppliers </span>
+                        </a>
+                      </li>
+                      <li class="nav-item ">
+                        <a class="nav-link" href="{% url 'view_department-list' %}">
+                          <span class="sidebar-mini"> VD </span>
+                          <span class="sidebar-normal"> View Departments </span>
+                        </a>
+                      </li>
+                      <li class="nav-item ">
+                        <a class="nav-link" href="{% url 'view_status-list' %}">
+                          <span class="sidebar-mini"> VS </span>
+                          <span class="sidebar-normal"> View Status </span>
+                        </a>
+                      </li>
+                      {% comment %} <li class="nav-item ">
                         <a class="nav-link" href="https://google.com">
                           <span class="sidebar-mini"> I </span>
                           <span class="sidebar-normal"> Input Orders </span>
@@ -263,7 +299,7 @@
                           <span class="sidebar-mini"> V </span>
                           <span class="sidebar-normal"> View Orders </span>
                         </a>
-                      </li>
+                      </li> {% endcomment %}
                     </ul>
                   </div>
                 </li>
@@ -316,6 +352,9 @@
             <span class="navbar-toggler-icon icon-bar"></span>
             <span class="navbar-toggler-icon icon-bar"></span>
           </button>
+
+          {% block navbar %}{% endblock navbar %}
+
           <div class="collapse navbar-collapse justify-content-end">
             <form class="navbar-form">
               <div class="input-group no-border">
@@ -366,6 +405,8 @@
           </div>
         </div>
       </nav>
+
+
       <!-- End Navbar -->
     {% comment %} </div> {% endcomment %}
     {% comment %} <div class="content">

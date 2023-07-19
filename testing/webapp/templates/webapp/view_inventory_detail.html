@@ -4,60 +4,81 @@
   View Inventory
 {% endblock %}
 
+{% block navbar %}
+<div class="collapse navbar-collapse">
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="navbar-brand" href="#">Asset Detail</a>
+    </li>
+  </ul>
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="navbar-brand" href="#">Checkout log</a>
+    </li>
+  </ul>
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="navbar-brand" href="{% url 'view_inventory-maintenances-list' asset.id %}">Maintenances</a>
+    </li>
+  </ul>
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="navbar-brand" href="{% url 'view_inventory-attachements-list' asset.id %}">Attachements</a>
+    </li>
+  </ul>
+</div>
+{% endblock navbar %}
+
 {% block content %}
-  <div class="content">
-    <div class="container-fluid">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card">
-              <div class="card-header card-header-icon card-header-danger">
-                <div class="card-icon">
-                  <i class="material-icons">assignment</i>
-                </div>
-                <h4 class="card-title">Inventory</h4>
+  {% comment %} <div class="content"> {% endcomment %}
+    <div class="container">
+      <div class="row">
+        {% comment %} <div class="col-md-12"> {% endcomment %}
+          <div class="card">
+            <div class="card-header card-header-icon card-header-danger">
+              <div class="card-icon">
+                <i class="material-icons">assignment</i>
               </div>
-              <div class="card-body">
-                <div class="table-responsive">
-                  <div class="row">
-                    <div class="col-md-6">
-                      <h1>Asset: {{ asset.manufacturer.name }} {{ asset.name }}</h1>
-                      <h3>
-                        <strong>Category:</strong>{{ asset.category.name }}
-                      </h3>
-                      <h3>
-                        <strong>Price:</strong>{{ asset.price }}
-                      </h3>
-                      <h3>
-                        <strong>Status:</strong>{{ asset.status.name }}
-                      </h3>
-                      <h3>
-                        <strong>Checkout status:</strong>{{ asset.get_checkout_status_display }}
-                      </h3>
-                      <h3>
-                        <strong>Assigned to:</strong>{{ asset.assigned_to }}
-                      </h3>
-                      <h3>
-                        <strong>Department:</strong>{{ asset.department.name }}
-                      </h3>
-                      <h3>
-                        <strong>Purchase date:</strong>{{ asset.purchase_date }}
-                      </h3>
-                    </div>
-                    {% if asset.asset_image %}
-                    <div class="col-md-6">
-                      <img src="{{ asset.asset_image.url }}" class="img-fluid">
-                    </div>
-                    {% endif %}
+              <h4 class="card-title">Inventory</h4>
+            </div>
+            <div class="card-body">
+              <div class="table">
+                <div class="row">
+                  <div class="col-md-6">
+                    <h2>Asset: {{ asset.manufacturer.name }} {{ asset.name }}</h2>
+                    <hr>
+                    <b><strong>Category: </strong>{{ asset.category.name }}</b><br>
+                    <b><strong>Price: </strong>{{ asset.price }}</b><br>
+                    <b><strong>Status: </strong>{{ asset.status.name }}</b><br>
+                    <b><strong>Checkout status: </strong>{{ asset.get_checkout_status_display }}</b><br>
+                    <hr>
+                    <b><strong>Assigned to: </strong>{{ asset.assigned_to }}</b><br>
+                    <b><strong>Department: </strong>{{ asset.department.name }}</b><br>
+                    <b><strong>Purchase date: </strong>{{ asset.purchase_date }}</b><br>
+                    <hr>
+                    <b><strong>Processor: </strong>{{ asset.processor }}</b><br>
+                    <b><strong>RAM: </strong>{{ asset.ram }} GB</b><br>
+                    <b><strong>HDD: </strong>{% if asset.hdd %}{{ asset.hdd }} GB{% else %} -{% endif %}</b><br>
+                    <b><strong>SSD: </strong>{% if asset.ssd %}{{ asset.ssd }} GB{% else %} -{% endif %}</b><br>
+                    <hr>
+                    <b><strong>Serial number: </strong>{{ asset.serial }}</b><br>
+                    <b><strong>Invoice number: </strong>{% if asset.invoice %}{{ asset.invoice }}{% else %} -{% endif %}</b><br>
+                    <b><strong>Supplier: </strong>{{ asset.supplier }}</b><br>
+                    <hr>
                   </div>
-                  <a class="btn btn-danger" href="{% url 'view_inventory-update' asset.id %}" role="button">Update</a>
-                  <a class="btn btn-danger float-right" href="{% url 'view_inventory-delete' asset.id %}" role="button">Delete</a>
+                  {% if asset.asset_image %}
+                    <div class="col-md-6">
+                      <img src="{{ asset.asset_image.url }}" class="img-fluid" />
+                    </div>
+                  {% endif %}
                 </div>
+                <a class="btn btn-danger" href="{% url 'view_inventory-update' asset.id %}" role="button">Update</a>
+                  <a class="btn btn-danger float-right" href="{% url 'view_inventory-delete' asset.id %}" role="button">Delete</a>
               </div>
             </div>
           </div>
-        </div>
+        {% comment %} </div> {% endcomment %}
       </div>
     </div>
-  </div>
+  {% comment %} </div> {% endcomment %}
 {% endblock %}

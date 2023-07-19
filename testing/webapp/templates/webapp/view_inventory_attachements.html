@@ -1,0 +1,87 @@
+{% extends 'master.html' %}
+
+{% block title %}
+  View Inventory
+{% endblock %}
+
+{% block navbar %}
+<div class="collapse navbar-collapse">
+    <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="navbar-brand" href="{% url 'view_inventory-detail' asset.id %}">Asset Detail</a>
+        </li>
+    </ul>
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="navbar-brand" href="#pablo">Checkout log</a>
+    </li>
+  </ul>
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="navbar-brand" href="{% url 'view_inventory-maintenances-list' asset.id %}">Maintenances</a>
+    </li>
+  </ul>
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="navbar-brand" href="#">Attachements</a>
+    </li>
+  </ul>
+</div>
+{% endblock navbar %}
+
+{% block content %}
+  {% comment %} <div class="content"> {% endcomment %}
+    <div class="container">
+      <div class="row">
+        {% comment %} <div class="col-md-12"> {% endcomment %}
+          <div class="card">
+            <div class="card-header card-header-icon card-header-danger">
+              <div class="card-icon">
+                <i class="material-icons">assignment</i>
+              </div>
+              <h4 class="card-title">Attachements</h4>
+            </div>
+            <div class="card-body">
+                <div class="material-datatables">
+                    <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Attachement</th>
+                            <th class="disabled-sorting text-right">Actions</th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <th>ID</th>
+                            <th>Attachement</th>
+                            <th class="text-right">Actions</th>
+                        </tr>
+                        </tfoot>
+                        <tbody>
+                        {% for attachement in attachements %}
+                        <tr>
+                            <td>{{ attachement.id }}</td>
+                            {% comment %} <td><img src="{{ attachement.file.url }}" alt="ALT" height="30" width="30"></td> {% endcomment %}
+                            <td><a href="{{ attachement.file.url }}"><img src="{{ attachement.file.url }}" alt="ALT" height="30" width="30"></a></td>
+                            <td class="text-right">
+                                <a href="#" class="btn btn-link btn-info btn-just-icon like"><i class="material-icons">favorite</i></a>
+                                <a href="{% url 'view_inventory-attachements-delete' asset.id attachement.id %}" class="btn btn-link btn-danger btn-just-icon remove"><i class="material-icons">close</i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col md-6">
+                        <a class="btn btn-danger" href="{% url 'view_inventory-attachements-add' asset.id %}" role="button">Add</a>
+                    </div>
+                </div>
+            </div>
+          </div>
+        {% comment %} </div> {% endcomment %}
+      </div>
+    </div>
+  {% comment %} </div> {% endcomment %}
+{% endblock %}

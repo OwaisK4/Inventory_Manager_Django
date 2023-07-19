@@ -56,10 +56,16 @@
             <div class="row">
               <label class="col-sm-2 col-form-label">Name:</label>
               <label class="col-form-label">&nbsp&nbsp</label>
-              <div class="col-sm-6">
+              <div class="col-sm-4">
                 <div class="form-group">
                   {{ form.name }}
-                  {% comment %} <input type="text" class="form-control" id="po_no" name="po_no" /> {% endcomment %}
+                </div>
+              </div>
+              <label class="col-sm-1 col-form-label">Processor:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  {{ form.processor }}
                 </div>
               </div>
             </div>
@@ -67,9 +73,30 @@
             <div class="row">
               <label class="col-sm-2 col-form-label">Price:</label>
               <label class="col-form-label">&nbsp&nbsp</label>
-              <div class="col-sm-6">
+              <div class="col-sm-4">
                 <div class="form-group">{{ form.price }}</div>
               </div>
+              <label class="col-sm-1 col-form-label">RAM:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-2">
+                <div class="form-group">{{ form.ram }}</div>
+              </div>
+              <label class="col-form-label">GB</label>
+            </div>
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">HDD:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-2">
+                <div class="form-group">{{ form.hdd }}</div>
+              </div>
+              <label class="col-sm-1 col-form-label text-left">GB</label>
+              <label class="col-sm-2 col-form-label">SSD:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-2">
+                <div class="form-group">{{ form.ssd }}</div>
+              </div>
+              <label class="col-form-label">GB</label>
             </div>
 
             <div class="row">
@@ -77,7 +104,7 @@
               <code class="col-form-label"></code>
               <div class="col-sm-6">
                 <div class="form-group">{{ form.purchase_date }}</div>
-                <div class="form-group">Previous: {{ form.purchase_date.value | date:'m/d/Y' }}</div>
+                {% comment %} <div class="form-group">Previous: {{ form.purchase_date.value | date:'m/d/Y' }}</div> {% endcomment %}
               </div>
             </div>
 
@@ -107,6 +134,36 @@
                   {{ form.checkout_status }}
                 </div>
               </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Serial number:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-3">
+                <div class="form-group">{{ form.serial }}</div>
+              </div>
+              <label class="col-sm-2 col-form-label">Invoice number:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-3">
+                <div class="form-group">{{ form.invoice }}</div>
+              </div>
+            </div>
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Supplier:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-6">
+                <div class="form-group">{{ form.supplier }}</div>
+              </div>
+              <!-- Start of new button-->
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <a href="{% url 'input_supplier' %}?next={{ request.path }}" class="btn btn-outline-info btn-block pb-2"><i class="material-icons">add</i> New</a>
+                </div>
+              </div>
+              <!-- End of new button-->
             </div>
 
             <hr />
@@ -149,7 +206,8 @@
               <!-- Start of new button-->
               <div class="col-sm-2">
                 <div class="form-group">
-                  <button type="button" class="btn btn-outline-info btn-block pb-2"><i class="material-icons">add</i> New</button>
+                  {% comment %} <button type="button" class="btn btn-outline-info btn-block pb-2"><i class="material-icons">add</i> New</button> {% endcomment %}
+                  <a href="{% url 'input_department' %}?next={{ request.path }}" class="btn btn-outline-info btn-block pb-2"><i class="material-icons">add</i> New</a>
                 </div>
               </div>
               <!-- End of new button-->

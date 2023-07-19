@@ -1,0 +1,123 @@
+{% extends 'master.html' %}
+
+{% block title %}
+  Input Maintenance
+{% endblock %}
+
+{% block content %}
+<div class="content">
+  <div class="container">
+    <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header card-header-danger card-header-text">
+          <div class="card-text">
+            <h4 class="card-title">Input Maintenance</h4>
+          </div>
+        </div>
+        <div class="card-body">
+          <form method="POST" action="" enctype="multipart/form-data" class="form-horizontal" id="input_form">
+            {% csrf_token %}
+
+            <ul>
+              {% comment %} <li> {% endcomment %}
+                {% comment %} {{ form.file.errors }} {% endcomment %}
+              {% comment %} </li> {% endcomment %}
+            </ul>
+            {% comment %} <div class="row"> {% endcomment %}
+              {% comment %} <label class="col-sm-2 col-form-label">Attachement:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-4">
+                {{ form.file }}
+                <input type="hidden" name="next" value={{ next }}>
+              </div> {% endcomment %}
+              
+            <div class="row">
+                <label class="col-sm-2 col-form-label">Type:</label>
+                <label class="col-form-label">&nbsp&nbsp</label>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                    {{ form.type }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-2 col-form-label">Supplier:</label>
+                <label class="col-form-label">&nbsp&nbsp</label>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                    {{ form.supplier }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-2 col-form-label">Maintenance name:</label>
+                <label class="col-form-label">&nbsp&nbsp</label>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                    {{ form.maintenance_name }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-2 col-form-label">Start date:</label>
+                <label class="col-form-label">&nbsp&nbsp</label>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                    {{ form.start_date }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-2 col-form-label">End date:</label>
+                <label class="col-form-label">&nbsp&nbsp</label>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                    {{ form.end_date }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-2 col-form-label">Cost:</label>
+                <label class="col-form-label">&nbsp&nbsp</label>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                    {{ form.cost }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-2 col-form-label">Notes:</label>
+                <label class="col-form-label">&nbsp&nbsp</label>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                    {{ form.notes }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-2 col-form-label">File:</label>
+                <label class="col-form-label">&nbsp&nbsp</label>
+                <div class="col-sm-6">
+                    {{ form.file }}
+                </div>
+            </div>
+
+            {% comment %} </div> {% endcomment %}
+
+              <hr />
+
+              <div class="row text-center">
+                <div class="col-md-12 text-center">
+                  <button name="submit" id="submit" type="submit" class="btn btn-success">Submit</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
