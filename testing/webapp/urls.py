@@ -15,6 +15,14 @@ urlpatterns = [
 ]
 
 urlpatterns += [
+    path('input_accessory/', views.AccessoryCreateView.as_view(), name='input_accessory'),
+    path('view_accessories/', views.AccessoryListView.as_view(), name='view_accessory-list'),
+    path('view_accessories/<int:pk>', views.AccessoryDetailView.as_view(), name='view_accessory-detail'),
+    path('view_accessories/<int:pk>/delete/', views.AccessoryDeleteView.as_view(), name='view_accessory-delete'),
+    path('view_accessories/<int:pk>/update/', views.AccessoryUpdateView.as_view(), name='view_accessory-update'),
+]
+
+urlpatterns += [
     path('view_inventory/<int:pk>/attachements/', views.inventory_attachements_list, name='view_inventory-attachements-list'),
     path('view_inventory/<int:pk>/attachements/add', views.InventoryAttachementsAddView.as_view(), name='view_inventory-attachements-add'),
     path('view_inventory/<int:pk>/attachements/<int:pk_attachement>/delete', views.inventory_attachements_delete, name='view_inventory-attachements-delete'),
@@ -72,4 +80,12 @@ urlpatterns += [
     # path('view_statuses/<int:pk>', views.StatusDetailView.as_view(), name='view_status-detail'),
     path('view_statuses/<int:pk>/delete/', views.status_delete, name='view_status-delete'),
     path('view_statuses/<int:pk>/update/', views.StatusUpdateView.as_view(), name='view_status-update'),
+]
+
+urlpatterns += [
+    path('input_location/', views.LocationCreateView.as_view(), name='input_location'),
+    path('view_locations/', views.LocationListView.as_view(), name='view_location-list'),
+    # path('view_locations/<int:pk>', views.LocationDetailView.as_view(), name='view_location-detail'),
+    path('view_locations/<int:pk>/delete/', views.LocationDeleteView.as_view(), name='view_location-delete'),
+    path('view_locations/<int:pk>/update/', views.LocationUpdateView.as_view(), name='view_location-update'),
 ]

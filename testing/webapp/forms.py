@@ -1,6 +1,6 @@
 import datetime
 from django import forms
-from webapp.models import Asset, Employee, Category, Manufacturer, Department, Status, Attachement, Supplier, Maintenance
+from webapp.models import Asset, Employee, Category, Manufacturer, Department, Status, Attachement, Supplier, Maintenance, Accessory
 
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
@@ -25,7 +25,7 @@ class RenewBookForm(forms.Form):
 class AssetModelForm(forms.ModelForm):
     class Meta:
         model = Asset
-        fields = ['category', 'manufacturer', 'name', 'price', 'processor', 'ram', 'hdd', 'ssd', 'purchase_date', 'status', 'checkout_status', 'department', 'supplier', 'assigned_to', 'asset_image', 'serial', 'invoice']
+        fields = ['category', 'manufacturer', 'name', 'price', 'processor', 'ram', 'hdd', 'ssd', 'purchase_date', 'status', 'checkout_status', 'department', 'supplier', 'assigned_to', 'location', 'asset_image', 'serial', 'invoice']
         widgets = {
             'category' : forms.Select(attrs={
                 'class': "selectpicker",
@@ -87,12 +87,85 @@ class AssetModelForm(forms.ModelForm):
                 'data-style': "btn btn-info",
                 'style': 'max-width: 300px;',
             }),
+            'location' : forms.Select(attrs={
+                'class': "selectpicker",
+                'data-style': "btn btn-info",
+                'style': 'max-width: 300px;',
+            }),
             'department' : forms.Select(attrs={
                 'class': "selectpicker",
                 'data-style': "btn btn-info",
                 'style': 'max-width: 300px;',
             }),
             'asset_image' : forms.ClearableFileInput(attrs={
+                # 'class': 'form-control',
+            }),
+            'supplier' : forms.Select(attrs={
+                'class': "selectpicker",
+                'data-style': "btn btn-info",
+                'style': 'max-width: 300px;',
+            }),
+            'serial' : forms.TextInput(attrs={
+                'class': "form-control",
+                'placeholder': 'Serial no.',
+            }),
+            'invoice' : forms.NumberInput(attrs={
+                'class': "form-control",
+                'placeholder': 'Invoice no.',
+            }),
+        }
+
+class AccessoryModelForm(forms.ModelForm):
+    class Meta:
+        model = Accessory
+        fields = ['category', 'manufacturer', 'name', 'price', 'purchase_date', 'status', 'department', 'supplier', 'assigned_to', 'location', 'accessory_image', 'serial', 'invoice']
+        widgets = {
+            'category' : forms.Select(attrs={
+                'class': "selectpicker",
+                'data-style': "btn btn-info",
+                'style': 'max-width: 300px;',
+            }),
+            'manufacturer' : forms.Select(attrs={
+                'class': "selectpicker",
+                'data-style': "btn btn-info",
+                'style': 'max-width: 300px;',
+            }),
+            'name' : forms.TextInput(attrs={
+                'class': "form-control",
+                'placeholder': 'Name',
+            }),
+            'price' : forms.NumberInput(attrs={
+                'class': "form-control",
+                'placeholder': 'Price',
+            }),
+            'purchase_date' : forms.DateInput(
+                # format=('%m/%d/%Y'),
+                attrs={
+                'class': "datepicker form-control",
+                'placeholder': 'Purchase Date (mm/dd/YYYY)',
+                'type': 'date',
+            }),
+            'status' : forms.Select(attrs={
+                'class': "selectpicker",
+                'data-style': "btn btn-info",
+                'style': 'max-width: 300px;',
+            }),
+            'assigned_to' : forms.Select(attrs={
+                'class': "selectpicker",
+                'data-style': "btn btn-info",
+                'style': 'max-width: 300px;',
+            }),
+            'location' : forms.Select(attrs={
+                'class': "selectpicker",
+                'data-style': "btn btn-info",
+                'style': 'max-width: 300px;',
+            }),
+            'department' : forms.Select(attrs={
+                'class': "selectpicker",
+                'data-style': "btn btn-info",
+                'style': 'max-width: 300px;',
+            }),
+            'accessory_image' : forms.ClearableFileInput(attrs={
                 # 'class': 'form-control',
             }),
             'supplier' : forms.Select(attrs={

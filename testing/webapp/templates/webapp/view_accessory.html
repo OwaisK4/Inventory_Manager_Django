@@ -1,0 +1,65 @@
+{% extends 'master.html' %}
+
+{% block title %}View Accessories{% endblock title %}
+
+{% block content %}
+<div class="content">
+  <div class="container-fluid">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-icon card-header-danger">
+              <div class="card-icon">
+                <i class="material-icons">assignment</i>
+              </div>
+              <h4 class="card-title">Accessories</h4>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead class="text-primary">
+                    <th>ID</th>
+                    <th>Category</th>
+                    <th>Manufacturer</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Purchase Date</th>
+                    <th>Status</th>
+                    <th>Assigned to</th>
+                    <th>Department</th>
+                    <th>Location</th>
+                    <th>Image</th>
+                    <th></th>
+                    <th></th>
+                  </thead>
+                  <tbody>
+                    {% for accessory in accessories %}
+                    <tr>
+                      <td><a href="{% url 'view_accessory-detail' accessory.id %}">LDP{{ accessory.id|stringformat:"06d" }}</a></td>
+                      <td>{{ accessory.category }}</td>
+                      <td>{{ accessory.manufacturer }}</td>
+                      <td>{{ accessory.name }}</td>
+                      <td>{{ accessory.price }}</td>
+                      <td>{{ accessory.purchase_date }}</td>
+                      <td>{{ accessory.status.name }}</td>
+                      <td>{{ accessory.assigned_to }}</td>
+                      <td>{{ accessory.department }}</td>
+                      <td>{{ accessory.location }}</td>
+                      <td>{% if accessory.accessory_image %}YES{% else %}NO{% endif %}</td>
+                      <td><a href="{% url 'view_accessory-update' accessory.id %}" class="btn btn-link btn-warning btn-just-icon edit"><i class="material-icons">edit</i></a></td>
+                      <td><a href="{% url 'view_accessory-delete' accessory.id %}" class="btn btn-link btn-danger btn-just-icon remove"><i class="material-icons">close</i></a></td>
+                    </tr>
+                    {% endfor %}
+                  <tbody>
+                </table>
+                <a class="btn btn-danger" href="{% url 'input_accessory' %}" role="button">Add accessory</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

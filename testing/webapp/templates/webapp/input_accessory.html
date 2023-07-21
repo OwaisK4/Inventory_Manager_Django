@@ -1,0 +1,205 @@
+{% extends 'master.html' %}
+
+{% block title %}
+  Input Accessory
+{% endblock %}
+
+{% block content %}
+<div class="content">
+  <div class="container">
+    <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header card-header-danger card-header-text">
+          <div class="card-text">
+            <h4 class="card-title">Input Accessory</h4>
+          </div>
+        </div>
+        <div class="card-body">
+          <form method="POST" action="" enctype="multipart/form-data" class="form-horizontal" id="input_form">
+            {% csrf_token %}
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Category:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  {{ form.category }}
+                </div>
+              </div>
+              <!-- Start of new button-->
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <a href="{% url 'input_category' %}?next={{ request.path }}" class="btn btn-outline-info btn-block pb-2"><i class="material-icons">add</i> New</a>
+                </div>
+              </div>
+              <!-- End of new button-->
+            </div>
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Manufacturer:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  {{ form.manufacturer }}
+                </div>
+              </div>
+              <!-- Start of new button-->
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <a href="{% url 'input_manufacturer' %}?next={{ request.path }}" class="btn btn-outline-info btn-block pb-2"><i class="material-icons">add</i> New</a>
+                </div>
+              </div>
+              <!-- End of new button-->
+            </div>
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Name:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  {{ form.name }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Price:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-4">
+                <div class="form-group">{{ form.price }}</div>
+              </div>
+            </div>
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Purchase Date:</label>
+              <code class="col-form-label"></code>
+              <div class="col-sm-6">
+                <div class="form-group">{{ form.purchase_date }}</div>
+                {% comment %} <div class="form-group">Previous: {{ form.purchase_date.value | date:'m/d/Y' }}</div> {% endcomment %}
+              </div>
+            </div>
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Status:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  {{ form.status }}
+                </div>
+              </div>
+              <!-- Start of new button-->
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <button type="button" class="btn btn-outline-info btn-block pb-2"><i class="material-icons">add</i> New</button>
+                </div>
+              </div>
+              <!-- End of new button-->
+            </div>
+
+            <hr />
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Serial number:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-3">
+                <div class="form-group">{{ form.serial }}</div>
+              </div>
+              <label class="col-sm-2 col-form-label">Invoice number:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-3">
+                <div class="form-group">{{ form.invoice }}</div>
+              </div>
+            </div>
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Supplier:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-6">
+                <div class="form-group">{{ form.supplier }}</div>
+              </div>
+              <!-- Start of new button-->
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <a href="{% url 'input_supplier' %}?next={{ request.path }}" class="btn btn-outline-info btn-block pb-2"><i class="material-icons">add</i> New</a>
+                </div>
+              </div>
+              <!-- End of new button-->
+            </div>
+
+            <hr />
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Assigned to:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  {{ form.assigned_to }}
+                </div>
+              </div>
+              <!-- Start of new button-->
+              <div class="col-sm-2">
+                <div class="form-group">
+                  {% comment %} <button type="button" class="btn btn-outline-primary btn-block pb-2">New</button> {% endcomment %}
+                  <a href="{% url 'input_employee' %}?next={{ request.path }}" class="btn btn-outline-info btn-block pb-2"><i class="material-icons">add</i> New</a>
+                </div>
+              </div>
+              <!-- End of new button-->
+              <label class="col-sm-2 col-form-label">Location:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  {{ form.location }}
+                </div>
+              </div>
+              <!-- Start of new button-->
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <!-- <a href="{% url 'input_employee' %}?next={{ request.path }}" class="btn btn-outline-info btn-block pb-2"><i class="material-icons">add</i> New</a> -->
+                </div>
+              </div>
+              <!-- End of new button-->
+            
+            </div>
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Accessory image:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-6">
+                  {{ form.accessory_image }}
+              </div>
+            </div>
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Department:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  {{ form.department }}
+                </div>
+              </div>
+              <!-- Start of new button-->
+              <div class="col-sm-2">
+                <div class="form-group">
+                  {% comment %} <button type="button" class="btn btn-outline-info btn-block pb-2"><i class="material-icons">add</i> New</button> {% endcomment %}
+                  <a href="{% url 'input_department' %}?next={{ request.path }}" class="btn btn-outline-info btn-block pb-2"><i class="material-icons">add</i> New</a>
+                </div>
+              </div>
+              <!-- End of new button-->
+            </div>
+
+              <hr />
+
+              <div class="row text-center">
+                <div class="col-md-12 text-center">
+                  <button name="submit" id="submit" type="submit" class="btn btn-success  float-right">Submit</button>
+                </div>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

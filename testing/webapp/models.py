@@ -31,6 +31,10 @@ class Supplier(models.Model):
     name = models.CharField(max_length=200, help_text="Supplier of asset/accessory", unique=True)
     def __str__(self):
         return f"{self.name}"
+class Location(models.Model):
+    name = models.CharField(max_length=200, help_text="Location name", unique=True)
+    def __str__(self):
+        return f"{self.name}"
 
 class Asset(models.Model):
     class STATUSES(models.TextChoices):
@@ -53,6 +57,7 @@ class Asset(models.Model):
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
     supplier = models.ForeignKey(Supplier, on_delete=models.SET_NULL, null=True)
     assigned_to = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True)
+    location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True)
 
     asset_image = models.ImageField(upload_to='images/', blank=True, null=True)
 
@@ -91,3 +96,28 @@ class Maintenance(models.Model):
     file = models.FileField(upload_to='maintenance/')
 
     asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
+
+class Accessory(models.Model):
+    class STATUSES(models.TextChoices):
+        checked_in = 'I', 'Checked in'
+        checked_out = 'O', 'Checked out'
+
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+    manufacturer = models.ForeignKey(Manufacturer, on_delete=models.SET_NULL, null=True)
+    name = models.CharField(max_length=200, help_text='Name of asset')
+    price = models.IntegerField(help_text='Price of asset in rupees')
+
+    purchase_date = models.DateField(help_text='Date of asset purchase')
+    status = models.ForeignKey(Status, on_delete=models.SET_NULL, null=True)
+    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
+    supplier = models.ForeignKey(Supplier, on_delete=models.SET_NULL, null=True)
+    assigned_to = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True)
+    location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True)
+
+    accessory_image = models.ImageField(upload_to='images/', blank=True, null=True)
+
+    serial = models.CharField(max_length=200, help_text='Serial number of asset', blank=True)
+    invoice = models.IntegerField(help_text='Invoice number of asset', blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.manufacturer.name} {self.name}"

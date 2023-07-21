@@ -4,8 +4,8 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.urls import reverse, reverse_lazy
 from datetime import datetime
-from .models import Asset, Employee, Category, Manufacturer, Department, Status, Attachement, Supplier, Maintenance
-from .forms import AssetModelForm, EmployeeModelForm, CategoryModelForm, ManufacturerModelForm, AttachementModelForm, SupplierModelForm, DepartmentModelForm, StatusModelForm, MaintenanceModelForm
+from .models import Asset, Employee, Category, Manufacturer, Department, Status, Attachement, Supplier, Maintenance, Accessory, Location
+from .forms import AssetModelForm, EmployeeModelForm, CategoryModelForm, ManufacturerModelForm, AttachementModelForm, SupplierModelForm, DepartmentModelForm, StatusModelForm, MaintenanceModelForm, AccessoryModelForm, LocationModelForm
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
@@ -318,3 +318,75 @@ class StatusUpdateView(UpdateView):
     form_class = StatusModelForm
     template_name = 'webapp/input_status.html'
     success_url = reverse_lazy('view_status-list')
+
+# Views for Accessory objects
+class AccessoryCreateView(CreateView):
+    model = Accessory
+    form_class = AccessoryModelForm
+    template_name = 'webapp/input_accessory.html'
+    def get_success_url(self) -> str:
+        next_url = self.request.GET.get('next', None)
+        if next_url:
+            return str(next_url)
+        else:
+            return reverse_lazy('view_accessory-list')
+
+class AccessoryListView(ListView):
+    model = Accessory
+    context_object_name = 'accessories'
+    template_name = 'webapp/view_accessory.html'
+
+class AccessoryDetailView(DetailView):
+    model = Accessory
+    context_object_name = 'accessory'
+    template_name = 'webapp/view_accessory_detail.html'
+
+class AccessoryDeleteView(DeleteView):
+    model = Accessory
+    fields = '__all__'
+    context_object_name = 'accessory'
+    template_name = 'webapp/view_accessory_confirm_delete.html'
+    success_url = reverse_lazy('view_accessory-list')
+
+class AccessoryUpdateView(UpdateView):
+    model = Accessory
+    context_object_name = 'accessory'
+    form_class = AccessoryModelForm
+    template_name = 'webapp/input_accessory.html'
+    success_url = reverse_lazy('view_accessory-list')
+
+# Views for Location objects
+class LocationCreateView(CreateView):
+    model = Location
+    form_class = LocationModelForm
+    template_name = 'webapp/input_location.html'
+    def get_success_url(self) -> str:
+        next_url = self.request.GET.get('next', None)
+        if next_url:
+            return str(next_url)
+        else:
+            return reverse_lazy('view_location-list')
+
+class LocationListView(ListView):
+    model = Location
+    context_object_name = 'locations'
+    template_name = 'webapp/view_location.html'
+
+class LocationDetailView(DetailView):
+    model = Location
+    context_object_name = 'location'
+    template_name = 'webapp/view_location_detail.html'
+
+class LocationDeleteView(DeleteView):
+    model = Location
+    fields = '__all__'
+    context_object_name = 'location'
+    template_name = 'webapp/view_location_confirm_delete.html'
+    success_url = reverse_lazy('view_location-list')
+
+class LocationUpdateView(UpdateView):
+    model = Location
+    context_object_name = 'location'
+    form_class = LocationModelForm
+    template_name = 'webapp/input_location.html'
+    success_url = reverse_lazy('view_location-list')
