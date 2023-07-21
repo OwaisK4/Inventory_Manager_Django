@@ -19,11 +19,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from django.contrib import admin
-from django.urls import path, include
-
+from django.contrib.auth.views import LogoutView, logout_then_login
+from django.urls import path, include, reverse_lazy
+from webapp.views import register, UserListView, master_page, about
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', master_page, name="home"),
+    path('about/', about, name="about"),
 ]
 
 urlpatterns += [
@@ -32,7 +35,14 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    path('accounts/', include('django.contrib.auth.urls'))
+    path("accounts/logout/", LogoutView.as_view(next_page=reverse_lazy('login')), name="logout"),
+    path("accounts/adduser/", register, name="register"),
+    path('accounts/', include('django.contrib.auth.urls')),
+]
+
+urlpatterns += [
+    path('accounts/users/', UserListView.as_view(), name='user-list'),
+    # path('accounts/users/<int:pk>', , name='user-detail'),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

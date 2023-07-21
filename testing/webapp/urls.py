@@ -83,9 +83,9 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    path('input_location/', views.LocationCreateView.as_view(), name='input_location'),
+    path('input_location/', views.LocationCreateandDisplayView.as_view(), name='input_and_display_location'),
     path('view_locations/', views.LocationListView.as_view(), name='view_location-list'),
-    # path('view_locations/<int:pk>', views.LocationDetailView.as_view(), name='view_location-detail'),
+    path('view_locations/<int:pk>', views.LocationDetailView.as_view(), name='view_location-detail'),
     path('view_locations/<int:pk>/delete/', views.LocationDeleteView.as_view(), name='view_location-delete'),
-    path('view_locations/<int:pk>/update/', views.LocationUpdateView.as_view(), name='view_location-update'),
 ]
+

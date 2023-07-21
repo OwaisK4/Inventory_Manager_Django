@@ -1,0 +1,168 @@
+{% extends 'master.html' %}
+
+{% block title %}
+Register
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+  <div class="card card-signup">
+    <h2 class="card-title text-center">Sign up</h2>
+    <div class="card-body">
+      {% comment %} <div class="row"> {% endcomment %}
+      <form method="post">
+        {% csrf_token %}
+        {% comment %} {% for field in form %} {% endcomment %}
+          
+          <div class="form-group has-default bmd-form-group">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="material-icons">face</i>
+                </span>
+              </div>
+              {{ form.username }} <br>
+              {% if form.username.help_text %}
+                <small style="color: grey">{{ form.username.help_text }}</small>
+              {% endif %}
+              {% for error in form.username.errors %}
+                </div>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="material-icons" style="color: red">error</i>
+                    </span>
+                  </div>
+                  {{ error }}
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="form-group has-default bmd-form-group">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="material-icons">person</i>
+                </span>
+              </div>
+              {{ form.first_name }} <br>
+              {% if form.first_name.help_text %}
+                <small style="color: grey">{{ form.first_name.help_text }}</small>
+              {% endif %}
+              {% for error in form.first_name.errors %}
+                </div>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="material-icons" style="color: red">error</i>
+                    </span>
+                  </div>
+                  {{ error }}
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="form-group has-default bmd-form-group">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="material-icons">person</i>
+                </span>
+              </div>
+              {{ form.last_name }} <br>
+              {% if form.last_name.help_text %}
+                <small style="color: grey">{{ form.last_name.help_text }}</small>
+              {% endif %}
+              {% for error in form.last_name.errors %}
+                </div>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="material-icons" style="color: red">error</i>
+                    </span>
+                  </div>
+                  {{ error }}
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="form-group has-default bmd-form-group">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="material-icons">mail</i>
+                </span>
+              </div>
+              {{ form.email }} <br>
+              {% if form.email.help_text %}
+                <small style="color: grey">{{ form.email.help_text }}</small>
+              {% endif %}
+              {% for error in form.email.errors %}
+                </div>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="material-icons" style="color: red">error</i>
+                    </span>
+                  </div>
+                  {{ error }}
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="form-group has-default bmd-form-group">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="material-icons">lock_outline</i>
+                </span>
+              </div>
+              {{ form.password1 }} <br>
+              {% if form.password1.help_text %}
+                <small style="color: grey">{{ form.password1.help_text }}</small>
+              {% endif %}
+              {% for error in form.password1.errors %}
+                </div>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="material-icons" style="color: red">error</i>
+                    </span>
+                  </div>
+                  {{ error }}
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="form-group has-default bmd-form-group">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="material-icons">lock</i>
+                </span>
+              </div>
+              {{ form.password2 }} <br>
+              {% if form.password2.help_text %}
+                <small style="color: grey">{{ form.password2.help_text }}</small>
+              {% endif %}
+              {% for error in form.password2.errors %}
+                </div>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i class="material-icons" style="color: red">error</i>
+                    </span>
+                  </div>
+                  {{ error }}
+              {% endfor %}
+            </div>
+          </div>
+
+        {% comment %} {% endfor %} {% endcomment %}
+        <button name="submit" id="submit" type="submit" class="btn btn-success">Submit</button>
+      </form>
+      {% comment %} </div> {% endcomment %}
+    </div>
+  </div>
+</div>
+{% endblock %}
