@@ -13,7 +13,7 @@
   </ul>
   <ul class="navbar-nav">
     <li class="nav-item">
-      <a class="navbar-brand" href="#">Checkout log</a>
+      <a class="navbar-brand" href="{% url 'view_inventory-checkout-list' asset.id %}">Checkout log</a>
     </li>
   </ul>
   <ul class="navbar-nav">
@@ -40,6 +40,19 @@
                 <i class="material-icons">assignment</i>
               </div>
               <h4 class="card-title">Inventory</h4>
+              {% if asset.checkout_status == 'I' %}
+                <a href="{% url 'view_inventory-checkout' asset.id %}">
+                  <div class="card-icon card-header-info float-right">
+                    <i class="material-icons">chevron_right</i>
+                  </div>
+                </a>
+              {% else %}
+                <a href="{% url 'view_inventory-checkin' asset.id %}">
+                  <div class="card-icon card-header-info float-right">
+                    <i class="material-icons">chevron_left</i>
+                  </div>
+                </a>
+              {% endif %}
             </div>
             <div class="card-body">
               <div class="table">

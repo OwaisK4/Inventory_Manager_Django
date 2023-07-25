@@ -1,13 +1,15 @@
 from typing import Any, Dict
+from django.forms.models import BaseModelForm
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.urls import reverse, reverse_lazy
 from datetime import datetime
-from .models import Asset, Employee, Category, Manufacturer, Department, Status, Attachement, Supplier, Maintenance, Accessory, Location
-from .forms import AssetModelForm, EmployeeModelForm, CategoryModelForm, ManufacturerModelForm, AttachementModelForm, SupplierModelForm, DepartmentModelForm, StatusModelForm, MaintenanceModelForm, AccessoryModelForm, LocationModelForm, RegistrationForm
-from django.contrib.auth import login, authenticate
+from django.utils import timezone
+from .models import Asset, Employee, Category, Manufacturer, Department, Status, Attachement, Supplier, Maintenance, Accessory, Location, Checkout, Activity
+from .forms import AssetModelForm, EmployeeModelForm, CategoryModelForm, ManufacturerModelForm, AttachementModelForm, SupplierModelForm, DepartmentModelForm, StatusModelForm, MaintenanceModelForm, AccessoryModelForm, LocationModelForm, RegistrationForm, CheckoutModelForm
+# from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -18,9 +20,11 @@ from django.utils.translation import gettext_lazy as _
 def index(request):
     return HttpResponse("<H2>HEY! Welcome to my website! </H2>")
 
+@login_required
 def master_page(request):
     return render(request, 'master.html')
 
+@login_required
 def about(request):
     return render(request, 'registration/about.html')
 
@@ -30,10 +34,10 @@ def register(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=raw_password)
-            login(request, user)
+            # username = form.cleaned_data.get('username')
+            # raw_password = form.cleaned_data.get('password1')
+            # user = authenticate(username=username, password=raw_password)
+            # login(request, user)
             return HttpResponseRedirect(reverse('dashboard'))
     else:
         form = RegistrationForm()
@@ -49,7 +53,12 @@ def input_inventory_form(request):
     if request.method == 'POST':
         form = AssetModelForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save(commit=True)
+            created_asset = form.save(commit=False)
+            activity = Activity(event="Create", user=request.user)
+            activity.asset = created_asset
+            activity.employee = created_asset.assigned_to
+            created_asset.save()
+            activity.save()
             redirect_to = request.POST.get('next', '')
             if redirect_to:
                 return HttpResponseRedirect(redirect_to)
@@ -81,12 +90,12 @@ def input_employee_form(request):
     }
     return render(request, 'webapp/input_employee.html', context)
 
-class InventoryListView(ListView):
+class InventoryListView(LoginRequiredMixin, ListView):
     model = Asset
     context_object_name = 'inventory'
     template_name = 'webapp/view_inventory.html'
 
-class InventoryDetailView(DetailView):
+class InventoryDetailView(LoginRequiredMixin, DetailView):
     model = Asset
     context_object_name = 'asset'
     template_name = 'webapp/view_inventory_detail.html'
@@ -98,21 +107,37 @@ class InventoryDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'webapp/view_inventory_confirm_delete.html'
     success_url = reverse_lazy('view_inventory-list')
 
+    def form_valid(self, form) -> HttpResponse:
+        created_asset = self.get_object()
+        activity = Activity(event="Delete", user=self.request.user)
+        activity.asset = created_asset
+        activity.employee = created_asset.assigned_to
+        activity.save()
+        return super().form_valid(form)
+
 class InventoryUpdateView(LoginRequiredMixin, UpdateView):
     model = Asset
     context_object_name = 'asset'
     form_class = AssetModelForm
     template_name = 'webapp/input_inventory.html'
     success_url = reverse_lazy('view_inventory-list')
+    
+    def form_valid(self, form) -> HttpResponse:
+        created_asset = form.save(commit=False)
+        activity = Activity(event="Update", user=self.request.user)
+        activity.asset = created_asset
+        activity.employee = created_asset.assigned_to
+        activity.save()
+        return super().form_valid(form)
 
-@login_required
-def inventory_checkout(request, pk):
-    asset = Asset.objects.get(pk=pk)
-    if asset.checkout_status == 'I':
-        Asset.objects.filter(pk=pk).update(checkout_status='O')
-    else:
-        Asset.objects.filter(pk=pk).update(checkout_status='I')
-    return HttpResponseRedirect(reverse('view_inventory-list'))
+# @login_required
+# def inventory_checkout(request, pk):
+#     asset = Asset.objects.get(pk=pk)
+#     if asset.checkout_status == 'I':
+#         Asset.objects.filter(pk=pk).update(checkout_status='O')
+#     else:
+#         Asset.objects.filter(pk=pk).update(checkout_status='I')
+#     return HttpResponseRedirect(reverse('view_inventory-list'))
 
 @login_required
 def inventory_attachements_list(request, pk):
@@ -180,8 +205,64 @@ class InventoryMaintenancesAddView(LoginRequiredMixin, CreateView):
         maintenance.save()
         return HttpResponseRedirect(self.get_success_url())
 
+@login_required
+def inventory_checkout_list(request, pk):
+    asset = Asset.objects.get(pk=pk)
+    checkouts = Checkout.objects.filter(asset=asset)
+    context = {
+        'asset': asset,
+        'checkouts': checkouts,
+    }
+    return render(request, 'webapp/view_inventory_checkout_log.html', context)
 
-class EmployeeListView(ListView):
+class CheckoutView(LoginRequiredMixin, CreateView):
+    model = Checkout
+    form_class = CheckoutModelForm
+    template_name = 'webapp/view_inventory_checkout.html'
+
+    def get_success_url(self) -> str:
+        next_url = self.request.GET.get('next', None)
+        if next_url:
+            return str(next_url)
+        else:
+            return reverse_lazy('view_inventory-checkout-list', args=str(self.kwargs['pk']))
+
+    def form_valid(self, form):
+        checkout = form.save(commit=False)
+        checkout.asset = Asset.objects.get(pk=self.kwargs['pk'])
+        checkout.type = 'O'
+        checkout.user = self.request.user
+        checkout.save()
+        Asset.objects.filter(pk=self.kwargs['pk']).update(checkout_status='O')
+        return HttpResponseRedirect(self.get_success_url())
+
+class CheckinView(LoginRequiredMixin, CreateView):
+    model = Checkout
+    form_class = CheckoutModelForm
+    template_name = 'webapp/view_inventory_checkin.html'
+    
+    def get_success_url(self) -> str:
+        next_url = self.request.GET.get('next', None)
+        if next_url:
+            return str(next_url)
+        else:
+            return reverse_lazy('view_inventory-checkout-list', args=str(self.kwargs['pk']))
+        
+    def form_valid(self, form):
+        checkin = form.save(commit=False)
+        checkin.asset = Asset.objects.get(pk=self.kwargs['pk'])
+        checkin.type = 'I'
+        checkin.user = self.request.user
+        checkin.save()
+        Asset.objects.filter(pk=self.kwargs['pk']).update(checkout_status='I')
+        return HttpResponseRedirect(self.get_success_url())
+
+class ActivityListView(LoginRequiredMixin, ListView):
+    model = Activity
+    context_object_name = 'activities'
+    template_name = 'webapp/view_activity_log.html'
+
+class EmployeeListView(LoginRequiredMixin, ListView):
     model = Employee
     context_object_name = 'employees'
     template_name = 'webapp/view_employees.html'
@@ -205,16 +286,18 @@ class EmployeeUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'webapp/input_employee.html'
     success_url = reverse_lazy('view_employee-list')
 
+@login_required
 def image(request):
     return render(request, 'webapp/image.html')
 
+@login_required
 def time_view(request):
     now = datetime.now()
     time = f"Current time is {now}"
     return HttpResponse(time)
 
 # Views for Category objects
-class CategoryListView(ListView):
+class CategoryListView(LoginRequiredMixin, ListView):
     model = Category
     fields = '__all__'
     context_object_name = 'categories'
@@ -243,7 +326,7 @@ class CategoryUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('view_category-list')
 
 # Views for Manufacturer objects
-class ManufacturerListView(ListView):
+class ManufacturerListView(LoginRequiredMixin, ListView):
     model = Manufacturer
     fields = '__all__'
     context_object_name = 'manufacturers'
@@ -272,7 +355,7 @@ class ManufacturerUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('view_manufacturer-list')
 
 # Views for Supplier objects
-class SupplierListView(ListView):
+class SupplierListView(LoginRequiredMixin, ListView):
     model = Supplier
     fields = '__all__'
     context_object_name = 'suppliers'
@@ -301,7 +384,7 @@ class SupplierUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('view_supplier-list')
 
 # Views for Department objects
-class DepartmentListView(ListView):
+class DepartmentListView(LoginRequiredMixin, ListView):
     model = Department
     fields = '__all__'
     context_object_name = 'departments'
@@ -330,7 +413,7 @@ class DepartmentUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('view_department-list')
 
 # Views for Status objects
-class StatusListView(ListView):
+class StatusListView(LoginRequiredMixin, ListView):
     model = Status
     fields = '__all__'
     context_object_name = 'statuses'
@@ -370,12 +453,12 @@ class AccessoryCreateView(LoginRequiredMixin, CreateView):
         else:
             return reverse_lazy('view_accessory-list')
 
-class AccessoryListView(ListView):
+class AccessoryListView(LoginRequiredMixin, ListView):
     model = Accessory
     context_object_name = 'accessories'
     template_name = 'webapp/view_accessory.html'
 
-class AccessoryDetailView(DetailView):
+class AccessoryDetailView(LoginRequiredMixin, DetailView):
     model = Accessory
     context_object_name = 'accessory'
     template_name = 'webapp/view_accessory_detail.html'
@@ -406,12 +489,12 @@ class LocationCreateandDisplayView(LoginRequiredMixin, CreateView):
         context['locations'] = locations
         return context
 
-class LocationListView(ListView):
+class LocationListView(LoginRequiredMixin, ListView):
     model = Location
     context_object_name = 'locations'
     template_name = 'webapp/view_location.html'
 
-class LocationDetailView(DetailView):
+class LocationDetailView(LoginRequiredMixin, DetailView):
     model = Location
     context_object_name = 'location'
     template_name = 'webapp/view_location_detail.html'

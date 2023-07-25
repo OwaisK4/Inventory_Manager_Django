@@ -1,0 +1,145 @@
+{% extends 'master.html' %}
+
+{% block title %}
+  View Inventory
+{% endblock %}
+
+{% block navbar %}
+<div class="collapse navbar-collapse">
+    <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="navbar-brand" href="{% url 'view_inventory-detail' asset.id %}">Asset Detail</a>
+        </li>
+    </ul>
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="navbar-brand" href="#">Checkout log</a>
+    </li>
+  </ul>
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="navbar-brand" href="{% url 'view_inventory-maintenances-list' asset.id %}">Maintenances</a>
+    </li>
+  </ul>
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="navbar-brand" href="{% url 'view_inventory-attachements-list' asset.id %}">Attachements</a>
+    </li>
+  </ul>
+</div>
+{% endblock navbar %}
+
+{% block content %}
+  {% comment %} <div class="content"> {% endcomment %}
+    <div class="container-fluid">
+      <div class="row">
+        {% comment %} <div class="col-md-12"> {% endcomment %}
+          <div class="card">
+            <div class="card-header card-header-icon card-header-danger">
+              <div class="card-icon">
+                <i class="material-icons">assignment</i>
+              </div>
+              <h4 class="card-title">Checkout log</h4>
+            </div>
+            <div class="card-body">
+                {% comment %} <div class="material-datatables">
+                    <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Type</th>
+                            <th>Supplier</th>
+                            <th>Name</th>
+                            <th>Start date</th>
+                            <th>End date</th>
+                            <th>Cost</th>
+                            <th>Notes</th>
+                            <th>File</th>
+                            <th class="disabled-sorting text-right">Actions</th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <th>ID</th>
+                            <th>Type</th>
+                            <th>Supplier</th>
+                            <th>Name</th>
+                            <th>Start date</th>
+                            <th>End date</th>
+                            <th>Cost</th>
+                            <th>Notes</th>
+                            <th>File</th>
+                            <th class="text-right">Actions</th>
+                        </tr>
+                        </tfoot>
+                        <tbody>
+                        {% for maintenance in maintenances %}
+                        <tr>
+                            <td>{{ maintenance.id }}</td>
+                            <td>{{ maintenance.get_type_display }}</td>
+                            <td>{{ maintenance.supplier }}</td>
+                            <td>{{ maintenance.maintenance_name }}</td>
+                            <td>{{ maintenance.start_date }}</td>
+                            <td>{{ maintenance.end_date }}</td>
+                            <td>{{ maintenance.cost }}</td>
+                            <td>{{ maintenance.notes }}</td>
+                            <td><a href="{{ maintenance.file.url }}"><img src="{{ maintenance.file.url }}" alt="ALT" height="30" width="30"></a></td>
+                            <td class="text-right">
+                                <a href="#" class="btn btn-link btn-info btn-just-icon like"><i class="material-icons">favorite</i></a>
+                                <a href="{% url 'view_inventory-maintenances-delete' asset.id maintenance.id %}" class="btn btn-link btn-danger btn-just-icon remove"><i class="material-icons">close</i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div> {% endcomment %}
+                <ul class="step step-icon-xs">
+                    {% for checkout in checkouts %}
+                    <li class="step-item">
+                        <div class="step-content-wrapper">
+                            <span class="step-icon step-icon-soft-dark step-icon-pseudo"></span>
+                            <div class="step-content">
+                                {% if checkout.type == 'I' %}
+                                    <h5 class="mb-1"><span class="text-dark">Checked in from <a href="{% url 'view_employee-list' %}">{{ checkout.employee }}</a></span></h5>
+                                    <p class="font-size-sm mb-0"><b>Checkin Date:</b> {{ checkout.checkout_date }}</p>
+                                    <p class="font-size-sm mb-0"><b>Status:</b> {{ checkout.status }}</p>
+                                    <p class="font-size-sm mb-0"><b>Condition:</b> {{ checkout.condition }}</p>
+                                    <p class="font-size-sm mb-0"><b>Photos:</b>{% if checkout.asset_image %}<a href="{{ checkout.asset_image.url }}"><i class='material-icons'>image</i></a>{% endif %}</p>
+                                    <p class="font-size-sm mb-0"><b>Notes:</b> {{ checkout.notes }}</p>
+                                    <p class="font-size-sm mb-0"><b>User:</b> {{ checkout.user.get_full_name }}</p>
+                                {% else %}
+                                    <h5 class="mb-1"><span class="text-dark">Checked out to <a href="{% url 'view_employee-list' %}">{{ checkout.employee }}</a></span></h5>
+                                    <p class="font-size-sm mb-0"><b>Checkout Date:</b> {{ checkout.checkout_date }}</p>
+                                    <p class="font-size-sm mb-0"><b>Expected Return Date:</b> {{ checkout.expected_return_date }}</p>
+                                    <p class="font-size-sm mb-0"><b>Condition:</b> {{ checkout.condition }}</p>
+                                    <p class="font-size-sm mb-0"><b>Photos:</b>{% if checkout.asset_image %}<a href="{{ checkout.asset_image.url }}"><i class='material-icons'>image</i></a>{% endif %}</p>
+                                    <p class="font-size-sm mb-0"><b>Notes:</b> {{ checkout.notes }}</p>
+                                    <p class="font-size-sm mb-0"><b>User:</b> {{ checkout.user.get_full_name }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </li>
+                    <br>
+                    {% endfor %}
+                    {% comment %} <li class="step-item">
+                        <div class="step-content-wrapper">
+                            <span class="step-icon step-icon-soft-dark step-icon-pseudo"></span>
+                            <div class="step-content">
+                                <h5 class="mb-1"><span class="text-dark">Checked out to <a href="/employees/show/369665921"><i class="tio-group-equal"></i> Owais Ali Khan</a></span></h5>
+                                <p class="font-size-sm mb-0"><b>Checkout Date:</b> July 21, 2023</p>
+                                <p class="font-size-sm mb-0"><b>Expected Return Date:</b> -</p>
+                                <p class="font-size-sm mb-0"><b>Condition:</b> 10</p>
+                                <p class="font-size-sm mb-0"><b>Photos:</b> -</p>
+                                <p class="font-size-sm mb-0"><b>Notes:</b> Test checkout</p>
+                                <p class="font-size-sm mb-0"><b>User:</b> Kundan Nasir</p>
+                            </div>
+                        </div>
+                    </li> {% endcomment %}
+                </ul>
+            </div>
+          </div>
+        {% comment %} </div> {% endcomment %}
+      </div>
+    </div>
+  {% comment %} </div> {% endcomment %}
+{% endblock %}

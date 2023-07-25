@@ -3,12 +3,13 @@ from . import views
 
 urlpatterns = [
     path('', views.master_page, name='dashboard'),
+    path('activity_log/', views.ActivityListView.as_view(), name='activity_log'),
     path('input_inventory/', views.input_inventory_form, name='input_inventory'),
     path('view_inventory/', views.InventoryListView.as_view(), name='view_inventory-list'),
     path('view_inventory/<int:pk>', views.InventoryDetailView.as_view(), name='view_inventory-detail'),
     path('view_inventory/<int:pk>/delete/', views.InventoryDeleteView.as_view(), name='view_inventory-delete'),
     path('view_inventory/<int:pk>/update/', views.InventoryUpdateView.as_view(), name='view_inventory-update'),
-    path('view_inventory/<int:pk>/check/', views.inventory_checkout, name='view_inventory-check'),
+    # path('view_inventory/<int:pk>/check/', views.inventory_checkout, name='view_inventory-check'),
     path('index/', views.index, name='index'),
     path('time/', views.time_view),
     path('image/', views.image),
@@ -32,6 +33,13 @@ urlpatterns += [
     path('view_inventory/<int:pk>/maintenances/', views.inventory_maintenances_list, name='view_inventory-maintenances-list'),
     path('view_inventory/<int:pk>/maintenances/add', views.InventoryMaintenancesAddView.as_view(), name='view_inventory-maintenances-add'),
     path('view_inventory/<int:pk>/maintenances/<int:pk_maintenance>/delete', views.inventory_maintenances_delete, name='view_inventory-maintenances-delete'),
+]
+
+urlpatterns += [
+    path('view_inventory/<int:pk>/checkout_log/', views.inventory_checkout_list, name='view_inventory-checkout-list'),
+    path('view_inventory/<int:pk>/checkout_log/checkout', views.CheckoutView.as_view(), name='view_inventory-checkout'),
+    path('view_inventory/<int:pk>/checkout_log/check-in', views.CheckinView.as_view(), name='view_inventory-checkin'),
+    # path('view_inventory/<int:pk>/checkout_log/<int:pk_checkout>/delete', views.inventory_maintenances_delete, name='view_inventory-checkout-delete'),
 ]
 
 urlpatterns += [

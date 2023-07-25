@@ -1,5 +1,8 @@
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
+from django.contrib.auth.models import User
+import datetime
 
 # Create your models here.
 class Category(models.Model):
@@ -97,11 +100,47 @@ class Maintenance(models.Model):
 
     asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
 
-class Accessory(models.Model):
-    class STATUSES(models.TextChoices):
-        checked_in = 'I', 'Checked in'
-        checked_out = 'O', 'Checked out'
+class Checkout(models.Model):
+    class TYPES(models.TextChoices):
+        IN = 'I', 'Check-in'
+        OUT = 'O', 'Check-out'
+        
+    type = models.CharField(max_length=1, choices=TYPES.choices)
+    employee = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True)
+    checkout_date = models.DateField(help_text='Checkout/checkin date of asset', default=timezone.now)
+    expected_return_date = models.DateField(help_text='Expected return date of asset', default=timezone.now, blank=True, null=True)
+    condition = models.IntegerField(choices=[(i, i) for i in range(1, 11)], help_text="Condition of asset")
+    asset_image = models.ImageField(upload_to='images/', blank=True, null=True)
+    notes = models.CharField(max_length=500, help_text="Notes regarding checkout", blank=True)
 
+    location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True)
+    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
+    status = models.ForeignKey(Status, on_delete=models.SET_NULL, null=True)
+
+    asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+
+    class Meta:
+        ordering = ['-id']
+
+class Activity(models.Model):
+    class TYPES(models.TextChoices):
+        asset = 's', 'Asset'
+        accessory = 'c', 'Accessory'
+    timestamp = models.DateTimeField(help_text='Checkout/checkin date of asset', auto_now_add=True)
+    type = models.CharField(max_length=1, choices=TYPES.choices, default=TYPES.asset)
+    event = models.CharField(max_length=50, help_text="Event")
+    notes = models.CharField(max_length=500, help_text="Notes regarding activity", blank=True)
+
+    employee = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=True)
+    asset = models.ForeignKey(Asset, on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+
+    class Meta:
+        ordering = ['-id']
+
+
+class Accessory(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=200, help_text='Name of asset')

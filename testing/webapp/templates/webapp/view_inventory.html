@@ -26,7 +26,8 @@
                     <th>Price</th>
                     <th>Purchase Date</th>
                     <th>Status</th>
-                    <th>Checkout status</th>
+                    <th>Checkout/in</th>
+                    <th>Action</th>
                     <th>Assigned to</th>
                     <th>Department</th>
                     <th>Image</th>
@@ -36,7 +37,6 @@
                   <tbody>
                     {% for asset in inventory %}
                     <tr>
-                      {% comment %} <td><a href="{% url 'asset-detail' asset.id %}">LDP{{ asset.id|stringformat:"06d" }}</a></td> {% endcomment %}
                       <td><a href="{% url 'view_inventory-detail' asset.id %}">LDP{{ asset.id|stringformat:"06d" }}</a></td>
                       <td>{{ asset.category }}</td>
                       <td>{{ asset.manufacturer }}</td>
@@ -44,7 +44,15 @@
                       <td>{{ asset.price }}</td>
                       <td>{{ asset.purchase_date }}</td>
                       <td>{{ asset.status.name }}</td>
-                      <td><a href="{% url 'view_inventory-check' asset.id %}">{{ asset.get_checkout_status_display }}</a></td>
+                      {% comment %} <td><a href="{% url 'view_inventory-check' asset.id %}">{{ asset.get_checkout_status_display }}</a></td> {% endcomment %}
+                      <td>{{ asset.get_checkout_status_display }}</td>
+                      <td>
+                        {% if asset.checkout_status == 'I' %}
+                          <a class="btn btn-xs btn-info" href="{% url 'view_inventory-checkout' asset.id %}"><i class="material-icons">chevron_right</i></a>
+                        {% else %}
+                          <a class="btn btn-xs btn-info" href="{% url 'view_inventory-checkin' asset.id %}"><i class="material-icons">chevron_left</i></a>
+                        {% endif %}
+                      </td>
                       <td>{{ asset.assigned_to }}</td>
                       <td>{{ asset.department }}</td>
                       <td>{% if asset.asset_image %}YES{% else %}NO{% endif %}</td>
