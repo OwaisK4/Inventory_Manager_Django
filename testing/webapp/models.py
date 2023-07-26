@@ -131,6 +131,7 @@ class Activity(models.Model):
     type = models.CharField(max_length=1, choices=TYPES.choices, default=TYPES.asset)
     event = models.CharField(max_length=50, help_text="Event")
     notes = models.CharField(max_length=500, help_text="Notes regarding activity", blank=True)
+    asset_string = models.CharField(max_length=500, help_text="Asset string", blank=True)
 
     employee = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=True)
     asset = models.ForeignKey(Asset, on_delete=models.SET_NULL, null=True, blank=True)

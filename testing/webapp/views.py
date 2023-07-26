@@ -15,6 +15,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+import qrcode
+from io import BytesIO
+from base64 import b64encode
 
 # Create your views here.
 def index(request):
@@ -56,6 +59,7 @@ def input_inventory_form(request):
             created_asset = form.save(commit=False)
             activity = Activity(event="Create", user=request.user)
             activity.asset = created_asset
+            activity.asset_string = str(created_asset)
             activity.employee = created_asset.assigned_to
             created_asset.save()
             activity.save()
@@ -111,6 +115,7 @@ class InventoryDeleteView(LoginRequiredMixin, DeleteView):
         created_asset = self.get_object()
         activity = Activity(event="Delete", user=self.request.user)
         activity.asset = created_asset
+        activity.asset_string = str(created_asset)
         activity.employee = created_asset.assigned_to
         activity.save()
         return super().form_valid(form)
@@ -126,9 +131,36 @@ class InventoryUpdateView(LoginRequiredMixin, UpdateView):
         created_asset = form.save(commit=False)
         activity = Activity(event="Update", user=self.request.user)
         activity.asset = created_asset
+        activity.asset_string = str(created_asset)
         activity.employee = created_asset.assigned_to
         activity.save()
         return super().form_valid(form)
+
+@login_required
+def generate_barcode(request, pk):
+    asset = Asset.objects.get(pk=pk)
+    barcode = qrcode.make("LDP " + str(asset.id) + " " + asset.name)
+    response = HttpResponse(content_type='image/jpg')
+    barcode.save(response, "JPEG")
+    # response['Content-Disposition'] = 'attachment; filename="piece.jpg"'
+    return response
+
+@login_required
+def generate_all_barcodes(request):
+    assets = Asset.objects.all()
+    images = []
+    for asset in assets:
+        barcode = qrcode.make("LDP " + str(asset.id) + " " + asset.name)
+        image = BytesIO()
+        barcode.save(image, format="JPEG")
+        dataurl = 'data:image/png;base64,' + b64encode(image.getvalue()).decode('ascii')
+        images.append(dataurl)
+
+
+    context = {
+        'images': images
+    }
+    return render(request, 'webapp/view_barcodes.html', context)
 
 # @login_required
 # def inventory_checkout(request, pk):
@@ -154,7 +186,7 @@ def inventory_attachements_delete(request, pk, pk_attachement):
     # Attachement.objects.filter(pk=pk_attachement).delete()
     attachement = Attachement.objects.get(pk=pk_attachement)
     attachement.delete()
-    return HttpResponseRedirect(reverse('view_inventory-attachements-list', args=str(pk)))
+    return HttpResponseRedirect(reverse('view_inventory-attachements-list', args=(str(pk),)))
 
 class InventoryAttachementsAddView(LoginRequiredMixin, CreateView):
     model = Attachement
@@ -163,7 +195,7 @@ class InventoryAttachementsAddView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self) -> str:
         if self.kwargs['pk']:
-            return reverse('view_inventory-attachements-list', args=str(self.kwargs['pk']))
+            return reverse('view_inventory-attachements-list', args=str(self.kwargs['pk'],))
         else:
             return super().get_success_url()
 
@@ -184,9 +216,9 @@ def inventory_maintenances_list(request, pk):
     return render(request, 'webapp/view_inventory_maintenances.html', context)
 
 @login_required
-def inventory_maintenances_delete(request, pk, pk_attachement):
-    Maintenance.objects.filter(pk=pk_attachement).delete()
-    return HttpResponseRedirect(reverse('view_inventory-maintenances-list', args=str(pk)))
+def inventory_maintenances_delete(request, pk, pk_maintenance):
+    Maintenance.objects.filter(pk=pk_maintenance).delete()
+    return HttpResponseRedirect(reverse('view_inventory-maintenances-list', args=(str(pk),)))
 
 class InventoryMaintenancesAddView(LoginRequiredMixin, CreateView):
     model = Maintenance
@@ -195,7 +227,7 @@ class InventoryMaintenancesAddView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self) -> str:
         if self.kwargs['pk']:
-            return reverse('view_inventory-maintenances-list', args=str(self.kwargs['pk']))
+            return reverse('view_inventory-maintenances-list', args=(self.kwargs['pk'],))
         else:
             return super().get_success_url()
 
@@ -225,7 +257,7 @@ class CheckoutView(LoginRequiredMixin, CreateView):
         if next_url:
             return str(next_url)
         else:
-            return reverse_lazy('view_inventory-checkout-list', args=str(self.kwargs['pk']))
+            return reverse_lazy('view_inventory-checkout-list', args=str(self.kwargs['pk'],))
 
     def form_valid(self, form):
         checkout = form.save(commit=False)
@@ -246,7 +278,7 @@ class CheckinView(LoginRequiredMixin, CreateView):
         if next_url:
             return str(next_url)
         else:
-            return reverse_lazy('view_inventory-checkout-list', args=str(self.kwargs['pk']))
+            return reverse_lazy('view_inventory-checkout-list', args=str(self.kwargs['pk'],))
         
     def form_valid(self, form):
         checkin = form.save(commit=False)
@@ -285,10 +317,6 @@ class EmployeeUpdateView(LoginRequiredMixin, UpdateView):
     form_class = EmployeeModelForm
     template_name = 'webapp/input_employee.html'
     success_url = reverse_lazy('view_employee-list')
-
-@login_required
-def image(request):
-    return render(request, 'webapp/image.html')
 
 @login_required
 def time_view(request):

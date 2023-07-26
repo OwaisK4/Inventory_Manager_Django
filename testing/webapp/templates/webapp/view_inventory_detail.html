@@ -36,23 +36,36 @@
         {% comment %} <div class="col-md-12"> {% endcomment %}
           <div class="card">
             <div class="card-header card-header-icon card-header-danger">
-              <div class="card-icon">
-                <i class="material-icons">assignment</i>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="card-icon">
+                    <i class="material-icons">assignment</i>
+                  </div>
+                  <h4 class="card-title">Inventory</h4>
+                </div>
+                <div class="col-md-2">
+                  {% if asset.checkout_status == 'I' %}
+                    <div class="card-icon card-header-info float-right">
+                      <a href="{% url 'view_inventory-checkout' asset.id %}">
+                        <i class="material-icons">chevron_right</i>
+                      </a>
+                    </div>
+                  {% else %}
+                    <div class="card-icon card-header-info float-right">
+                      <a href="{% url 'view_inventory-checkin' asset.id %}">
+                        <i class="material-icons">chevron_left</i>
+                      </a>
+                    </div>
+                  {% endif %}
+                </div>
+                <div class="col-md-6">
+                  <div class="card-icon card-header-info float-right">
+                    <a href="{% url 'view_inventory-barcode' asset.id %}">
+                      <i class="material-icons">receipt</i>
+                    </a>
+                  </div>
+                </div>
               </div>
-              <h4 class="card-title">Inventory</h4>
-              {% if asset.checkout_status == 'I' %}
-                <a href="{% url 'view_inventory-checkout' asset.id %}">
-                  <div class="card-icon card-header-info float-right">
-                    <i class="material-icons">chevron_right</i>
-                  </div>
-                </a>
-              {% else %}
-                <a href="{% url 'view_inventory-checkin' asset.id %}">
-                  <div class="card-icon card-header-info float-right">
-                    <i class="material-icons">chevron_left</i>
-                  </div>
-                </a>
-              {% endif %}
             </div>
             <div class="card-body">
               <div class="table">
