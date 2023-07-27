@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Asset, Category, Manufacturer, Department, Employee, Status, Attachement, Maintenance, Accessory, Location, Checkout, Activity
+from .models import Asset, Category, Manufacturer, Department, Employee, Status, Attachement, Maintenance, Accessory, Location, Checkout, Activity, Audit, ScheduledAudit
 # Register your models here.
 
 admin.site.register(Asset)
@@ -14,3 +14,5 @@ admin.site.register(Accessory)
 admin.site.register(Location)
 admin.site.register(Checkout)
 admin.site.register(Activity)
+admin.site.register(Audit)
+admin.site.register(ScheduledAudit)

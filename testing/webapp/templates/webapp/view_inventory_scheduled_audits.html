@@ -1,0 +1,59 @@
+{% extends 'master.html' %}
+
+{% block title %}View Inventory{% endblock title %}
+
+{% block content %}
+<div class="content">
+  <div class="container-fluid">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-icon card-header-danger">
+              <div class="card-icon">
+                <i class="material-icons">assignment</i>
+              </div>
+              <h4 class="card-title">Scheduled audits</h4>
+              {% comment %} <div class="card-icon float-right">
+                <a href="{% url 'view_inventory-all-barcodes' %}">
+                  <i class="material-icons">receipt</i>
+                </a>
+              </div> {% endcomment %}
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead class="text-primary">
+                    <th>ID</th>
+                    <th>Scheduled audit</th>
+                    <th>Assigned to</th>
+                    <th>Asset</th>
+                    <th>Audit</th>
+                    <th></th>
+                    {% comment %} <th></th>
+                    <th></th> {% endcomment %}
+                  </thead>
+                  <tbody>
+                    {% for audit in scheduled_audits %}
+                    <tr>
+                      <td>{{ audit.id }}</td>
+                      <td>{{ audit.next_audit_date }}</td>
+                      <td>{{ audit.assigned_to_user.get_full_name }}</td>
+                      <td><a href="{% url 'view_inventory-detail' audit.asset.id %}">{{ audit.asset }}</a></td>
+                      <td><a href="{% url 'view_inventory-scheduled-audit' audit.id %}"><i class='material-icons'>cases</i></a></td>
+                      {% comment %} <td><a href="#" class="btn btn-link btn-warning btn-just-icon edit"><i class="material-icons">edit</i></a></td>
+                      <td><a href="#" class="btn btn-link btn-danger btn-just-icon remove"><i class="material-icons">close</i></a></td> {% endcomment %}
+                    </tr>
+                    {% endfor %}
+                  <tbody>
+                </table>
+                {% comment %} <a class="btn btn-danger" href="{% url 'view_inventory-audit-schedule' %}" role="button">Add asset</a> {% endcomment %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -44,6 +44,14 @@ urlpatterns += [
 ]
 
 urlpatterns += [
+    path('view_inventory/<int:pk>/audit_log/', views.inventory_audit_list, name='view_inventory-audit-list'),
+    path('view_inventory/<int:pk>/audit_log/audit/', views.InventoryAuditView.as_view(), name='view_inventory-audit'),
+    path('view_inventory/<int:pk>/audit_log/audit_schedule/', views.InventoryAuditScheduleView.as_view(), name='view_inventory-audit-schedule'),
+    path('view_inventory/scheduled_audits/', views.ScheduledAuditsListView.as_view(), name='view_inventory-scheduled-audit-list'),
+    path('view_inventory/scheduled_audits/<int:pk>/', views.scheduled_audit_view, name='view_inventory-scheduled-audit'),
+]
+
+urlpatterns += [
     path('input_employee/', views.input_employee_form, name='input_employee'),
     path('view_employees/', views.EmployeeListView.as_view(), name='view_employee-list'),
     # path('view_employees/<int:pk>', views.EmployeeDetailView.as_view(), name='view_employee-detail'),
@@ -96,4 +104,8 @@ urlpatterns += [
     path('view_locations/', views.LocationListView.as_view(), name='view_location-list'),
     path('view_locations/<int:pk>/', views.LocationDetailView.as_view(), name='view_location-detail'),
     path('view_locations/<int:pk>/delete/', views.LocationDeleteView.as_view(), name='view_location-delete'),
+]
+
+urlpatterns += [
+    path('export/', views.export_assets, name='export_assets'),
 ]

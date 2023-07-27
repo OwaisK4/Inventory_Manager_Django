@@ -22,6 +22,8 @@
             </div>
             <div class="card-body">
               <div class="table-responsive">
+                <a class="btn btn-danger" href="{% url 'input_inventory' %}" role="button">Add asset</a>
+                <a class="btn btn-danger float-right" href="{% url 'export_assets' %}" role="button">Export</a>
                 <table class="table">
                   <thead class="text-primary">
                     <th>ID</th>
@@ -68,7 +70,7 @@
                     {% endfor %}
                   <tbody>
                 </table>
-                <a class="btn btn-danger" href="{% url 'input_inventory' %}" role="button">Add asset</a>
+                {% comment %} <a class="btn btn-danger" href="{% url 'input_inventory' %}" role="button">Add asset</a> {% endcomment %}
               </div>
             </div>
           </div>

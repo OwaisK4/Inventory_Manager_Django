@@ -7,8 +7,8 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormVi
 from django.urls import reverse, reverse_lazy
 from datetime import datetime
 from django.utils import timezone
-from .models import Asset, Employee, Category, Manufacturer, Department, Status, Attachement, Supplier, Maintenance, Accessory, Location, Checkout, Activity
-from .forms import AssetModelForm, EmployeeModelForm, CategoryModelForm, ManufacturerModelForm, AttachementModelForm, SupplierModelForm, DepartmentModelForm, StatusModelForm, MaintenanceModelForm, AccessoryModelForm, LocationModelForm, RegistrationForm, CheckoutModelForm
+from .models import Asset, Employee, Category, Manufacturer, Department, Status, Attachement, Supplier, Maintenance, Accessory, Location, Checkout, Activity, Audit, ScheduledAudit
+from .forms import AssetModelForm, EmployeeModelForm, CategoryModelForm, ManufacturerModelForm, AttachementModelForm, SupplierModelForm, DepartmentModelForm, StatusModelForm, MaintenanceModelForm, AccessoryModelForm, LocationModelForm, RegistrationForm, CheckoutModelForm, AuditModelForm, ScheduledAuditModelForm
 # from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -18,6 +18,7 @@ from django.utils.translation import gettext_lazy as _
 import qrcode
 from io import BytesIO
 from base64 import b64encode
+import openpyxl
 
 # Create your views here.
 def index(request):
@@ -288,6 +289,73 @@ class CheckinView(LoginRequiredMixin, CreateView):
         checkin.save()
         Asset.objects.filter(pk=self.kwargs['pk']).update(checkout_status='I')
         return HttpResponseRedirect(self.get_success_url())
+    
+@login_required
+def inventory_audit_list(request, pk):
+    asset = Asset.objects.get(pk=pk)
+    audits = Audit.objects.filter(asset=asset)
+    context = {
+        'asset': asset,
+        'audits': audits,
+    }
+    return render(request, 'webapp/view_inventory_audit_log.html', context)
+
+class InventoryAuditView(LoginRequiredMixin, CreateView):
+    model = Audit
+    form_class = AuditModelForm
+    template_name = 'webapp/view_inventory_audit.html'
+
+    def get_success_url(self) -> str:
+        if self.kwargs['pk']:
+            return reverse('view_inventory-audit-schedule', args=(self.kwargs['pk'],))
+        else:
+            return super().get_success_url()
+
+    def form_valid(self, form):
+        audit = form.save(commit=False)
+        asset = Asset.objects.get(pk=self.kwargs['pk'])
+        audit.asset = asset
+        audit.asset_string = str(asset)
+        audit.user = self.request.user
+        audit.save()
+        return HttpResponseRedirect(self.get_success_url())
+    
+class InventoryAuditScheduleView(LoginRequiredMixin, CreateView):
+    model = ScheduledAudit
+    form_class = ScheduledAuditModelForm
+    template_name = 'webapp/view_inventory_audit_schedule.html'
+
+    def get_success_url(self) -> str:
+        if self.kwargs['pk']:
+            return reverse('view_inventory-audit-list', args=(self.kwargs['pk'],))
+        else:
+            return super().get_success_url()
+
+    def form_valid(self, form):
+        scheduled_audit = form.save(commit=False)
+        asset = Asset.objects.get(pk=self.kwargs['pk'])
+        if asset.scheduled_audit.exists():
+            asset.scheduled_audit.all().delete()
+        scheduled_audit.asset = asset
+        scheduled_audit.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+class ScheduledAuditsListView(LoginRequiredMixin, ListView):
+    model = ScheduledAudit
+    context_object_name = 'scheduled_audits'
+    template_name = 'webapp/view_inventory_scheduled_audits.html'
+
+@login_required
+def scheduled_audit_view(request, pk):
+    audit = ScheduledAudit.objects.get(pk=pk)
+    pk_asset = audit.asset.id
+    # audit.delete()
+    return HttpResponseRedirect(reverse('view_inventory-audit', args=(pk_asset,)))
+    # context = {
+    #     'asset': asset,
+    #     'scheduled_audits': scheduled_audits,
+    # }
+    # return render(request, 'webapp/view_inventory_scheduled_audits.html', context)
 
 class ActivityListView(LoginRequiredMixin, ListView):
     model = Activity
@@ -544,3 +612,62 @@ class LocationDeleteView(LoginRequiredMixin, DeleteView):
 #     form_class = LocationModelForm
 #     template_name = 'webapp/input_location.html'
 #     success_url = reverse_lazy('view_location-list')
+
+def export_assets(request):
+    assets = Asset.objects.all()
+    # fields = Asset._meta.get_fields()
+    all_fields = [f.name for f in Asset._meta.get_fields()]
+
+    # return HttpResponse(" ".join(all_fields))
+    object = BytesIO()
+
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+
+    sheet["A1"] = "category"
+    sheet["B1"] = "manufacturer"
+    sheet["C1"] = "name"
+    sheet["D1"] = "price"
+    sheet["E1"] = "Department"
+    sheet["F1"] = "Assigned to"
+    sheet["G1"] = "location"
+    sheet["H1"] = "purchase_date"
+    sheet["I1"] = "processor"
+    sheet["J1"] = "RAM"
+    sheet["K1"] = "HDD"
+    sheet["L1"] = "SSD"
+    sheet["M1"] = "Checkout status"
+    sheet["N1"] = "Status"
+    sheet["O1"] = "supplier"
+    sheet["P1"] = "serial"
+    sheet["Q1"] = "invoice"
+    
+    for i in range(len(assets)):
+        sheet.cell(row = i+2, column = 1).value = assets[i].category.name
+        sheet.cell(row = i+2, column = 2).value = assets[i].manufacturer.name
+        sheet.cell(row = i+2, column = 3).value = assets[i].name
+        sheet.cell(row = i+2, column = 4).value = assets[i].price
+        sheet.cell(row = i+2, column = 5).value = assets[i].department.name
+        sheet.cell(row = i+2, column = 6).value = assets[i].assigned_to.name
+        sheet.cell(row = i+2, column = 7).value = assets[i].location.name
+        sheet.cell(row = i+2, column = 8).value = assets[i].purchase_date
+        sheet.cell(row = i+2, column = 9).value = assets[i].processor
+        sheet.cell(row = i+2, column = 10).value = assets[i].ram
+        sheet.cell(row = i+2, column = 11).value = assets[i].hdd
+        sheet.cell(row = i+2, column = 12).value = assets[i].ssd
+        sheet.cell(row = i+2, column = 13).value = assets[i].checkout_status
+        sheet.cell(row = i+2, column = 14).value = assets[i].status.name
+        sheet.cell(row = i+2, column = 15).value = assets[i].supplier.name
+        sheet.cell(row = i+2, column = 16).value = assets[i].serial
+        sheet.cell(row = i+2, column = 17).value = assets[i].invoice
+
+    workbook.save(object)
+
+    # create a response
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    # tell the browser what the file is named
+    response['Content-Disposition'] = 'attachment;filename="Exported_assets.xlsx"'
+    # put the spreadsheet data into the response
+    response.write(object.getvalue())
+    # return the response
+    return response

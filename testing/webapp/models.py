@@ -140,6 +140,33 @@ class Activity(models.Model):
     class Meta:
         ordering = ['-id']
 
+class Audit(models.Model):
+    class TYPES(models.TextChoices):
+        general = 'G', 'General'
+        Special = 'S', 'Special'
+    purpose = models.CharField(max_length=1, choices=TYPES.choices, default=TYPES.general)
+    audit_date = models.DateField(help_text='Audit date of asset', default=timezone.now)
+    reason = models.CharField(max_length=200, help_text="Reason for (special) audit", blank=True) # Only for special audits
+    results = models.CharField(max_length=500, help_text="Results of audit") # Use TextArea widget for this
+    file = models.FileField(upload_to='audits/', blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
+    asset_string = models.CharField(max_length=500, help_text="Asset string", blank=True)
+
+    class Meta:
+        ordering = ['-id']
+
+class ScheduledAudit(models.Model):
+    def date_in_future():
+        now = timezone.now()
+        return now + datetime.timedelta(weeks=4)
+    
+    next_audit_date = models.DateField(help_text='Audit date of asset', default=date_in_future)
+    assigned_to_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    asset = models.ForeignKey(Asset, on_delete=models.CASCADE, related_name='scheduled_audit')
+
+    class Meta:
+        ordering = ['-next_audit_date', '-id']
 
 class Accessory(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)

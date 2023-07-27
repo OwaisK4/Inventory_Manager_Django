@@ -6,14 +6,19 @@
 
 {% block navbar %}
 <div class="collapse navbar-collapse">
-    <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="navbar-brand" href="{% url 'view_inventory-detail' asset.id %}">Asset Detail</a>
-        </li>
-    </ul>
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="navbar-brand" href="{% url 'view_inventory-detail' asset.id %}">Asset Detail</a>
+    </li>
+  </ul>
   <ul class="navbar-nav">
     <li class="nav-item">
       <a class="navbar-brand" href="#">Checkout log</a>
+    </li>
+  </ul>
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="navbar-brand" href="{% url 'view_inventory-audit-list' asset.id %}">Audit log</a>
     </li>
   </ul>
   <ul class="navbar-nav">

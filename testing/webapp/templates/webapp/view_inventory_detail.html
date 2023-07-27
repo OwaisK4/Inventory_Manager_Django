@@ -18,6 +18,11 @@
   </ul>
   <ul class="navbar-nav">
     <li class="nav-item">
+      <a class="navbar-brand" href="{% url 'view_inventory-audit-list' asset.id %}">Audit log</a>
+    </li>
+  </ul>
+  <ul class="navbar-nav">
+    <li class="nav-item">
       <a class="navbar-brand" href="{% url 'view_inventory-maintenances-list' asset.id %}">Maintenances</a>
     </li>
   </ul>

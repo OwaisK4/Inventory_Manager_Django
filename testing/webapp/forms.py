@@ -1,5 +1,5 @@
 from django import forms
-from webapp.models import Asset, Employee, Category, Manufacturer, Department, Status, Attachement, Supplier, Maintenance, Accessory, Location, Checkout
+from webapp.models import Asset, Employee, Category, Manufacturer, Department, Status, Attachement, Supplier, Maintenance, Accessory, Location, Checkout, Audit, ScheduledAudit
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
@@ -291,6 +291,54 @@ class CheckoutModelForm(forms.ModelForm):
                 'data-style': "btn btn-info",
                 'style': 'max-width: 300px;',
             }),
+        }
+
+class AuditModelForm(forms.ModelForm):
+    class Meta:
+        model = Audit
+        fields = ['purpose', 'audit_date', 'reason', 'results', 'file']
+        widgets = {
+            'purpose' : forms.Select(attrs={
+                'class': "selectpicker",
+                'data-style': "btn btn-info",
+                'style': 'max-width: 300px;',
+                'placeholder': 'Purpose',
+            }),
+            'audit_date' : forms.DateInput(
+                attrs={
+                'class': "datepicker form-control",
+                'placeholder': 'Audit date (mm/dd/YYYY)',
+                'type': 'date',
+            }),
+            'reason' : forms.TextInput(attrs={
+                'class': "form-control",
+                'placeholder': 'Reason',
+            }),
+            'results' : forms.Textarea(attrs={
+                'class': "form-control",
+                'placeholder': 'Results',
+            }),
+            'file' : forms.ClearableFileInput(attrs={
+                'class': 'form-control',
+            }),
+        }
+
+class ScheduledAuditModelForm(forms.ModelForm):
+    class Meta:
+        model = ScheduledAudit
+        fields = ['next_audit_date', 'assigned_to_user']
+        widgets = {
+            'next_audit_date' : forms.DateInput(attrs={
+                'class': "datepicker form-control",
+                'placeholder': 'Next scheduled audit date (mm/dd/YYYY)',
+                'type': 'date',
+            }),
+            'assigned_to_user' : forms.Select(attrs={
+                'class': "selectpicker",
+                'data-style': "btn btn-info",
+                'style': 'max-width: 300px;',
+                'placeholder': 'Purpose',
+            })
         }
 
 

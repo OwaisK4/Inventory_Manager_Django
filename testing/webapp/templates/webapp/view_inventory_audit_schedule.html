@@ -1,0 +1,67 @@
+{% extends 'master.html' %}
+
+{% block title %}
+  Input Maintenance
+{% endblock %}
+
+{% block content %}
+<div class="content">
+  <div class="container">
+    <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header card-header-danger card-header-text">
+          <div class="card-text">
+            <h4 class="card-title">Next Audit Schedule</h4>
+          </div>
+        </div>
+        <div class="card-body">
+          <form method="POST" action="" enctype="multipart/form-data" class="form-horizontal" id="input_form">
+            {% csrf_token %}
+
+            {% if form.errors %}
+            <ul>
+              <li>
+                {% for error in form.errors %}
+                    {{ error }}
+                {% endfor %}
+              </li>
+            </ul>
+            {% endif %}
+              
+            <div class="row">
+                <label class="col-sm-2 col-form-label">Scheduled audit date:</label>
+                <label class="col-form-label">&nbsp&nbsp</label>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                    {{ form.next_audit_date }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <label class="col-sm-2 col-form-label">Assigned to:</label>
+                <label class="col-form-label">&nbsp&nbsp</label>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                    {{ form.assigned_to_user }}
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row text-center">
+            <div class="col-md-12 text-center">
+                <button name="submit" id="submit" type="submit" class="btn btn-success">Submit</button>
+            </div>
+            </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

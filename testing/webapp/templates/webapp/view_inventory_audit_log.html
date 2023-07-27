@@ -1,0 +1,95 @@
+{% extends 'master.html' %}
+
+{% block title %}
+  View Inventory
+{% endblock %}
+
+{% block navbar %}
+<div class="collapse navbar-collapse">
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="navbar-brand" href="{% url 'view_inventory-detail' asset.id %}">Asset Detail</a>
+    </li>
+  </ul>
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="navbar-brand" href="{% url 'view_inventory-checkout-list' asset.id %}">Checkout log</a>
+    </li>
+  </ul>
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="navbar-brand" href="#">Audit log</a>
+    </li>
+  </ul>
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="navbar-brand" href="{% url 'view_inventory-maintenances-list' asset.id %}">Maintenances</a>
+    </li>
+  </ul>
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="navbar-brand" href="{% url 'view_inventory-attachements-list' asset.id %}">Attachements</a>
+    </li>
+  </ul>
+</div>
+{% endblock navbar %}
+
+{% block content %}
+  {% comment %} <div class="content"> {% endcomment %}
+    <div class="container-fluid">
+      <div class="row">
+        {% comment %} <div class="col-md-12"> {% endcomment %}
+          <div class="card">
+            <div class="card-header card-header-icon card-header-danger">
+              <div class="card-icon">
+                <i class="material-icons">assignment</i>
+              </div>
+              <h4 class="card-title">Audit log</h4>
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="float-left">
+                  <a class="btn btn-lg btn-danger" href="{% url 'view_inventory-audit-schedule' asset.id %}" role="button">Schedule audit</a>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="float-right">
+                  <a class="btn btn-lg btn-danger" href="{% url 'view_inventory-audit' asset.id %}" role="button">Audit</a>
+                </div>
+              </div>
+            </div>
+            {% comment %} <div class="row">
+              <div class="col md-6">
+                  <a class="btn btn-danger float-right" href="{% url 'view_inventory-audit' asset.id %}" role="button">Audit</a>
+              </div>
+            </div> {% endcomment %}
+            <div class="card-body">
+                <ul class="step step-icon-xs">
+                    {% for audit in audits %}
+                    <li class="step-item">
+                        <div class="step-content-wrapper">
+                            <span class="step-icon step-icon-soft-dark step-icon-pseudo"></span>
+                            <div class="step-content">
+                                {% if audit.user %}
+                                    <h5 class="mb-1"><span class="text-dark">Audited by <a href="{% url 'user-list' %}">{{ audit.user.get_full_name }}</a></span></h5>
+                                {% endif %}
+                                <p class="font-size-sm mb-0"><b>Purpose of audit:</b> {{ audit.get_purpose_display }}</p>
+                                {% if audit.purpose == 'S' %}
+                                    <p class="font-size-sm mb-0"><b>Reason:</b> {{ audit.reason }}</p>
+                                {% endif %}
+                                <p class="font-size-sm mb-0"><b>Audit date:</b> {{ audit.audit_date }}</p>
+                                <p class="font-size-sm mb-0"><b>Results:</b> {{ audit.results }}</p>
+                                <p class="font-size-sm mb-0"><b>File:</b>{% if audit.file %}<a href="{{ audit.file.url }}"><i class='material-icons'>description</i></a>{% endif %}</p>
+                            </div>
+                        </div>
+                    </li>
+                    <br>
+                    {% endfor %}
+                </ul>
+            </div>
+          </div>
+        {% comment %} </div> {% endcomment %}
+      </div>
+    </div>
+  {% comment %} </div> {% endcomment %}
+{% endblock %}
