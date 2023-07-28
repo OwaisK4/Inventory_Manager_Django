@@ -168,6 +168,20 @@ class ScheduledAudit(models.Model):
     class Meta:
         ordering = ['-next_audit_date', '-id']
 
+class Change(models.Model):
+    timestamp = models.DateTimeField(help_text='Time of change log', auto_now_add=True)
+    status = models.CharField(max_length=200, help_text="Status")
+    user = models.CharField(max_length=200, help_text="User")
+    processor = models.CharField(max_length=200, help_text="Processor")
+    RAM = models.CharField(max_length=200, help_text="RAM")
+    disk_space = models.CharField(max_length=200, help_text="Disk space")
+    change_in_processor = models.CharField(max_length=100, help_text="Change in Processor")
+    change_in_ram = models.CharField(max_length=100, help_text="Change in RAM")
+    change_in_disk = models.CharField(max_length=100, help_text="Change in Disk")
+    message = models.CharField(max_length=500, help_text="Message")
+
+    asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
+
 class Accessory(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.SET_NULL, null=True)

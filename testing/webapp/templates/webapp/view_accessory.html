@@ -17,6 +17,8 @@
             </div>
             <div class="card-body">
               <div class="table-responsive">
+                <a class="btn btn-danger" href="{% url 'input_accessory' %}" role="button">Add accessory</a>
+                <a class="btn btn-danger float-right" href="{% url 'export_accessories' %}" role="button">Export</a>
                 <table class="table">
                   <thead class="text-primary">
                     <th>ID</th>
@@ -53,7 +55,7 @@
                     {% endfor %}
                   <tbody>
                 </table>
-                <a class="btn btn-danger" href="{% url 'input_accessory' %}" role="button">Add accessory</a>
+                {% comment %} <a class="btn btn-danger" href="{% url 'input_accessory' %}" role="button">Add accessory</a> {% endcomment %}
               </div>
             </div>
           </div>

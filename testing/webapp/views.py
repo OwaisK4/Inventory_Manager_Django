@@ -7,7 +7,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormVi
 from django.urls import reverse, reverse_lazy
 from datetime import datetime
 from django.utils import timezone
-from .models import Asset, Employee, Category, Manufacturer, Department, Status, Attachement, Supplier, Maintenance, Accessory, Location, Checkout, Activity, Audit, ScheduledAudit
+from .models import Asset, Employee, Category, Manufacturer, Department, Status, Attachement, Supplier, Maintenance, Accessory, Location, Checkout, Activity, Audit, ScheduledAudit, Change
 from .forms import AssetModelForm, EmployeeModelForm, CategoryModelForm, ManufacturerModelForm, AttachementModelForm, SupplierModelForm, DepartmentModelForm, StatusModelForm, MaintenanceModelForm, AccessoryModelForm, LocationModelForm, RegistrationForm, CheckoutModelForm, AuditModelForm, ScheduledAuditModelForm
 # from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
@@ -15,6 +15,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from django.views.decorators.csrf import csrf_exempt
 import qrcode
 from io import BytesIO
 from base64 import b64encode
@@ -29,8 +30,57 @@ def master_page(request):
     return render(request, 'master.html')
 
 @login_required
+def dashboard(request):
+    asset_count = Asset.objects.all().count()
+    accessories_count = Accessory.objects.all().count()
+    user_count = User.objects.all().count()
+    audits_count = ScheduledAudit.objects.all().count()
+    checked_in_count = Asset.objects.filter(checkout_status='I').count()
+    checked_out_count = Asset.objects.filter(checkout_status='O').count()
+
+    total_asset_cost = 0
+    for asset in Asset.objects.all():
+        total_asset_cost += asset.price
+    total_accessory_cost = 0
+    for accessory in Accessory.objects.all():
+        total_accessory_cost += accessory.price
+
+    context = {
+        'asset_count': asset_count,
+        'accessories_count': accessories_count,
+        'total_asset_cost': total_asset_cost,
+        'total_accessory_cost': total_accessory_cost,
+        'user_count': user_count,
+        'audits_count': audits_count,
+        'checked_in_count': checked_in_count,
+        'checked_out_count': checked_out_count,
+    }
+    return render(request, 'webapp/dashboard.html', context)
+
+@login_required
 def about(request):
     return render(request, 'registration/about.html')
+
+@csrf_exempt
+def webhook(request):
+    if request.method == 'POST':
+        print(request.body)
+        data = request.POST
+        # pk = data.get("ID")
+        # if Asset.objects.filter(pk=pk).exists():
+        #     asset = Asset.objects.get(pk=pk)
+        #     change = Change()
+        #     change.asset = asset
+        #     change.status = data.get("Status")
+        #     change.user = data.get("User")
+        #     change.processor = data.get("Processor")
+        #     change.RAM = data.get("RAM")
+        #     change.disk_space = data.get("sum_total_disk")
+        #     change.change_in_processor = data.get("status")
+        #     change.change_in_ram = data.get("status")
+        #     change.change_in_disk = data.get("status")
+        #     change.message = data.get("status")
+        return HttpResponse("Webhook received!")
 
 @login_required
 def register(request):
@@ -624,40 +674,47 @@ def export_assets(request):
     workbook = openpyxl.Workbook()
     sheet = workbook.active
 
-    sheet["A1"] = "category"
-    sheet["B1"] = "manufacturer"
-    sheet["C1"] = "name"
-    sheet["D1"] = "price"
+    sheet["A1"] = "Category"
+    sheet["B1"] = "Manufacturer"
+    sheet["C1"] = "Name"
+    sheet["D1"] = "Price"
     sheet["E1"] = "Department"
     sheet["F1"] = "Assigned to"
-    sheet["G1"] = "location"
-    sheet["H1"] = "purchase_date"
-    sheet["I1"] = "processor"
+    sheet["G1"] = "Location"
+    sheet["H1"] = "Purchase_date"
+    sheet["I1"] = "Processor"
     sheet["J1"] = "RAM"
     sheet["K1"] = "HDD"
     sheet["L1"] = "SSD"
     sheet["M1"] = "Checkout status"
     sheet["N1"] = "Status"
     sheet["O1"] = "supplier"
-    sheet["P1"] = "serial"
-    sheet["Q1"] = "invoice"
+    sheet["P1"] = "Serial"
+    sheet["Q1"] = "Invoice"
     
     for i in range(len(assets)):
-        sheet.cell(row = i+2, column = 1).value = assets[i].category.name
-        sheet.cell(row = i+2, column = 2).value = assets[i].manufacturer.name
+        if assets[i].category:
+            sheet.cell(row = i+2, column = 1).value = assets[i].category.name
+        if assets[i].manufacturer:
+            sheet.cell(row = i+2, column = 2).value = assets[i].manufacturer.name
         sheet.cell(row = i+2, column = 3).value = assets[i].name
         sheet.cell(row = i+2, column = 4).value = assets[i].price
-        sheet.cell(row = i+2, column = 5).value = assets[i].department.name
-        sheet.cell(row = i+2, column = 6).value = assets[i].assigned_to.name
-        sheet.cell(row = i+2, column = 7).value = assets[i].location.name
+        if assets[i].department:
+            sheet.cell(row = i+2, column = 5).value = assets[i].department.name
+        if assets[i].assigned_to:
+            sheet.cell(row = i+2, column = 6).value = assets[i].assigned_to.name
+        if assets[i].location:
+            sheet.cell(row = i+2, column = 7).value = assets[i].location.name
         sheet.cell(row = i+2, column = 8).value = assets[i].purchase_date
         sheet.cell(row = i+2, column = 9).value = assets[i].processor
         sheet.cell(row = i+2, column = 10).value = assets[i].ram
         sheet.cell(row = i+2, column = 11).value = assets[i].hdd
         sheet.cell(row = i+2, column = 12).value = assets[i].ssd
         sheet.cell(row = i+2, column = 13).value = assets[i].checkout_status
-        sheet.cell(row = i+2, column = 14).value = assets[i].status.name
-        sheet.cell(row = i+2, column = 15).value = assets[i].supplier.name
+        if assets[i].status:
+            sheet.cell(row = i+2, column = 14).value = assets[i].status.name
+        if assets[i].supplier:
+            sheet.cell(row = i+2, column = 15).value = assets[i].supplier.name
         sheet.cell(row = i+2, column = 16).value = assets[i].serial
         sheet.cell(row = i+2, column = 17).value = assets[i].invoice
 
@@ -670,4 +727,144 @@ def export_assets(request):
     # put the spreadsheet data into the response
     response.write(object.getvalue())
     # return the response
+    return response
+
+def export_accessories(request):
+    accessories = Accessory.objects.all()
+    all_fields = [f.name for f in Asset._meta.get_fields()]
+
+    # return HttpResponse(" ".join(all_fields))
+    object = BytesIO()
+
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+
+    sheet["A1"] = "Category"
+    sheet["B1"] = "Manufacturer"
+    sheet["C1"] = "Name"
+    sheet["D1"] = "Price"
+    sheet["E1"] = "Department"
+    sheet["F1"] = "Assigned to"
+    sheet["G1"] = "Location"
+    sheet["H1"] = "Purchase date"
+    sheet["I1"] = "Status"
+    sheet["J1"] = "Supplier"
+    sheet["K1"] = "Serial"
+    sheet["L1"] = "Invoice"
+    
+    for i in range(len(accessories)):
+        if accessories[i].category:
+            sheet.cell(row = i+2, column = 1).value = accessories[i].category.name
+        if accessories[i].manufacturer:
+            sheet.cell(row = i+2, column = 2).value = accessories[i].manufacturer.name
+        sheet.cell(row = i+2, column = 3).value = accessories[i].name
+        sheet.cell(row = i+2, column = 4).value = accessories[i].price
+        if accessories[i].department:
+            sheet.cell(row = i+2, column = 5).value = accessories[i].department.name
+        if accessories[i].assigned_to:
+            sheet.cell(row = i+2, column = 6).value = accessories[i].assigned_to.name
+        if accessories[i].location:
+            sheet.cell(row = i+2, column = 7).value = accessories[i].location.name
+        sheet.cell(row = i+2, column = 8).value = accessories[i].purchase_date
+        if accessories[i].status:
+            sheet.cell(row = i+2, column = 9).value = accessories[i].status.name
+        if accessories[i].supplier:
+            sheet.cell(row = i+2, column = 10).value = accessories[i].supplier.name
+        sheet.cell(row = i+2, column = 11).value = accessories[i].serial
+        sheet.cell(row = i+2, column = 12).value = accessories[i].invoice
+
+    workbook.save(object)
+
+    # create a response
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    # tell the browser what the file is named
+    response['Content-Disposition'] = 'attachment;filename="Exported_accessories.xlsx"'
+    # put the spreadsheet data into the response
+    response.write(object.getvalue())
+    # return the response
+    return response
+
+def export_employees(request):
+    employees = Employee.objects.all()
+    object = BytesIO()
+
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+    sheet["A1"] = "Employee"
+    
+    for i in range(len(employees)):
+        sheet.cell(row = i+2, column = 1).value = employees[i].name
+
+    workbook.save(object)
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment;filename="Exported_employees.xlsx"'
+    response.write(object.getvalue())
+    return response
+
+def export_categories(request):
+    categories = Category.objects.all()
+    object = BytesIO()
+
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+    sheet["A1"] = "Category"
+    
+    for i in range(len(categories)):
+        sheet.cell(row = i+2, column = 1).value = categories[i].name
+
+    workbook.save(object)
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment;filename="Exported_categories.xlsx"'
+    response.write(object.getvalue())
+    return response
+
+def export_manufacturers(request):
+    manufacturers = Manufacturer.objects.all()
+    object = BytesIO()
+
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+    sheet["A1"] = "Manufacturer"
+    
+    for i in range(len(manufacturers)):
+        sheet.cell(row = i+2, column = 1).value = manufacturers[i].name
+
+    workbook.save(object)
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment;filename="Exported_manufacturers.xlsx"'
+    response.write(object.getvalue())
+    return response
+
+def export_suppliers(request):
+    suppliers = Supplier.objects.all()
+    object = BytesIO()
+
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+    sheet["A1"] = "Supplier"
+    
+    for i in range(len(suppliers)):
+        sheet.cell(row = i+2, column = 1).value = suppliers[i].name
+
+    workbook.save(object)
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment;filename="Exported_suppliers.xlsx"'
+    response.write(object.getvalue())
+    return response
+
+def export_departments(request):
+    departments = Department.objects.all()
+    object = BytesIO()
+
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+    sheet["A1"] = "Department"
+    
+    for i in range(len(departments)):
+        sheet.cell(row = i+2, column = 1).value = departments[i].name
+
+    workbook.save(object)
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment;filename="Exported_departments.xlsx"'
+    response.write(object.getvalue())
     return response

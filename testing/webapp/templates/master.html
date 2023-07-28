@@ -39,11 +39,11 @@
   <meta property="og:site_name" content="Creative Tim" />
   <!--     Fonts and icons     -->
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
-  <link rel="stylesheet" href="{% static 'webapp/Assets/new/https_/maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css' %}">
+  {% comment %} <link rel="stylesheet" href="{% static 'webapp/Assets/new/https_/maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css' %}"> {% endcomment %}
   <!-- CSS Files -->
-  <link href="{% static 'webapp/Assets/assets/css/material-dashboard.minf066.css?v=2.1.0" rel="stylesheet' %}" />
+  {% comment %} <link href="{% static 'webapp/Assets/assets/css/material-dashboard.minf066.css?v=2.1.0" rel="stylesheet' %}" /> {% endcomment %}
   <!-- CSS Just for demo purpose, don't include it in your project -->
-  <link href="{% static 'webapp/Assets/assets/demo/demo.css' %}" rel="stylesheet"/>
+  {% comment %} <link href="{% static 'webapp/Assets/assets/demo/demo.css' %}" rel="stylesheet"/> {% endcomment %}
   <link rel="stylesheet" href="{% static 'webapp/Assets/assets/css/material-dashboard.minf066.css' %}">
 
 </head>
@@ -118,7 +118,7 @@
         <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#pagesExamples">
               <i class="material-icons">apps</i>
-              <p>Inventory Management
+              <p>Asset Management
                 <b class="caret"></b>
               </p>
             </a>
@@ -141,7 +141,7 @@
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'input_inventory' %}">
                     <span class="sidebar-mini"> I </span>
-                    <span class="sidebar-normal"> Input Inventory
+                    <span class="sidebar-normal"> Input Asset
                     </span>
                   </a>
                 </li>
@@ -152,15 +152,8 @@
                     </span>
                   </a>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'input_employee' %}">
-                    <span class="sidebar-mini"> I </span>
-                    <span class="sidebar-normal"> Input Employees
-                    </span>
-                  </a>
-                </li>
 
-                <li class="nav-item ">
+                {% comment %} <li class="nav-item ">
                       <a class="nav-link" data-toggle="collapse" href="#componentsCollapse">
                         <span class="sidebar-mini"> P </span>
                         <span class="sidebar-normal"> Products
@@ -189,15 +182,15 @@
                           </li>
                         </ul>
                       </div>
-                    </li>
+                    </li> {% endcomment %}
 
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'input_and_display_location' %}">
-                    <span class="sidebar-mini"> W </span>
+                    <span class="sidebar-mini"> L </span>
                     <span class="sidebar-normal"> Locations </span>
                   </a>
                 </li>
-                <li class="nav-item ">
+                {% comment %} <li class="nav-item ">
                   <a class="nav-link" data-toggle="collapse" href="#componentsCollapse1">
                     <span class="sidebar-mini"> O </span>
                     <span class="sidebar-normal"> Outbounds
@@ -220,23 +213,23 @@
                       </li>
                     </ul>
                   </div>
-                </li>
+                </li> {% endcomment %}
                 <li class="nav-item ">
                   <a class="nav-link" href="{% url 'view_inventory-list' %}">
-                    <span class="sidebar-mini"> VI </span>
-                    <span class="sidebar-normal"> View Inventory </span>
+                    <span class="sidebar-mini"> A </span>
+                    <span class="sidebar-normal"> Assets </span>
                   </a>
                 </li>
                 <li class="nav-item ">
                   <a class="nav-link" href="{% url 'view_accessory-list' %}">
-                    <span class="sidebar-mini"> VA </span>
-                    <span class="sidebar-normal"> View Accessory </span>
+                    <span class="sidebar-mini"> A </span>
+                    <span class="sidebar-normal"> Accessories </span>
                   </a>
                 </li>
                 <li class="nav-item ">
                   <a class="nav-link" data-toggle="collapse" href="#componentsCollapse2">
-                    <span class="sidebar-mini"> OM </span>
-                    <span class="sidebar-normal"> View Tables
+                    <span class="sidebar-mini"> M </span>
+                    <span class="sidebar-normal"> More
                       <b class="caret"></b>
                     </span>
                   </a>
@@ -244,44 +237,44 @@
                     <ul class="nav">
                       <li class="nav-item ">
                         <a class="nav-link" href="{% url 'view_employee-list' %}">
-                          <span class="sidebar-mini"> VE </span>
-                          <span class="sidebar-normal"> View Employees </span>
+                          <span class="sidebar-mini"> E </span>
+                          <span class="sidebar-normal"> Employees </span>
                         </a>
                       </li>
                       <li class="nav-item ">
                         <a class="nav-link" href="{% url 'view_category-list' %}">
-                          <span class="sidebar-mini"> VC </span>
-                          <span class="sidebar-normal"> View Categories </span>
+                          <span class="sidebar-mini"> C </span>
+                          <span class="sidebar-normal"> Categories </span>
                         </a>
                       </li>
                       <li class="nav-item ">
                         <a class="nav-link" href="{% url 'view_manufacturer-list' %}">
-                          <span class="sidebar-mini"> VM </span>
-                          <span class="sidebar-normal"> View Manufacturers </span>
+                          <span class="sidebar-mini"> M </span>
+                          <span class="sidebar-normal"> Manufacturers </span>
                         </a>
                       </li>
                       <li class="nav-item ">
                         <a class="nav-link" href="{% url 'view_supplier-list' %}">
-                          <span class="sidebar-mini"> VS </span>
-                          <span class="sidebar-normal"> View Suppliers </span>
+                          <span class="sidebar-mini"> S </span>
+                          <span class="sidebar-normal"> Suppliers </span>
                         </a>
                       </li>
                       <li class="nav-item ">
                         <a class="nav-link" href="{% url 'view_department-list' %}">
-                          <span class="sidebar-mini"> VD </span>
-                          <span class="sidebar-normal"> View Departments </span>
+                          <span class="sidebar-mini"> D </span>
+                          <span class="sidebar-normal"> Departments </span>
                         </a>
                       </li>
                       <li class="nav-item ">
                         <a class="nav-link" href="{% url 'view_status-list' %}">
-                          <span class="sidebar-mini"> VS </span>
-                          <span class="sidebar-normal"> View Status </span>
+                          <span class="sidebar-mini"> S </span>
+                          <span class="sidebar-normal"> Status </span>
                         </a>
                       </li>
                     </ul>
                   </div>
                 </li>
-                <li class="nav-item ">
+                {% comment %} <li class="nav-item ">
                   <a class="nav-link" data-toggle="collapse" href="#componentsCollapse3">
                     <span class="sidebar-mini"> R </span>
                     <span class="sidebar-normal"> Reports
@@ -304,7 +297,7 @@
                       </li>
                     </ul>
                   </div>
-                </li>
+                </li> {% endcomment %}
               </ul>
             </div>
           </li>
@@ -334,7 +327,7 @@
           {% block navbar %}{% endblock navbar %}
 
           <div class="collapse navbar-collapse justify-content-end">
-            <form class="navbar-form">
+            {% comment %} <form class="navbar-form">
               <div class="input-group no-border">
                 <input type="text" value="" class="form-control" placeholder="Search...">
                 <button type="submit" class="btn btn-white btn-round btn-just-icon">
@@ -342,9 +335,9 @@
                   <div class="ripple-container"></div>
                 </button>
               </div>
-            </form>
+            </form> {% endcomment %}
             <ul class="navbar-nav">
-              <li class="nav-item">
+              {% comment %} <li class="nav-item">
                 <a class="nav-link" href="#pablo">
                   <i class="material-icons">dashboard</i>
                   <p class="d-lg-none d-md-block">
@@ -367,7 +360,7 @@
                   <a class="dropdown-item" href="#">Another Notification</a>
                   <a class="dropdown-item" href="#">Another One</a>
                 </div>
-              </li>
+              </li> {% endcomment %}
               <li class="nav-item dropdown">
                 <a class="nav-link" href="#pablo" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="material-icons">person</i>
@@ -737,6 +730,12 @@
         alert('You clicked on Like button');
       });
     });
+    
+    $('#fixednav ul li a').click(function(){
+      $('a').parent().removeClass('active');
+      $(this).parent().addClass('active');
+      });​  
+  
   </script>
 
 </body>

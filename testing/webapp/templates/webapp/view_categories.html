@@ -15,6 +15,14 @@
               <h4 class="card-title">Categories</h4>
             </div>
             <div class="card-body">
+              <div class="row">
+                <div class="col-sm-6">
+                  <a class="btn btn-danger" href="{% url 'input_category' %}" role="button">Add category</a>
+                </div>
+                <div class="col-sm-6">
+                  <a class="btn btn-danger float-right" href="{% url 'export_categories' %}" role="button">Export</a>
+                </div>
+              </div>
               <div class="toolbar">
                 <!-- Here you can write extra buttons/actions for the toolbar -->
               </div>
@@ -52,7 +60,7 @@
                   </tbody>
                 </table>
               </div>
-              <a class="btn btn-danger" href="{% url 'input_category' %}" role="button">Add category</a>
+              {% comment %} <a class="btn btn-danger" href="{% url 'input_category' %}" role="button">Add category</a> {% endcomment %}
             </div>
             <!-- end content -->
           </div>

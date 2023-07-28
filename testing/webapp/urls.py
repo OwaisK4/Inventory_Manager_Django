@@ -2,7 +2,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.master_page, name='dashboard'),
+    path('', views.dashboard, name='dashboard'),
+    path('webhook/', views.webhook, name='webhook'),
     path('activity_log/', views.ActivityListView.as_view(), name='activity_log'),
     path('input_inventory/', views.input_inventory_form, name='input_inventory'),
     path('view_inventory/', views.InventoryListView.as_view(), name='view_inventory-list'),
@@ -107,5 +108,11 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    path('export/', views.export_assets, name='export_assets'),
+    path('export/assets/', views.export_assets, name='export_assets'),
+    path('export/accessories/', views.export_accessories, name='export_accessories'),
+    path('export/employees/', views.export_employees, name='export_employees'),
+    path('export/categories/', views.export_categories, name='export_categories'),
+    path('export/manufacturers/', views.export_manufacturers, name='export_manufacturers'),
+    path('export/suppliers/', views.export_suppliers, name='export_suppliers'),
+    path('export/departments/', views.export_departments, name='export_departments'),
 ]
