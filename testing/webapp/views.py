@@ -37,6 +37,7 @@ def dashboard(request):
     audits_count = ScheduledAudit.objects.all().count()
     checked_in_count = Asset.objects.filter(checkout_status='I').count()
     checked_out_count = Asset.objects.filter(checkout_status='O').count()
+    activities = Activity.objects.all().order_by('-id')[:10]
 
     total_asset_cost = 0
     for asset in Asset.objects.all():
@@ -54,6 +55,7 @@ def dashboard(request):
         'audits_count': audits_count,
         'checked_in_count': checked_in_count,
         'checked_out_count': checked_out_count,
+        'activities': activities,
     }
     return render(request, 'webapp/dashboard.html', context)
 
@@ -350,6 +352,19 @@ def inventory_audit_list(request, pk):
     }
     return render(request, 'webapp/view_inventory_audit_log.html', context)
 
+class ScheduledAuditDeleteView(LoginRequiredMixin, DeleteView):
+    model = ScheduledAudit
+    fields = '__all__'
+    context_object_name = 'audit'
+    template_name = 'webapp/generic_confirm_delete.html'
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["delete_type"] = "audit"
+        context["delete_object"] = str(self.get_object())
+        return context
+    def get_success_url(self) -> str:
+        return reverse('view_inventory-scheduled-audit-list')
+
 class InventoryAuditView(LoginRequiredMixin, CreateView):
     model = Audit
     form_class = AuditModelForm
@@ -401,11 +416,6 @@ def scheduled_audit_view(request, pk):
     pk_asset = audit.asset.id
     # audit.delete()
     return HttpResponseRedirect(reverse('view_inventory-audit', args=(pk_asset,)))
-    # context = {
-    #     'asset': asset,
-    #     'scheduled_audits': scheduled_audits,
-    # }
-    # return render(request, 'webapp/view_inventory_scheduled_audits.html', context)
 
 class ActivityListView(LoginRequiredMixin, ListView):
     model = Activity
@@ -465,6 +475,18 @@ def category_delete(request, pk):
     Category.objects.filter(pk=pk).delete()
     return HttpResponseRedirect(reverse('view_category-list'))
 
+class CategoryDeleteView(LoginRequiredMixin, DeleteView):
+    model = Category
+    fields = '__all__'
+    context_object_name = 'category'
+    template_name = 'webapp/generic_confirm_delete.html'
+    success_url = reverse_lazy('view_category-list')
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["delete_type"] = "Category"
+        context["delete_object"] = f"category: {self.get_object().name}"
+        return context
+
 class CategoryUpdateView(LoginRequiredMixin, UpdateView):
     model = Category
     form_class = CategoryModelForm
@@ -493,6 +515,18 @@ class ManufacturerCreateView(LoginRequiredMixin, CreateView):
 def manufacturer_delete(request, pk):
     Manufacturer.objects.filter(pk=pk).delete()
     return HttpResponseRedirect(reverse('view_manufacturer-list'))
+
+class ManufacturerDeleteView(LoginRequiredMixin, DeleteView):
+    model = Manufacturer
+    fields = '__all__'
+    context_object_name = 'manufacturer'
+    template_name = 'webapp/generic_confirm_delete.html'
+    success_url = reverse_lazy('view_manufacturer-list')
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["delete_type"] = "Manufacturer"
+        context["delete_object"] = f"manufacturer: {self.get_object().name}"
+        return context
 
 class ManufacturerUpdateView(LoginRequiredMixin, UpdateView):
     model = Manufacturer
@@ -523,6 +557,18 @@ def supplier_delete(request, pk):
     Supplier.objects.filter(pk=pk).delete()
     return HttpResponseRedirect(reverse('view_supplier-list'))
 
+class SupplierDeleteView(LoginRequiredMixin, DeleteView):
+    model = Supplier
+    fields = '__all__'
+    context_object_name = 'supplier'
+    template_name = 'webapp/generic_confirm_delete.html'
+    success_url = reverse_lazy('view_supplier-list')
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["delete_type"] = "Supplier"
+        context["delete_object"] = f"supplier: {self.get_object().name}"
+        return context
+
 class SupplierUpdateView(LoginRequiredMixin, UpdateView):
     model = Supplier
     form_class = SupplierModelForm
@@ -552,6 +598,18 @@ def department_delete(request, pk):
     Department.objects.filter(pk=pk).delete()
     return HttpResponseRedirect(reverse('view_department-list'))
 
+class DepartmentDeleteView(LoginRequiredMixin, DeleteView):
+    model = Department
+    fields = '__all__'
+    context_object_name = 'department'
+    template_name = 'webapp/generic_confirm_delete.html'
+    success_url = reverse_lazy('view_department-list')
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["delete_type"] = "Department"
+        context["delete_object"] = f"department: {self.get_object().name}"
+        return context
+
 class DepartmentUpdateView(LoginRequiredMixin, UpdateView):
     model = Department
     form_class = DepartmentModelForm
@@ -580,6 +638,18 @@ class StatusCreateView(LoginRequiredMixin, CreateView):
 def status_delete(request, pk):
     Status.objects.filter(pk=pk).delete()
     return HttpResponseRedirect(reverse('view_status-list'))
+
+class StatusDeleteView(LoginRequiredMixin, DeleteView):
+    model = Status
+    fields = '__all__'
+    context_object_name = 'status'
+    template_name = 'webapp/generic_confirm_delete.html'
+    success_url = reverse_lazy('view_status-list')
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["delete_type"] = "Status"
+        context["delete_object"] = f"status: {self.get_object().name}"
+        return context
 
 class StatusUpdateView(LoginRequiredMixin, UpdateView):
     model = Status

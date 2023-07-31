@@ -161,12 +161,19 @@ class ScheduledAudit(models.Model):
         now = timezone.now()
         return now + datetime.timedelta(weeks=4)
     
+    @property
+    def is_past_due(self):
+        return datetime.date.today() > self.next_audit_date
+    
     next_audit_date = models.DateField(help_text='Audit date of asset', default=date_in_future)
     assigned_to_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     asset = models.ForeignKey(Asset, on_delete=models.CASCADE, related_name='scheduled_audit')
 
     class Meta:
         ordering = ['-next_audit_date', '-id']
+
+    def __str__(self):
+        return f"Audit # {self.id}"
 
 class Change(models.Model):
     timestamp = models.DateTimeField(help_text='Time of change log', auto_now_add=True)

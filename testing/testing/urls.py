@@ -24,13 +24,13 @@ from django.urls import path, include, reverse_lazy
 from webapp.views import register, UserListView, master_page, about
 
 urlpatterns = [
+    path('', include('webapp.urls')),
     path('admin/', admin.site.urls),
-    path('', master_page, name="home"),
     path('about/', about, name="about"),
 ]
 
 urlpatterns += [
-    path('webapp/', include('webapp.urls')),
+    # path('webapp/', include('webapp.urls')),
     path('locallibrary/', include('locallibrary.urls')),
 ]
 

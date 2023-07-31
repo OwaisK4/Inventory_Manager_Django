@@ -41,7 +41,6 @@ urlpatterns += [
     path('view_inventory/<int:pk>/checkout_log/', views.inventory_checkout_list, name='view_inventory-checkout-list'),
     path('view_inventory/<int:pk>/checkout_log/checkout/', views.CheckoutView.as_view(), name='view_inventory-checkout'),
     path('view_inventory/<int:pk>/checkout_log/check-in/', views.CheckinView.as_view(), name='view_inventory-checkin'),
-    # path('view_inventory/<int:pk>/checkout_log/<int:pk_checkout>/delete', views.inventory_maintenances_delete, name='view_inventory-checkout-delete'),
 ]
 
 urlpatterns += [
@@ -50,6 +49,7 @@ urlpatterns += [
     path('view_inventory/<int:pk>/audit_log/audit_schedule/', views.InventoryAuditScheduleView.as_view(), name='view_inventory-audit-schedule'),
     path('view_inventory/scheduled_audits/', views.ScheduledAuditsListView.as_view(), name='view_inventory-scheduled-audit-list'),
     path('view_inventory/scheduled_audits/<int:pk>/', views.scheduled_audit_view, name='view_inventory-scheduled-audit'),
+    path('view_inventory/scheduled_audits/<int:pk>/delete/', views.ScheduledAuditDeleteView.as_view(), name='view_inventory-scheduled-audit-delete'),
 ]
 
 urlpatterns += [
@@ -63,40 +63,35 @@ urlpatterns += [
 urlpatterns += [
     path('input_category/', views.CategoryCreateView.as_view(), name='input_category'),
     path('view_categories/', views.CategoryListView.as_view(), name='view_category-list'),
-    # path('view_categories/<int:pk>', views.CategoryDetailView.as_view(), name='view_category-detail'),
-    path('view_categories/<int:pk>/delete/', views.category_delete, name='view_category-delete'),
+    path('view_categories/<int:pk>/delete/', views.CategoryDeleteView.as_view(), name='view_category-delete'),
     path('view_categories/<int:pk>/update/', views.CategoryUpdateView.as_view(), name='view_category-update'),
 ]
 
 urlpatterns += [
     path('input_manufacturer/', views.ManufacturerCreateView.as_view(), name='input_manufacturer'),
     path('view_manufacturers/', views.ManufacturerListView.as_view(), name='view_manufacturer-list'),
-    # path('view_manufacturers/<int:pk>', views.ManufacturerDetailView.as_view(), name='view_manufacturer-detail'),
-    path('view_manufacturers/<int:pk>/delete/', views.manufacturer_delete, name='view_manufacturer-delete'),
+    path('view_manufacturers/<int:pk>/delete/', views.ManufacturerDeleteView.as_view(), name='view_manufacturer-delete'),
     path('view_manufacturers/<int:pk>/update/', views.ManufacturerUpdateView.as_view(), name='view_manufacturer-update'),
 ]
 
 urlpatterns += [
     path('input_supplier/', views.SupplierCreateView.as_view(), name='input_supplier'),
     path('view_suppliers/', views.SupplierListView.as_view(), name='view_supplier-list'),
-    # path('view_suppliers/<int:pk>', views.SupplierDetailView.as_view(), name='view_supplier-detail'),
-    path('view_suppliers/<int:pk>/delete/', views.supplier_delete, name='view_supplier-delete'),
+    path('view_suppliers/<int:pk>/delete/', views.SupplierDeleteView.as_view(), name='view_supplier-delete'),
     path('view_suppliers/<int:pk>/update/', views.SupplierUpdateView.as_view(), name='view_supplier-update'),
 ]
 
 urlpatterns += [
     path('input_department/', views.DepartmentCreateView.as_view(), name='input_department'),
     path('view_departments/', views.DepartmentListView.as_view(), name='view_department-list'),
-    # path('view_departments/<int:pk>', views.DepartmentDetailView.as_view(), name='view_department-detail'),
-    path('view_departments/<int:pk>/delete/', views.department_delete, name='view_department-delete'),
+    path('view_departments/<int:pk>/delete/', views.DepartmentDeleteView.as_view(), name='view_department-delete'),
     path('view_departments/<int:pk>/update/', views.DepartmentUpdateView.as_view(), name='view_department-update'),
 ]
 
 urlpatterns += [
     path('input_status/', views.StatusCreateView.as_view(), name='input_status'),
     path('view_statuses/', views.StatusListView.as_view(), name='view_status-list'),
-    # path('view_statuses/<int:pk>', views.StatusDetailView.as_view(), name='view_status-detail'),
-    path('view_statuses/<int:pk>/delete/', views.status_delete, name='view_status-delete'),
+    path('view_statuses/<int:pk>/delete/', views.StatusDeleteView.as_view(), name='view_status-delete'),
     path('view_statuses/<int:pk>/update/', views.StatusUpdateView.as_view(), name='view_status-update'),
 ]
 

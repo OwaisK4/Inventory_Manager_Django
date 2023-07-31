@@ -37,12 +37,22 @@
                     {% for audit in scheduled_audits %}
                     <tr>
                       <td>{{ audit.id }}</td>
-                      <td>{{ audit.next_audit_date }}</td>
+                      {% if audit.is_past_due %}
+                        <td class="text-danger">
+                          {{ audit.next_audit_date }}
+                        </td>
+                      {% else %}
+                        <td>
+                          {{ audit.next_audit_date }}
+                        </td>
+                      {% endif %}
                       <td>{{ audit.assigned_to_user.get_full_name }}</td>
                       <td><a href="{% url 'view_inventory-detail' audit.asset.id %}">{{ audit.asset }}</a></td>
                       <td><a href="{% url 'view_inventory-scheduled-audit' audit.id %}"><i class='material-icons'>cases</i></a></td>
-                      {% comment %} <td><a href="#" class="btn btn-link btn-warning btn-just-icon edit"><i class="material-icons">edit</i></a></td>
-                      <td><a href="#" class="btn btn-link btn-danger btn-just-icon remove"><i class="material-icons">close</i></a></td> {% endcomment %}
+                      {% comment %} <td><a href="#" class="btn btn-link btn-warning btn-just-icon edit"><i class="material-icons">edit</i></a></td> {% endcomment %}
+                      <td>
+                        <a href="{% url 'view_inventory-scheduled-audit-delete' audit.id %}" class="btn btn-link btn-danger btn-just-icon remove"><i class="material-icons">close</i></a>
+                      </td>
                     </tr>
                     {% endfor %}
                   <tbody>
