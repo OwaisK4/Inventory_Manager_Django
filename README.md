@@ -85,7 +85,7 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-This project was developed by me during my brief stint at LDP Logistics in the summer of 2023, where I worked as an IT Support / Web Developer. The main function of this project is to act as a web portal that keeps track of all the inventory (assets, accessories, licenses, etc) held at all offices of LDP Logistics. The backend is built using the Django web framework and the frontend using Bootstrap 4.
+This project was solely developed by me during my brief stint at LDP Logistics in the summer of 2023, where I worked as an IT Support / Web Developer. The main function of this project is to act as a web portal that keeps track of all the inventory (assets, accessories, licenses, etc) held at all offices of LDP Logistics. The backend is built using the Django web framework and the frontend using Bootstrap 4.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -96,8 +96,6 @@ This project was developed by me during my brief stint at LDP Logistics in the s
 * [![JQuery][JQuery.com]][JQuery-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -131,12 +129,16 @@ _Below is an example of how you can instruct your audience on installing and set
    ```sh
    pip install -r requirements.txt
    ```
-4. Set up the database (default is sqlite for testing)
-   ```sh
+4. Create a basic user for the first login
+   ```py
+   python manage.py createsuperuser
+   ``` 
+6. Set up the database (default is sqlite for testing)
+   ```py
    python manage.py makemigrations
    python manage.py migrate
    ```
-5. Run the server at localhost
+7. Run the server at localhost
    ```py
    python manage.py runserver
    ```
@@ -148,29 +150,15 @@ _Below is an example of how you can instruct your audience on installing and set
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+The main usage of this website and all its functionality is outlined as follows:
+
+Authentication:
+For first time login, use the credentials you created in step 4 of Installation. Once logged in, you can create more users using the Add User button on sidebar.
+
 
 _For more examples, please refer to the [Documentation](https://example.com)_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-- [x] Add Changelog
-- [x] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-- [ ] Multi-language Support
-    - [ ] Chinese
-    - [ ] Spanish
-
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- CONTRIBUTING -->
@@ -203,9 +191,9 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
+Owais Ali Khan - [@your_twitter](https://twitter.com/your_username) - owaisalikhan2003@gmail.com
 
-Project Link: [https://github.com/OwaisK4/Inventory_Manager_Django](https://github.com/your_username/repo_name)
+Project Link: [https://github.com/OwaisK4/Inventory_Manager_Django](https://github.com/OwaisK4/Inventory_Manager_Django)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -243,7 +231,7 @@ Use this space to list resources you find helpful and would like to give credit 
 [license-url]: https://github.com/OwaisK4/Inventory_Manager_Django/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/othneildrew
-[product-screenshot]: project.png
+[product-screenshot]: sample/project.png
 [Django-badge]: https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white
 [Django-url]: https://www.djangoproject.com/
 [Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
