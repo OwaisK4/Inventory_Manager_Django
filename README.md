@@ -31,7 +31,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="testing/webapp/static/webapp/logo.png" alt="Logo" width="240" height="80">
+    <img src="sample/logo.png" alt="Logo" width="240" height="240">
   </a>
 
   <h3 align="center">LDP Asset Manager</h3>
@@ -94,6 +94,8 @@ This project was solely developed by me during my brief stint at LDP Logistics i
 * [![Django][Django-badge]][Django-url]
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
 * [![JQuery][JQuery.com]][JQuery-url]
+* [![Visual Studio Code][VS-Code-badge]][VS-Code-url]
+* [![StackOverflow][StackOverflow-badge]][StackOverflow-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -191,7 +193,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Owais Ali Khan - [@your_twitter](https://twitter.com/your_username) - owaisalikhan2003@gmail.com
+Owais Ali Khan - [@owais](https://www.linkedin.com/in/owais-ali-khan-04933b238/) - owaisalikhan2003@gmail.com
 
 Project Link: [https://github.com/OwaisK4/Inventory_Manager_Django](https://github.com/OwaisK4/Inventory_Manager_Django)
 
@@ -230,7 +232,7 @@ Use this space to list resources you find helpful and would like to give credit 
 [license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
 [license-url]: https://github.com/OwaisK4/Inventory_Manager_Django/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
+[linkedin-url]: https://www.linkedin.com/in/owais-ali-khan-04933b238/
 [product-screenshot]: sample/project.png
 [Django-badge]: https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white
 [Django-url]: https://www.djangoproject.com/
@@ -242,3 +244,7 @@ Use this space to list resources you find helpful and would like to give credit 
 [Bootstrap-url]: https://getbootstrap.com
 [JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
 [JQuery-url]: https://jquery.com 
+[VS-Code-badge]: https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white
+[VS-Code-url]: https://code.visualstudio.com/
+[StackOverflow-badge]: https://img.shields.io/badge/-Stackoverflow-FE7A16?style=for-the-badge&logo=stack-overflow&logoColor=white
+[StackOverflow-url]: https://img.shields.io/badge/-Stackoverflow-FE7A16?style=for-the-badge&logo=stack-overflow&logoColor=white
