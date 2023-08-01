@@ -94,7 +94,7 @@ This project was solely developed by me during my brief stint at LDP Logistics i
 * [![Django][Django-badge]][Django-url]
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
 * [![JQuery][JQuery.com]][JQuery-url]
-* [![VS-Code][VS-Code-badge]][VS-Code-url]
+* [![Visual Studio Code][VS-Code-badge]][VS-Code-url]
 * [![StackOverflow][StackOverflow-badge]][StackOverflow-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
