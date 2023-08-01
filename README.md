@@ -31,7 +31,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="testing/webapp/static/webapp/logo.png" alt="Logo" width="240" height="80">
+    <img src="sample/logo.png" alt="Logo" width="240" height="240">
   </a>
 
   <h3 align="center">LDP Asset Manager</h3>
