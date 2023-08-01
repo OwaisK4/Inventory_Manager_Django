@@ -191,7 +191,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Owais Ali Khan - [@your_twitter](https://twitter.com/your_username) - owaisalikhan2003@gmail.com
+Owais Ali Khan - [@owais](https://www.linkedin.com/in/owais-ali-khan-04933b238/) - owaisalikhan2003@gmail.com
 
 Project Link: [https://github.com/OwaisK4/Inventory_Manager_Django](https://github.com/OwaisK4/Inventory_Manager_Django)
 
@@ -230,7 +230,7 @@ Use this space to list resources you find helpful and would like to give credit 
 [license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
 [license-url]: https://github.com/OwaisK4/Inventory_Manager_Django/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
+[linkedin-url]: https://www.linkedin.com/in/owais-ali-khan-04933b238/
 [product-screenshot]: sample/project.png
 [Django-badge]: https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white
 [Django-url]: https://www.djangoproject.com/
