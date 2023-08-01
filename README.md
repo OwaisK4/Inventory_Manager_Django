@@ -152,7 +152,7 @@ _Below is an example of how you can instruct your audience on installing and set
 
 The main usage of this website and all its functionality is outlined as follows:
 
-*Authentication:<br>
+* Authentication: <br>
 For first time login, use the credentials you created in step 4 of Installation. Once logged in, you can create more users using the Add User button on sidebar.
 
 
