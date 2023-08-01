@@ -231,7 +231,7 @@ class LicenseModelForm(forms.ModelForm):
             }),
             'cost' : forms.NumberInput(attrs={
                 'class': "form-control",
-                'placeholder': 'Cost',
+                'placeholder': 'Cost in dollars',
             }),
             'billing_terms' : forms.TextInput(attrs={
                 'class': "form-control",
