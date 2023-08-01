@@ -30,8 +30,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="sample/logo.png" alt="Logo" width="240" height="240">
+  <a href="https://ldplogistic.com">
+    <img src="sample/logo.png" alt="Logo">
   </a>
 
   <h3 align="center">LDP Asset Manager</h3>
