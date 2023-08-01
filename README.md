@@ -118,11 +118,11 @@ This is the list things you need to use the software and how to install them.
 
 * Python
 
-* Linux (Debian-based)
+  Linux (Debian-based)
   ```sh
   sudo apt install python
   ```
-* Windows
+  Windows<br>
   Download the latest version of <a href="https://www.python.org/downloads/">Python<a>
 
 * npm
