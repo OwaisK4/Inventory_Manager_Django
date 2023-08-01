@@ -30,7 +30,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
+  <a href="https://ldplogistic.com">
     <img src="sample/logo.png" alt="Logo">
   </a>
 
