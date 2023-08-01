@@ -103,6 +103,14 @@ urlpatterns += [
 ]
 
 urlpatterns += [
+    path('input_license/', views.LicenseCreateView.as_view(), name='input_license'),
+    path('view_licenses/', views.LicenseListView.as_view(), name='view_license-list'),
+    path('view_licenses/<int:pk>/', views.LicenseDetailView.as_view(), name='view_license-detail'),
+    path('view_licenses/<int:pk>/delete/', views.LicenseDeleteView.as_view(), name='view_license-delete'),
+    path('view_licenses/<int:pk>/update/', views.LicenseUpdateView.as_view(), name='view_license-update'),
+]
+
+urlpatterns += [
     path('export/assets/', views.export_assets, name='export_assets'),
     path('export/accessories/', views.export_accessories, name='export_accessories'),
     path('export/employees/', views.export_employees, name='export_employees'),

@@ -78,13 +78,13 @@
                   <div class="col-md-6">
                     <h2>Asset: {{ asset.manufacturer.name }} {{ asset.name }}</h2>
                     <hr>
-                    <b><strong>Category: </strong>{{ asset.category.name }}</b><br>
+                    <b><strong>Category: </strong>{{ asset.category }}</b><br>
                     <b><strong>Price: </strong>{{ asset.price }}</b><br>
-                    <b><strong>Status: </strong>{{ asset.status.name }}</b><br>
+                    <b><strong>Status: </strong>{{ asset.status }}</b><br>
                     <b><strong>Checkout status: </strong>{{ asset.get_checkout_status_display }}</b><br>
                     <hr>
                     <b><strong>Assigned to: </strong>{{ asset.assigned_to }}</b><br>
-                    <b><strong>Department: </strong>{{ asset.department.name }}</b><br>
+                    <b><strong>Department: </strong>{{ asset.department }}</b><br>
                     <b><strong>Location: </strong>{{ asset.location }}</b><br>
                     <b><strong>Purchase date: </strong>{{ asset.purchase_date }}</b><br>
                     <hr>
@@ -105,7 +105,7 @@
                   {% endif %}
                 </div>
                 <a class="btn btn-danger" href="{% url 'view_inventory-update' asset.id %}" role="button">Update</a>
-                  <a class="btn btn-danger float-right" href="{% url 'view_inventory-delete' asset.id %}" role="button">Delete</a>
+                <a class="btn btn-danger float-right" href="{% url 'view_inventory-delete' asset.id %}" role="button">Delete</a>
               </div>
             </div>
           </div>

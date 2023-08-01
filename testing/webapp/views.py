@@ -7,8 +7,8 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormVi
 from django.urls import reverse, reverse_lazy
 from datetime import datetime
 from django.utils import timezone
-from .models import Asset, Employee, Category, Manufacturer, Department, Status, Attachement, Supplier, Maintenance, Accessory, Location, Checkout, Activity, Audit, ScheduledAudit, Change
-from .forms import AssetModelForm, EmployeeModelForm, CategoryModelForm, ManufacturerModelForm, AttachementModelForm, SupplierModelForm, DepartmentModelForm, StatusModelForm, MaintenanceModelForm, AccessoryModelForm, LocationModelForm, RegistrationForm, CheckoutModelForm, AuditModelForm, ScheduledAuditModelForm
+from .models import Asset, Employee, Category, Manufacturer, Department, Status, Attachement, Supplier, Maintenance, Accessory, Location, Checkout, Activity, Audit, ScheduledAudit, Change, License
+from .forms import AssetModelForm, EmployeeModelForm, CategoryModelForm, ManufacturerModelForm, AttachementModelForm, SupplierModelForm, DepartmentModelForm, StatusModelForm, MaintenanceModelForm, AccessoryModelForm, LocationModelForm, RegistrationForm, CheckoutModelForm, AuditModelForm, ScheduledAuditModelForm, LicenseModelForm
 # from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -109,6 +109,9 @@ def input_inventory_form(request):
     if request.method == 'POST':
         form = AssetModelForm(request.POST, request.FILES)
         if form.is_valid():
+            if form.cleaned_data.get("price") < 0:
+                form.price = 0
+                # raise ValidationError(_("Price cannot be less than 0."))
             created_asset = form.save(commit=False)
             activity = Activity(event="Create", user=request.user)
             activity.asset = created_asset
@@ -692,6 +695,42 @@ class AccessoryUpdateView(LoginRequiredMixin, UpdateView):
     form_class = AccessoryModelForm
     template_name = 'webapp/input_accessory.html'
     success_url = reverse_lazy('view_accessory-list')
+
+# Views for License objects
+class LicenseCreateView(LoginRequiredMixin, CreateView):
+    model = License
+    form_class = LicenseModelForm
+    template_name = 'webapp/input_license.html'
+    success_url = reverse_lazy('view_license-list')
+
+class LicenseListView(LoginRequiredMixin, ListView):
+    model = License
+    context_object_name = 'licenses'
+    template_name = 'webapp/view_license.html'
+
+class LicenseDetailView(LoginRequiredMixin, DetailView):
+    model = License
+    context_object_name = 'license'
+    template_name = 'webapp/view_license_detail.html'
+
+class LicenseDeleteView(LoginRequiredMixin, DeleteView):
+    model = License
+    fields = '__all__'
+    context_object_name = 'license'
+    template_name = 'webapp/generic_confirm_delete.html'
+    success_url = reverse_lazy('view_license-list')
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["delete_type"] = "License"
+        context["delete_object"] = f"license: {self.get_object().software_name}"
+        return context
+
+class LicenseUpdateView(LoginRequiredMixin, UpdateView):
+    model = License
+    context_object_name = 'license'
+    form_class = LicenseModelForm
+    template_name = 'webapp/input_license.html'
+    success_url = reverse_lazy('view_license-list')
 
 # Views for Location objects
 class LocationCreateandDisplayView(LoginRequiredMixin, CreateView):

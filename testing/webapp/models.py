@@ -209,3 +209,21 @@ class Accessory(models.Model):
 
     def __str__(self):
         return f"{self.manufacturer.name} {self.name}"
+
+class License(models.Model):
+    class TYPES(models.TextChoices):
+        dynamic = 'D', 'Dynamic'
+        product_key = 'P', 'Product key'
+    software_name = models.CharField(max_length=300, help_text='Name of licensed software')
+    to_name = models.CharField(max_length=100, help_text='Name of person the software is licensed to')
+    to_email = models.EmailField(max_length=254, help_text='Email of person the software is licensed to')
+    license_type = models.CharField(max_length=1, choices=TYPES.choices)
+    seats = models.IntegerField(help_text='Total seats allowed per license', blank=True, null=True)
+    reference_no = models.CharField(max_length=200, help_text='Reference no. of license', blank=True)
+    purchase_date = models.DateField(help_text='Date of license purchase')
+    expiration_date = models.DateField(help_text='Date of license expiration')
+    cost = models.IntegerField(help_text='Cost of license')
+    billing_terms = models.CharField(max_length=300, help_text='Billing terms of license')
+    notes = models.CharField(max_length=500, help_text='Notes regarding license', blank=True)
+    def __str__(self):
+        return f"{self.software_name}"

@@ -1,0 +1,142 @@
+{% extends 'master.html' %}
+
+{% block title %}
+  Input License
+{% endblock %}
+
+{% block content %}
+<div class="content">
+  <div class="container">
+    <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header card-header-danger card-header-text">
+          <div class="card-text">
+            <h4 class="card-title">Input License</h4>
+          </div>
+        </div>
+        <div class="card-body">
+          <form method="POST" action="" class="form-horizontal" id="input_form">
+            {% csrf_token %}
+
+            {% comment %} {% if form.price.errors %}
+            <small>{{ form.price.errors }}</small>
+            {% endif %} {% endcomment %}
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Software name:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  {{ form.software_name }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">License type:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  {{ form.license_type }}
+                </div>
+              </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Licensed to:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  {{ form.to_name }}
+                </div>
+              </div>
+              <label class="col-sm-1 col-form-label">Licensed to:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  {{ form.to_email }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Seats:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-4">
+                <div class="form-group">{{ form.seats }}</div>
+              </div>
+              <label class="col-sm-1 col-form-label">Reference number:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-4">
+                <div class="form-group">{{ form.reference_no }}</div>
+              </div>
+            </div>
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Purchase date:</label>
+              <label class="col-form-label">&nbsp</label>
+              <code class="col-form-label"></code>
+              <div class="col-sm-6">
+                <div class="form-group">{{ form.purchase_date }}</div>
+              </div>
+            </div>
+
+            <div class="row">
+                <label class="col-sm-2 col-form-label">Expiration date:</label>
+                <label class="col-form-label">&nbsp</label>
+                <code class="col-form-label"></code>
+                <div class="col-sm-6">
+                  <div class="form-group">{{ form.expiration_date }}</div>
+                </div>
+              </div>
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Cost:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  {{ form.cost }}
+                </div>
+              </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Billing terms:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  {{ form.billing_terms }}
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <label class="col-sm-2 col-form-label">Notes:</label>
+              <label class="col-form-label">&nbsp&nbsp</label>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  {{ form.notes }}
+                </div>
+              </div>
+            </div>
+
+            <hr />
+
+            <div class="row text-center">
+            <div class="col-md-12 text-center">
+                <button name="submit" id="submit" type="submit" class="btn btn-success  float-right">Submit</button>
+            </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

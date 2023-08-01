@@ -1,5 +1,5 @@
 from django import forms
-from webapp.models import Asset, Employee, Category, Manufacturer, Department, Status, Attachement, Supplier, Maintenance, Accessory, Location, Checkout, Audit, ScheduledAudit
+from webapp.models import Asset, Employee, Category, Manufacturer, Department, Status, Attachement, Supplier, Maintenance, Accessory, Location, Checkout, Audit, ScheduledAudit, License
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
@@ -24,6 +24,12 @@ class RegistrationForm(UserCreationForm):
         }
 
 class AssetModelForm(forms.ModelForm):
+    def clean_price(self):
+        price_input = self.cleaned_data['price']
+        if price_input < 0:
+            raise ValidationError(_("Price cannot be less than zero."))
+        return price_input
+
     class Meta:
         model = Asset
         fields = ['category', 'manufacturer', 'name', 'price', 'processor', 'ram', 'hdd', 'ssd', 'purchase_date', 'status', 'department', 'supplier', 'assigned_to', 'location', 'asset_image', 'serial', 'invoice']
@@ -32,14 +38,11 @@ class AssetModelForm(forms.ModelForm):
                 'class': "selectpicker",
                 'data-style': "btn btn-info",
                 'style': 'max-width: 300px;',
-                # 'label': 'Category',
-                # 'placeholder': 'Category',
             }),
             'manufacturer' : forms.Select(attrs={
                 'class': "selectpicker",
                 'data-style': "btn btn-info",
                 'style': 'max-width: 300px;',
-                # 'placeholder': 'Manufacturer',
             }),
             'name' : forms.TextInput(attrs={
                 'class': "form-control",
@@ -181,6 +184,62 @@ class AccessoryModelForm(forms.ModelForm):
             'invoice' : forms.NumberInput(attrs={
                 'class': "form-control",
                 'placeholder': 'Invoice no.',
+            }),
+        }
+
+class LicenseModelForm(forms.ModelForm):
+    class Meta:
+        model = License
+        fields = ["software_name", "to_name", "to_email", "license_type", "seats", "reference_no", "purchase_date", "expiration_date", "cost", "billing_terms", "notes"]
+        widgets = {
+            'software_name' : forms.TextInput(attrs={
+                'class': "form-control",
+                'placeholder': 'Software name',
+            }),
+            'to_name' : forms.TextInput(attrs={
+                'class': "form-control",
+                'placeholder': 'Licensed to',
+            }),
+            'to_email' : forms.EmailInput(attrs={
+                'class': "form-control",
+                'placeholder': 'user@email.com',
+            }),
+            'license_type' : forms.Select(attrs={
+                'class': "selectpicker",
+                'data-style': "btn btn-info",
+                'style': 'max-width: 300px;',
+            }),
+            'seats' : forms.NumberInput(attrs={
+                'class': "form-control",
+                'placeholder': 'No. of seats',
+            }),
+            'reference_no' : forms.TextInput(attrs={
+                'class': "form-control",
+                'placeholder': 'Reference number',
+            }),
+            'purchase_date' : forms.DateInput(
+                attrs={
+                'class': "datepicker form-control",
+                'placeholder': 'Purchase Date (mm/dd/YYYY)',
+                'type': 'date',
+            }),
+            'expiration_date' : forms.DateInput(
+                attrs={
+                'class': "datepicker form-control",
+                'placeholder': 'Expiration Date (mm/dd/YYYY)',
+                'type': 'date',
+            }),
+            'cost' : forms.NumberInput(attrs={
+                'class': "form-control",
+                'placeholder': 'Cost',
+            }),
+            'billing_terms' : forms.TextInput(attrs={
+                'class': "form-control",
+                'placeholder': 'Billing terms',
+            }),
+            'notes' : forms.Textarea(attrs={
+                'class': "form-control",
+                'placeholder': 'Notes',
             }),
         }
 

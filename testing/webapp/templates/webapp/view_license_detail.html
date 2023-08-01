@@ -1,0 +1,52 @@
+{% extends 'master.html' %}
+
+{% block title %}
+  View Inventory
+{% endblock title %}
+
+{% block content %}
+  {% comment %} <div class="content"> {% endcomment %}
+    <div class="container">
+      <div class="row">
+        {% comment %} <div class="col-md-12"> {% endcomment %}
+          <div class="card">
+            <div class="card-header card-header-icon card-header-danger">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="card-icon">
+                    <i class="material-icons">assignment</i>
+                  </div>
+                  <h4 class="card-title">License</h4>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="table">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <h2>License: {{ license.software_name }}</h2>
+                    <hr>
+                    <b><strong>Type: </strong>{{ license.get_license_type_display }}</b><br>
+                    <b><strong>Seats: </strong>{{ license.seats }}</b><br>
+                    <b><strong>Reference number: </strong>{{ license.reference_no }}</b><br>
+                    <hr>
+                    <b><strong>Licensed to: </strong>{{ license.to_name }}</b><br>
+                    <b><strong>License email: </strong>{{ license.to_email }}</b><br>
+                    <b><strong>Expiration date: </strong>{{ license.expiration_date }}</b><br>
+                    <b><strong>Purchase date: </strong>{{ license.purchase_date }}</b><br>
+                    <hr>
+                    <b><strong>Billing terms: </strong>{{ license.billing_terms }}</b><br>
+                    <b><strong>Notes: </strong>{{ license.notes }}</b><br>
+                  </div>
+                </div>
+                <hr>
+                <a class="btn btn-danger" href="{% url 'view_license-update' license.id %}" role="button">Update</a>
+                <a class="btn btn-danger float-right" href="{% url 'view_license-delete' license.id %}" role="button">Delete</a>
+              </div>
+            </div>
+          </div>
+        {% comment %} </div> {% endcomment %}
+      </div>
+    </div>
+  {% comment %} </div> {% endcomment %}
+{% endblock %}
