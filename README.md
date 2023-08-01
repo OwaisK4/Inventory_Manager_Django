@@ -94,7 +94,7 @@ This project was solely developed by me during my brief stint at LDP Logistics i
 * [![Django][Django-badge]][Django-url]
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
 * [![JQuery][JQuery.com]][JQuery-url]
-* [![VSCode][VS-Code]][VS-Code-url]
+* [![VS-Code][VS-Code-badge]][VS-Code-url]
 * [![StackOverflow][StackOverflow-badge]][StackOverflow-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -244,7 +244,7 @@ Use this space to list resources you find helpful and would like to give credit 
 [Bootstrap-url]: https://getbootstrap.com
 [JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
 [JQuery-url]: https://jquery.com 
-[VS-Code]: https://code.visualstudio.com/
+[VS-Code-badge]: https://code.visualstudio.com/
 [VS-Code-url]: https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white
 [StackOverflow-badge]: https://img.shields.io/badge/-Stackoverflow-FE7A16?style=for-the-badge&logo=stack-overflow&logoColor=white
 [StackOverflow-url]: https://img.shields.io/badge/-Stackoverflow-FE7A16?style=for-the-badge&logo=stack-overflow&logoColor=white
