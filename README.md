@@ -123,29 +123,33 @@ This is the list things you need to use the software and how to install them.
   sudo apt install python
   ```
   Windows<br>
-  Download the latest version of <a href="https://www.python.org/downloads/">Python<a>
+  Download the latest version of <a href="https://www.python.org/downloads/">Python<a><br>
+  Also, make sure to check the "Add to PATH" option while installing.
 
-* npm
+* Dependencies
   ```sh
-  npm install npm@latest -g
   ```
 
 ### Installation
 
 _Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
    ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+   git clone https://github.com/OwaisK4/Inventory_Manager_Django
    ```
-3. Install NPM packages
+3. Install dependencies
    ```sh
-   npm install
+   pip install -r requirements.txt
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
+4. Set up the database (default is sqlite for testing)
+   ```sh
+   python manage.py makemigrations
+   python manage.py migrate
+   ```
+5. Run the server at localhost
+   ```py
+   python manage.py runserver
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
