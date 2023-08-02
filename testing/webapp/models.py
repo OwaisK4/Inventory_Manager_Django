@@ -25,17 +25,23 @@ class Department(models.Model):
     def __str__(self):
         return f"{self.name}"
 
-class Employee(models.Model):
-    name = models.CharField(max_length=200, help_text="Name of employee", unique=True)
-    def __str__(self):
-        return f"{self.name}"
-
 class Supplier(models.Model):
     name = models.CharField(max_length=200, help_text="Supplier of asset/accessory", unique=True)
     def __str__(self):
         return f"{self.name}"
+    
 class Location(models.Model):
     name = models.CharField(max_length=200, help_text="Location name", unique=True)
+    def __str__(self):
+        return f"{self.name}"
+    
+class Employee(models.Model):
+    name = models.CharField(max_length=200, help_text="Name of employee", unique=True)
+    title = models.CharField(max_length=300, help_text="Title/Designation of employee")
+    location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True)
+    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
+    email = models.EmailField(max_length=254, help_text='Email of employee')
+    
     def __str__(self):
         return f"{self.name}"
 
@@ -99,6 +105,9 @@ class Maintenance(models.Model):
     file = models.FileField(upload_to='maintenance/')
 
     asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.get_type_display()} by {self.supplier} for {self.asset}"
 
 class Checkout(models.Model):
     class TYPES(models.TextChoices):
@@ -208,7 +217,10 @@ class Accessory(models.Model):
     invoice = models.IntegerField(help_text='Invoice number of asset', blank=True, null=True)
 
     def __str__(self):
-        return f"{self.manufacturer.name} {self.name}"
+        if self.manufacturer:
+            return f"{self.manufacturer} {self.name}"
+        else:
+            return f"{self.name}"
 
 class License(models.Model):
     class TYPES(models.TextChoices):

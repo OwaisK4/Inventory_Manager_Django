@@ -44,7 +44,7 @@
                   <tbody>
                     {% for asset in inventory %}
                     <tr>
-                      <td><a href="{% url 'view_inventory-detail' asset.id %}">LDP{{ asset.id|stringformat:"06d" }}</a></td>
+                      <td><a href="{% url 'view_inventory-detail' asset.id %}">LDPAST{{ asset.id|stringformat:"04d" }}</a></td>
                       <td>{{ asset.category }}</td>
                       <td>{{ asset.manufacturer }}</td>
                       <td>{{ asset.name }}</td>

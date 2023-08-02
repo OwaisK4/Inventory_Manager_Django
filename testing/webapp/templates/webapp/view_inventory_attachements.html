@@ -36,7 +36,7 @@
 
 {% block content %}
   {% comment %} <div class="content"> {% endcomment %}
-    <div class="container">
+    <div class="container-fluid">
       <div class="row">
         {% comment %} <div class="col-md-12"> {% endcomment %}
           <div class="card">
@@ -70,7 +70,6 @@
                             {% comment %} <td><img src="{{ attachement.file.url }}" alt="ALT" height="30" width="30"></td> {% endcomment %}
                             <td><a href="{{ attachement.file.url }}"><img src="{{ attachement.file.url }}" alt="ALT" height="30" width="30"></a></td>
                             <td class="text-right">
-                                <a href="#" class="btn btn-link btn-info btn-just-icon like"><i class="material-icons">favorite</i></a>
                                 <a href="{% url 'view_inventory-attachements-delete' asset.id attachement.id %}" class="btn btn-link btn-danger btn-just-icon remove"><i class="material-icons">close</i></a>
                             </td>
                         </tr>

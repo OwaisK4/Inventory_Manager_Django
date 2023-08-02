@@ -10,8 +10,8 @@ urlpatterns = [
     path('view_inventory/<int:pk>/', views.InventoryDetailView.as_view(), name='view_inventory-detail'),
     path('view_inventory/<int:pk>/delete/', views.InventoryDeleteView.as_view(), name='view_inventory-delete'),
     path('view_inventory/<int:pk>/update/', views.InventoryUpdateView.as_view(), name='view_inventory-update'),
-    path('view_inventory/<int:pk>/barcode/', views.generate_barcode, name='view_inventory-barcode'),
-    path('view_inventory/barcodes/', views.generate_all_barcodes, name='view_inventory-all-barcodes'),
+    path('view_inventory/<int:pk>/barcode/', views.generate_barcode_asset, name='view_inventory-barcode'),
+    path('view_inventory/barcodes/', views.generate_all_barcodes_asset, name='view_inventory-all-barcodes'),
     # path('view_inventory/<int:pk>/check/', views.inventory_checkout, name='view_inventory-check'),
     path('index/', views.index, name='index'),
     path('time/', views.time_view),
@@ -23,18 +23,22 @@ urlpatterns += [
     path('view_accessories/<int:pk>/', views.AccessoryDetailView.as_view(), name='view_accessory-detail'),
     path('view_accessories/<int:pk>/delete/', views.AccessoryDeleteView.as_view(), name='view_accessory-delete'),
     path('view_accessories/<int:pk>/update/', views.AccessoryUpdateView.as_view(), name='view_accessory-update'),
+    path('view_accessories/<int:pk>/barcode/', views.generate_barcode_accessory, name='view_accessory-barcode'),
+    path('view_accessories/barcodes/', views.generate_all_barcodes_accessory, name='view_accessory-all-barcodes'),
 ]
 
 urlpatterns += [
     path('view_inventory/<int:pk>/attachements/', views.inventory_attachements_list, name='view_inventory-attachements-list'),
-    path('view_inventory/<int:pk>/attachements/add', views.InventoryAttachementsAddView.as_view(), name='view_inventory-attachements-add'),
-    path('view_inventory/<int:pk>/attachements/<int:pk_attachement>/delete', views.inventory_attachements_delete, name='view_inventory-attachements-delete'),
+    path('view_inventory/<int:pk>/attachements/add/', views.InventoryAttachementsAddView.as_view(), name='view_inventory-attachements-add'),
+    # path('view_inventory/<int:pk>/attachements/<int:pk_attachement>/delete', views.inventory_attachements_delete, name='view_inventory-attachements-delete'),
+    path('view_inventory/<int:pk_asset>/attachements/<int:pk>/delete/', views.AttachementDeleteView.as_view(), name='view_inventory-attachements-delete'),
 ]
 
 urlpatterns += [
     path('view_inventory/<int:pk>/maintenances/', views.inventory_maintenances_list, name='view_inventory-maintenances-list'),
     path('view_inventory/<int:pk>/maintenances/add/', views.InventoryMaintenancesAddView.as_view(), name='view_inventory-maintenances-add'),
-    path('view_inventory/<int:pk>/maintenances/<int:pk_maintenance>/delete/', views.inventory_maintenances_delete, name='view_inventory-maintenances-delete'),
+    # path('view_inventory/<int:pk>/maintenances/<int:pk_maintenance>/delete/', views.inventory_maintenances_delete, name='view_inventory-maintenances-delete'),
+    path('view_inventory/<int:pk_asset>/maintenances/<int:pk>/delete/', views.MaintenanceDeleteView.as_view(), name='view_inventory-maintenances-delete'),
 ]
 
 urlpatterns += [
@@ -118,4 +122,5 @@ urlpatterns += [
     path('export/manufacturers/', views.export_manufacturers, name='export_manufacturers'),
     path('export/suppliers/', views.export_suppliers, name='export_suppliers'),
     path('export/departments/', views.export_departments, name='export_departments'),
+    path('export/licenses/', views.export_licenses, name='export_licenses'),
 ]

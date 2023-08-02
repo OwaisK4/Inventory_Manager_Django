@@ -51,7 +51,6 @@
                         <td>{{ supplier.name }}</td>
                         <td>{{ supplier.asset_set.all|length }}</td>
                         <td class="text-right">
-                            <a href="#" class="btn btn-link btn-info btn-just-icon like"><i class="material-icons">favorite</i></a>
                             <a href="{% url 'view_supplier-update' supplier.id %}" class="btn btn-link btn-warning btn-just-icon edit"><i class="material-icons">edit</i></a>
                             <a href="{% url 'view_supplier-delete' supplier.id %}" class="btn btn-link btn-danger btn-just-icon remove"><i class="material-icons">close</i></a>
                         </td>

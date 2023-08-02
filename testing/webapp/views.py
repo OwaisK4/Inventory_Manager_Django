@@ -16,6 +16,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import ForeignKey
 import qrcode
 from io import BytesIO
 from base64 import b64encode
@@ -189,30 +190,76 @@ class InventoryUpdateView(LoginRequiredMixin, UpdateView):
         activity.asset = created_asset
         activity.asset_string = str(created_asset)
         activity.employee = created_asset.assigned_to
+        changes = form.changed_data
+        notes = ""
+        if changes:
+            notes = "Changed "
+            for change in changes:
+                # initial = form.get_initial_for_field(form.fields[change], change)
+                initial = form[change].initial
+                field_object = Asset._meta.get_field(change)
+                current = form.cleaned_data[change]
+                # print(f"Initial = {initial}")
+                # print(f"Current = {current}")
+                notes += change
+                if not isinstance(field_object, ForeignKey):
+                    notes += " from "
+                    notes += str(initial)
+                notes += " to "
+                notes += str(current)
+                notes += ", "
+            notes = notes[:-2]
+        activity.notes = notes
+        # print(form.get_initial_for_field(form.fields["price"], "price"))
+        # activity.notes = changes
         activity.save()
         return super().form_valid(form)
 
 @login_required
-def generate_barcode(request, pk):
+def generate_barcode_asset(request, pk):
     asset = Asset.objects.get(pk=pk)
-    barcode = qrcode.make("LDP " + str(asset.id) + " " + asset.name)
+    barcode = qrcode.make("LDPAST " + str(asset.id) + " " + asset.name)
     response = HttpResponse(content_type='image/jpg')
     barcode.save(response, "JPEG")
     # response['Content-Disposition'] = 'attachment; filename="piece.jpg"'
     return response
 
 @login_required
-def generate_all_barcodes(request):
+def generate_all_barcodes_asset(request):
     assets = Asset.objects.all()
     images = []
     for asset in assets:
-        barcode = qrcode.make("LDP " + str(asset.id) + " " + asset.name)
+        barcode = qrcode.make("LDPAST " + str(asset.id) + " " + asset.name)
         image = BytesIO()
         barcode.save(image, format="JPEG")
         dataurl = 'data:image/png;base64,' + b64encode(image.getvalue()).decode('ascii')
         images.append(dataurl)
 
+    context = {
+        'images': images
+    }
+    return render(request, 'webapp/view_barcodes.html', context)
 
+@login_required
+def generate_barcode_accessory(request, pk):
+    accessory = Accessory.objects.get(pk=pk)
+    barcode = qrcode.make("LDPASC " + str(accessory.id) + " " + str(accessory))
+    response = HttpResponse(content_type='image/jpg')
+    barcode.save(response, "JPEG")
+    # response['Content-Disposition'] = 'attachment; filename="piece.jpg"'
+    return response
+
+@login_required
+def generate_all_barcodes_accessory(request):
+    accessories = Accessory.objects.all()
+    images = []
+    for accessory in accessories:
+        barcode = qrcode.make("LDPASC " + str(accessory.id) + " " + str(accessory))
+        image = BytesIO()
+        barcode.save(image, format="JPEG")
+        dataurl = 'data:image/png;base64,' + b64encode(image.getvalue()).decode('ascii')
+        images.append(dataurl)
+        
     context = {
         'images': images
     }
@@ -239,10 +286,26 @@ def inventory_attachements_list(request, pk):
 
 @login_required
 def inventory_attachements_delete(request, pk, pk_attachement):
-    # Attachement.objects.filter(pk=pk_attachement).delete()
     attachement = Attachement.objects.get(pk=pk_attachement)
     attachement.delete()
     return HttpResponseRedirect(reverse('view_inventory-attachements-list', args=(str(pk),)))
+
+class AttachementDeleteView(LoginRequiredMixin, DeleteView):
+    model = Attachement
+    fields = '__all__'
+    context_object_name = 'attachement'
+    template_name = 'webapp/generic_confirm_delete.html'
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["delete_type"] = "Attachement"
+        context["delete_object"] = f"attachement # {self.get_object().id}"
+        return context
+    def get_success_url(self) -> str:
+        pk_asset = self.kwargs.get("pk_asset", "")
+        if pk_asset:
+            return reverse("view_inventory-attachements-list", args=(str(pk_asset),))
+        else:
+            return reverse("view_inventory-list")
 
 class InventoryAttachementsAddView(LoginRequiredMixin, CreateView):
     model = Attachement
@@ -275,6 +338,24 @@ def inventory_maintenances_list(request, pk):
 def inventory_maintenances_delete(request, pk, pk_maintenance):
     Maintenance.objects.filter(pk=pk_maintenance).delete()
     return HttpResponseRedirect(reverse('view_inventory-maintenances-list', args=(str(pk),)))
+
+class MaintenanceDeleteView(LoginRequiredMixin, DeleteView):
+    model = Maintenance
+    fields = '__all__'
+    context_object_name = 'maintenance'
+    template_name = 'webapp/generic_confirm_delete.html'
+    # success_url = reverse_lazy('view_supplier-list')
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["delete_type"] = "Maintenance"
+        context["delete_object"] = f"maintenance: {self.get_object()}"
+        return context
+    def get_success_url(self) -> str:
+        pk_asset = self.kwargs.get("pk_asset", "")
+        if pk_asset:
+            return reverse("view_inventory-maintenances-list", args=(str(pk_asset),))
+        else:
+            return reverse("view_inventory-list")
 
 class InventoryMaintenancesAddView(LoginRequiredMixin, CreateView):
     model = Maintenance
@@ -321,6 +402,13 @@ class CheckoutView(LoginRequiredMixin, CreateView):
         checkout.type = 'O'
         checkout.user = self.request.user
         checkout.save()
+
+        activity = Activity(event="Check-out", user=self.request.user)
+        activity.asset = checkout.asset
+        activity.asset_string = str(checkout.asset)
+        activity.employee = checkout.asset.assigned_to
+        activity.save()
+        
         Asset.objects.filter(pk=self.kwargs['pk']).update(checkout_status='O')
         return HttpResponseRedirect(self.get_success_url())
 
@@ -342,6 +430,13 @@ class CheckinView(LoginRequiredMixin, CreateView):
         checkin.type = 'I'
         checkin.user = self.request.user
         checkin.save()
+
+        activity = Activity(event="Check-in", user=self.request.user)
+        activity.asset = checkin.asset
+        activity.asset_string = str(checkin.asset)
+        activity.employee = checkin.asset.assigned_to
+        activity.save()
+
         Asset.objects.filter(pk=self.kwargs['pk']).update(checkout_status='I')
         return HttpResponseRedirect(self.get_success_url())
     
@@ -975,5 +1070,44 @@ def export_departments(request):
     workbook.save(object)
     response = HttpResponse(content_type='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment;filename="Exported_departments.xlsx"'
+    response.write(object.getvalue())
+    return response
+
+def export_licenses(request):
+    licenses = License.objects.all()
+    object = BytesIO()
+
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+
+    sheet["A1"] = "Software name"
+    sheet["B1"] = "Licensed to"
+    sheet["C1"] = "License email"
+    sheet["D1"] = "License type"
+    sheet["E1"] = "Seats"
+    sheet["F1"] = "Reference no."
+    sheet["G1"] = "Purchase date"
+    sheet["H1"] = "Expiration date"
+    sheet["I1"] = "Cost"
+    sheet["J1"] = "Billing terms"
+    sheet["K1"] = "Notes"
+    
+    for i in range(len(licenses)):
+        sheet.cell(row = i+2, column = 1).value = licenses[i].software_name
+        sheet.cell(row = i+2, column = 2).value = licenses[i].to_name
+        sheet.cell(row = i+2, column = 3).value = licenses[i].to_email
+        sheet.cell(row = i+2, column = 4).value = licenses[i].get_license_type_display()
+        sheet.cell(row = i+2, column = 5).value = licenses[i].seats
+        sheet.cell(row = i+2, column = 6).value = licenses[i].reference_no
+        sheet.cell(row = i+2, column = 7).value = licenses[i].purchase_date
+        sheet.cell(row = i+2, column = 8).value = licenses[i].expiration_date
+        sheet.cell(row = i+2, column = 9).value = licenses[i].cost
+        sheet.cell(row = i+2, column = 10).value = licenses[i].billing_terms
+        sheet.cell(row = i+2, column = 11).value = licenses[i].notes
+
+    workbook.save(object)
+
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment;filename="Exported_licenses.xlsx"'
     response.write(object.getvalue())
     return response

@@ -14,6 +14,11 @@
                 <i class="material-icons">assignment</i>
               </div>
               <h4 class="card-title">Accessories</h4>
+              <div class="card-icon float-right">
+                <a href="{% url 'view_accessory-all-barcodes' %}">
+                  <i class="material-icons">receipt</i>
+                </a>
+              </div>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -38,7 +43,7 @@
                   <tbody>
                     {% for accessory in accessories %}
                     <tr>
-                      <td><a href="{% url 'view_accessory-detail' accessory.id %}">LDP{{ accessory.id|stringformat:"06d" }}</a></td>
+                      <td><a href="{% url 'view_accessory-detail' accessory.id %}">LDPASC{{ accessory.id|stringformat:"04d" }}</a></td>
                       <td>{{ accessory.category }}</td>
                       <td>{{ accessory.manufacturer }}</td>
                       <td>{{ accessory.name }}</td>

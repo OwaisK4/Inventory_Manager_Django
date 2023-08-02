@@ -28,12 +28,17 @@
                 <i class="material-icons">assignment</i>
               </div>
               <h4 class="card-title">Accessory</h4>
+              <div class="card-icon card-header-info float-right">
+                <a href="{% url 'view_accessory-barcode' accessory.id %}">
+                  <i class="material-icons">receipt</i>
+                </a>
+              </div>
             </div>
             <div class="card-body">
               <div class="table">
                 <div class="row">
                   <div class="col-md-6">
-                    <h2>Accessory: {{ accessory.manufacturer }} {{ accessory.name }}</h2>
+                    <h2>Accessory: {% if accessory.manufacturer %}{{ accessory.manufacturer }}{% endif %} {{ accessory.name }}</h2>
                     <hr>
                     <b><strong>Category: </strong>{{ accessory.category }}</b><br>
                     <b><strong>Price: </strong>{{ accessory.price }}</b><br>

@@ -231,7 +231,7 @@ class LicenseModelForm(forms.ModelForm):
             }),
             'cost' : forms.NumberInput(attrs={
                 'class': "form-control",
-                'placeholder': 'Cost in dollars',
+                'placeholder': 'Cost (in dollars)',
             }),
             'billing_terms' : forms.TextInput(attrs={
                 'class': "form-control",
@@ -410,12 +410,32 @@ class EmployeeModelForm(forms.ModelForm):
 
     class Meta:
         model = Employee
-        fields = ['name']
+        fields = ['name', 'title', 'location', 'department', 'email']
         widgets = {
             'name' : forms.TextInput(attrs={
                 'class': "form-control",
                 'style': 'max-width: 300px;',
                 'placeholder': 'Name',
+            }),
+            'title' : forms.TextInput(attrs={
+                'class': "form-control",
+                'style': 'max-width: 300px;',
+                'placeholder': 'Designation',
+            }),
+            'email' : forms.EmailInput(attrs={
+                'class': "form-control",
+                'style': 'max-width: 300px;',
+                'placeholder': 'employee@email.com',
+            }),
+            'location' : forms.Select(attrs={
+                'class': "selectpicker",
+                'data-style': "btn btn-info",
+                'style': 'max-width: 300px;',
+            }),
+            'department' : forms.Select(attrs={
+                'class': "selectpicker",
+                'data-style': "btn btn-info",
+                'style': 'max-width: 300px;',
             }),
         }
 

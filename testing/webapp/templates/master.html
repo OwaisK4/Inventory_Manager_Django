@@ -57,9 +57,9 @@
         Tip 2: you can also add an image using data-image tag
     -->
       <div class="logo">
-        <a href="#" class="simple-text logo-normal">
-          <img src="{% static 'webapp/Assets/assets/img/logo.jpg' %}" width="100%" alt="Living Fashions'" >
-        </a>
+        {% comment %} <a href="#" class="simple-text logo-normal"> {% endcomment %}
+          <img src="{% static 'webapp/Assets/assets/img/logo.jpg' %}" width="100%" height="" alt="Living Fashions'" >
+        {% comment %} </a> {% endcomment %}
       </div>
       <div class="sidebar-wrapper">
         <div class="user">
@@ -685,7 +685,7 @@
         s = b.getElementsByTagName(e)[0];
         s.parentNode.insertBefore(t, s)
       }(window,
-        document, 'script', '../../../../connect.facebook.net/en_US/fbevents.js');
+        document, 'script', "{% static 'webapp/Assets/new/http_/connect.facebook.net/en_US/fbevents.js' %}");
 
       try {
         fbq('init', '111649226022273');

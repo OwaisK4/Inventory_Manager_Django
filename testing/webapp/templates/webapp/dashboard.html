@@ -28,6 +28,7 @@
                           <th>Event</th>
                           <th>Item</th>
                           <th>To/From employee</th>
+                          <th>Notes</th>
                         </thead>
                         <tbody>
                           {% for activity in activities %}
@@ -45,6 +46,7 @@
                                 {% endif %}
                               </td>
                               <td>{{ activity.employee }}</td>
+                              <td>{% if activity.notes %}{{ activity.notes }}{% else %}-{% endif %}</td>
                           </tr>
                           {% endfor %}
                         <tbody>

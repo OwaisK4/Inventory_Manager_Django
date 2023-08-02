@@ -25,7 +25,7 @@
                     <th>Event</th>
                     <th>Item</th>
                     <th>To/From employee</th>
-                    {% comment %} <th>Notes</th> {% endcomment %}
+                    <th>Notes</th>
                   </thead>
                   <tbody>
                     {% for activity in activities %}
@@ -45,6 +45,7 @@
                         </td>
                         <td>{{ activity.employee }}</td>
                         {% comment %} <td>{{ activity.notes }}</td> {% endcomment %}
+                        <td>{% if activity.notes %}{{ activity.notes }}{% else %}-{% endif %}</td>
                         <td class="text-right">
                         </td>
                     </tr>

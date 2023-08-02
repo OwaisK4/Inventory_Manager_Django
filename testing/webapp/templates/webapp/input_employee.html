@@ -5,49 +5,85 @@
 {% endblock %}
 
 {% block content %}
-<div class="content">
-  <div class="container">
-    <div class="row">
-    <div class="col-md-12">
-      <div class="card">
-        <div class="card-header card-header-danger card-header-text">
-          <div class="card-text">
-            <h4 class="card-title">Input Employee</h4>
+  <div class="content">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-danger card-header-text">
+              <div class="card-text">
+                <h4 class="card-title">Input Employee</h4>
+              </div>
+            </div>
+            <div class="card-body">
+              <form method="POST" action="" class="form-horizontal" id="input_form">
+                {% csrf_token %}
+
+                <ul>
+                  {% comment %} <li> {% endcomment %}
+                    {% comment %} {{ form.name.errors }} {% endcomment %}
+                    {% comment %} {{ form.errors }} {% endcomment %}
+                  {% comment %} </li> {% endcomment %}
+                </ul>
+
+                <div class="row">
+                  <label class="col-sm-2 col-form-label">Name:</label>
+                  <label class="col-form-label">&nbsp&nbsp</label>
+                  <div class="col-sm-6">
+                    <div class="form-group">{{ form.name }}</div>
+                  </div>
+                  {% comment %} {{ form.name.errors }} {% endcomment %}
+                </div>
+
+                <div class="row">
+                  <label class="col-sm-2 col-form-label">Designation:</label>
+                  <label class="col-form-label">&nbsp&nbsp</label>
+                  <div class="col-sm-6">
+                    <div class="form-group">{{ form.title }}</div>
+                  </div>
+                  {% comment %} {{ form.title.errors }} {% endcomment %}
+                </div>
+
+                <div class="row">
+                  <label class="col-sm-2 col-form-label">Email:</label>
+                  <label class="col-form-label">&nbsp&nbsp</label>
+                  <div class="col-sm-6">
+                    <div class="form-group">{{ form.email }}</div>
+                  </div>
+                  {% comment %} {{ form.email.errors }} {% endcomment %}
+                </div>
+
+                <div class="row">
+                  <label class="col-sm-2 col-form-label">Location:</label>
+                  <label class="col-form-label">&nbsp&nbsp</label>
+                  <div class="col-sm-6">
+                    <div class="form-group">{{ form.location }}</div>
+                  </div>
+                  {% comment %} {{ form.location.errors }} {% endcomment %}
+                </div>
+
+                <div class="row">
+                  <label class="col-sm-2 col-form-label">Department:</label>
+                  <label class="col-form-label">&nbsp&nbsp</label>
+                  <div class="col-sm-6">
+                    <div class="form-group">{{ form.department }}</div>
+                  </div>
+                  {% comment %} {{ form.department.errors }} {% endcomment %}
+                </div>
+
+                <hr />
+
+                <div class="row text-center">
+                  <div class="col-md-12 text-center">
+                    <input type="hidden" name="next" value={{ next }}>
+                    <button name="submit" id="submit" type="submit" class="btn btn-success">Submit</button>
+                  </div>
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
-        <div class="card-body">
-          <form method="POST" action="" class="form-horizontal" id="input_form">
-            {% csrf_token %}
-
-            <ul>
-              {% comment %} <li> {% endcomment %}
-                {{ form.name.errors }}
-              {% comment %} </li> {% endcomment %}
-            </ul>
-            <div class="row">
-              <label class="col-sm-2 col-form-label">Name:</label>
-              <label class="col-form-label">&nbsp&nbsp</label>
-              <div class="col-sm-6">
-                <div class="form-group">
-                  {{ form.name }}
-                  <input type="hidden" name="next" value={{ next }}>
-                </div>
-              </div>
-            </div>
-
-              <hr />
-
-              <div class="row text-center">
-                <div class="col-md-12 text-center">
-                  <button name="submit" id="submit" type="submit" class="btn btn-success">Submit</button>
-                </div>
-              </div>
-            </div>
-          </form>
         </div>
       </div>
     </div>
-    </div>
   </div>
-</div>
 {% endblock %}

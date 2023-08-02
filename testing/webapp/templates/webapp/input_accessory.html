@@ -91,7 +91,8 @@
               <!-- Start of new button-->
               <div class="col-sm-2">
                 <div class="form-group">
-                  <button type="button" class="btn btn-outline-info btn-block pb-2"><i class="material-icons">add</i> New</button>
+                  <a href="{% url 'input_status' %}?next={{ request.path }}" class="btn btn-outline-info btn-block pb-2"><i class="material-icons">add</i> New</a>
+                  {% comment %} <button type="button" class="btn btn-outline-info btn-block pb-2"><i class="material-icons">add</i> New</button> {% endcomment %}
                 </div>
               </div>
               <!-- End of new button-->
