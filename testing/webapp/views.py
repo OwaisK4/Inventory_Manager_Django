@@ -914,7 +914,7 @@ def export_assets(request):
         sheet.cell(row = i+2, column = 10).value = assets[i].ram
         sheet.cell(row = i+2, column = 11).value = assets[i].hdd
         sheet.cell(row = i+2, column = 12).value = assets[i].ssd
-        sheet.cell(row = i+2, column = 13).value = assets[i].checkout_status
+        sheet.cell(row = i+2, column = 13).value = assets[i].get_checkout_status_display()
         if assets[i].status:
             sheet.cell(row = i+2, column = 14).value = assets[i].status.name
         if assets[i].supplier:
