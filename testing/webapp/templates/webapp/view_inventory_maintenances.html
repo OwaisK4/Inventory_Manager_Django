@@ -88,7 +88,8 @@
                             <td>{{ maintenance.end_date }}</td>
                             <td>{{ maintenance.cost }}</td>
                             <td>{{ maintenance.notes }}</td>
-                            <td><a href="{{ maintenance.file.url }}"><img src="{{ maintenance.file.url }}" alt="ALT" height="30" width="30"></a></td>
+                            {% comment %} <td><a href="{{ maintenance.file.url }}"><img src="{{ maintenance.file.url }}" alt="ALT" height="30" width="30"></a></td> {% endcomment %}
+                            <td><a href="{{ maintenance.file.url }}">File</a></td>
                             <td class="text-right">
                                 <a href="{% url 'view_inventory-maintenances-delete' asset.id maintenance.id %}" class="btn btn-link btn-danger btn-just-icon remove"><i class="material-icons">close</i></a>
                             </td>
