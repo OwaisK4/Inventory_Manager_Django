@@ -26,24 +26,18 @@ from webapp.views import register, UserListView, master_page, about
 urlpatterns = [
     path('', include('webapp.urls')),
     path('admin/', admin.site.urls),
-    path('about/', about, name="about"),
-]
-
-urlpatterns += [
-    # path('webapp/', include('webapp.urls')),
-    path('locallibrary/', include('locallibrary.urls')),
 ]
 
 urlpatterns += [
     path("accounts/logout/", LogoutView.as_view(next_page=reverse_lazy('login')), name="logout"),
     path("accounts/adduser/", register, name="register"),
+    path('accounts/users/', UserListView.as_view(), name='user-list'),
     path('accounts/', include('django.contrib.auth.urls')),
 ]
 
-urlpatterns += [
-    path('accounts/users/', UserListView.as_view(), name='user-list'),
-    # path('accounts/users/<int:pk>', , name='user-detail'),
-]
+# urlpatterns += [
+#     path('locallibrary/', include('locallibrary.urls')),
+# ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

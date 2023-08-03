@@ -71,7 +71,11 @@
               <span>
                 {% if user.is_authenticated %}
                   {% comment %} {{ user.get_username }} {% endcomment %}
-                  {{ user.get_full_name }}
+                  {% if user.get_full_name %}
+                    {{ user.get_full_name }}
+                  {% else %}
+                    {{ user.username }}
+                  {% endif %}
                 {% else %}
                   Unauthenticated
                 {% endif %}
@@ -702,7 +706,8 @@
   </noscript>
   <script>
     $(document).ready(function() {
-      $('#datatables').DataTable({
+      $('#datatables').DataTable({        
+        {% block order %}{% endblock %}
         "pagingType": "full_numbers",
         "lengthMenu": [
           [10, 25, 50, -1],
@@ -737,10 +742,10 @@
       });
     });
     
-    $('#fixednav ul li a').click(function(){
+    {% comment %} $('#fixednav ul li a').click(function(){
       $('a').parent().removeClass('active');
       $(this).parent().addClass('active');
-      });​  
+      });​   {% endcomment %}
   
   </script>
 

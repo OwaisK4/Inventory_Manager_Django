@@ -1111,3 +1111,37 @@ def export_licenses(request):
     response['Content-Disposition'] = 'attachment;filename="Exported_licenses.xlsx"'
     response.write(object.getvalue())
     return response
+
+def export_activity(request):
+    activity = Activity.objects.all().order_by('-id')
+    object = BytesIO()
+
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+
+    sheet["A1"] = "ID"
+    sheet["B1"] = "Timestamp"
+    sheet["C1"] = "Type"
+    sheet["D1"] = "Event"
+    sheet["E1"] = "Asset"
+    sheet["F1"] = "Employee"
+    sheet["G1"] = "Notes"
+    sheet["H1"] = "User"
+    
+    for i in range(len(activity)):
+        sheet.cell(row = i+2, column = 1).value = str(activity[i].id)
+        sheet.cell(row = i+2, column = 2).value = activity[i].timestamp.replace(tzinfo=None)
+        sheet.cell(row = i+2, column = 3).value = activity[i].get_type_display()
+        sheet.cell(row = i+2, column = 4).value = activity[i].event
+        sheet.cell(row = i+2, column = 5).value = activity[i].asset_string
+        sheet.cell(row = i+2, column = 6).value = str(activity[i].employee)
+        sheet.cell(row = i+2, column = 7).value = activity[i].notes
+        if activity[i].user:
+            sheet.cell(row = i+2, column = 8).value = activity[i].user.get_full_name()
+
+    workbook.save(object)
+
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment;filename="Exported_activity.xlsx"'
+    response.write(object.getvalue())
+    return response

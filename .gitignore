@@ -1,5 +1,15 @@
 *.log
 *.pot
 *.pyc
-__pycache__
+__pycache__/
+*$py.class
+
 venv/
+
+.vscode
+
+*.sqlite3
+media/
+*.pyc
+*.db
+*.pid

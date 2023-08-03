@@ -24,7 +24,7 @@
               <div class="table-responsive">
                 <a class="btn btn-danger" href="{% url 'input_inventory' %}" role="button">Add asset</a>
                 <a class="btn btn-danger float-right" href="{% url 'export_assets' %}" role="button">Export</a>
-                <table class="table">
+                {% comment %} <table class="table">
                   <thead class="text-primary">
                     <th>ID</th>
                     <th>Category</th>
@@ -51,7 +51,6 @@
                       <td>{{ asset.price }}</td>
                       <td>{{ asset.purchase_date }}</td>
                       <td>{{ asset.status.name }}</td>
-                      {% comment %} <td><a href="{% url 'view_inventory-check' asset.id %}">{{ asset.get_checkout_status_display }}</a></td> {% endcomment %}
                       <td>{{ asset.get_checkout_status_display }}</td>
                       <td>
                         {% if asset.checkout_status == 'I' %}
@@ -63,13 +62,79 @@
                       <td>{{ asset.assigned_to }}</td>
                       <td>{{ asset.department }}</td>
                       <td>{% if asset.asset_image %}YES{% else %}NO{% endif %}</td>
-                      {% comment %} <td><a href="{% url 'view_inventory-delete' asset.id %}" class="btn-sm btn-danger" role="button">X</a></td> {% endcomment %}
                       <td><a href="{% url 'view_inventory-update' asset.id %}" class="btn btn-link btn-warning btn-just-icon edit"><i class="material-icons">edit</i></a></td>
                       <td><a href="{% url 'view_inventory-delete' asset.id %}" class="btn btn-link btn-danger btn-just-icon remove"><i class="material-icons">close</i></a></td>
                     </tr>
                     {% endfor %}
                   <tbody>
-                </table>
+                </table> {% endcomment %}
+                <div class="material-datatables">
+                  <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Category</th>
+                        <th>Manufacturer</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Purchase Date</th>
+                        <th>Status</th>
+                        <th>Checkout/in</th>
+                        <th>Action</th>
+                        <th>Assigned to</th>
+                        <th>Department</th>
+                        <th>Image</th>
+                        <th class="disabled-sorting text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tfoot>
+                      <tr>
+                        <th>ID</th>
+                        <th>Category</th>
+                        <th>Manufacturer</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Purchase Date</th>
+                        <th>Status</th>
+                        <th>Checkout/in</th>
+                        <th>Action</th>
+                        <th>Assigned to</th>
+                        <th>Department</th>
+                        <th>Image</th>
+                        <th class="text-right">Actions</th>
+                      </tr>
+                    </tfoot>
+                    <tbody>
+                      {% for asset in inventory %}
+                      <tr>
+                        <td><a href="{% url 'view_inventory-detail' asset.id %}">LDPAST{{ asset.id|stringformat:"04d" }}</a></td>
+                        <td>{{ asset.category }}</td>
+                        <td>{{ asset.manufacturer }}</td>
+                        <td>{{ asset.name }}</td>
+                        <td>{{ asset.price }}</td>
+                        <td>{{ asset.purchase_date }}</td>
+                        <td>{{ asset.status.name }}</td>
+                        <td>{{ asset.get_checkout_status_display }}</td>
+                        <td>
+                          {% if asset.checkout_status == 'I' %}
+                            <a class="btn btn-xs btn-info" href="{% url 'view_inventory-checkout' asset.id %}"><i class="material-icons">chevron_right</i></a>
+                          {% else %}
+                            <a class="btn btn-xs btn-info" href="{% url 'view_inventory-checkin' asset.id %}"><i class="material-icons">chevron_left</i></a>
+                          {% endif %}
+                        </td>
+                        <td>{{ asset.assigned_to }}</td>
+                        <td>{{ asset.department }}</td>
+                        <td>{% if asset.asset_image %}YES{% else %}NO{% endif %}</td>
+                        {% comment %} <td><a href="{% url 'view_inventory-delete' asset.id %}" class="btn-sm btn-danger" role="button">X</a></td> {% endcomment %}
+                        <td>
+                          <a href="{% url 'view_inventory-update' asset.id %}" class="btn btn-link btn-warning btn-just-icon edit"><i class="material-icons">edit</i></a>
+                          <a href="{% url 'view_inventory-delete' asset.id %}" class="btn btn-link btn-danger btn-just-icon remove"><i class="material-icons">close</i></a>
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
                 {% comment %} <a class="btn btn-danger" href="{% url 'input_inventory' %}" role="button">Add asset</a> {% endcomment %}
               </div>
             </div>

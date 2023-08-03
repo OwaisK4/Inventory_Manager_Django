@@ -123,4 +123,5 @@ urlpatterns += [
     path('export/suppliers/', views.export_suppliers, name='export_suppliers'),
     path('export/departments/', views.export_departments, name='export_departments'),
     path('export/licenses/', views.export_licenses, name='export_licenses'),
+    path('export/activity/', views.export_activity, name='export_activity'),
 ]
