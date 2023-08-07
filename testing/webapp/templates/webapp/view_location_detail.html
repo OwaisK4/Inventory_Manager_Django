@@ -43,7 +43,7 @@
                       <td>{{ asset.price }}</td>
                       <td>{{ asset.purchase_date }}</td>
                       <td>{{ asset.status.name }}</td>
-                      <td><a href="{% url 'view_inventory-check' asset.id %}">{{ asset.get_checkout_status_display }}</a></td>
+                      <td><a href="{% url 'view_inventory-detail' asset.id %}">{{ asset.get_checkout_status_display }}</a></td>
                       <td>{{ asset.assigned_to }}</td>
                       <td>{{ asset.department }}</td>
                       <td>{% if asset.asset_image %}YES{% else %}NO{% endif %}</td>
